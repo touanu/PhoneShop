@@ -1,0 +1,45 @@
+﻿@model PhoneShop.DataAccess.DTO.LoginRequestData
+
+<h2>Đăng nhập</h2>
+
+<form id="loginForm" method="post" onsubmit="return login(this)">
+    <div class="form-group">
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" class="form-control" id="username" name="Username" placeholder="Nhập tên đăng nhập">
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" class="form-control" id="password" name="Password" placeholder="Nhập mật khẩu">
+    </div>
+    <button type="submit" class="btn btn-primary">Đăng nhập</button>
+</form>
+@section Scripts {
+    <script>
+        function login(form) {
+            var data = {
+                Username: $("#username").val(),
+                Password: $("#password").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/Login",
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        // Lưu trữ thông tin đăng nhập vào session
+                        sessionStorage.setItem("LoggedIn", true);
+
+                        // Chuyển hướng đến trang chủ
+                        window.location.href = "@Url.Action("Index", "Home")";
+                    } else {
+                        // Hiển thị thông báo lỗi đăng nhập
+                        $("#errorMessage").text(result.message);
+                    }
+                }
+            });
+
+            return false; // Ngăn chặn hành vi mặc định của trình duyệt
+        }
+    </script>
+}
