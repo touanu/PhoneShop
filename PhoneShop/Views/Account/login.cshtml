@@ -1,45 +1,105 @@
-﻿@model PhoneShop.DataAccess.DTO.LoginRequestData
-
-<h2>Đăng nhập</h2>
-
-<form id="loginForm" method="post" onsubmit="return login(this)">
-    <div class="form-group">
-        <label for="username">Tên đăng nhập:</label>
-        <input type="text" class="form-control" id="username" name="Username" placeholder="Nhập tên đăng nhập">
+﻿
+﻿@{
+     ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<!-- /.login-logo -->
+<div class="card card-outline card-primary">
+    <div class="card-header text-center">
+        <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
     </div>
-    <div class="form-group">
-        <label for="password">Mật khẩu:</label>
-        <input type="password" class="form-control" id="password" name="Password" placeholder="Nhập mật khẩu">
+    <div class="card-body">
+        <p class="login-box-msg">Đăng nhập</p>
+
+            <div class="input-group mb-3">
+                <input type="email" id="txtEmail" class="form-control" placeholder="Email">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <input type="password" id="txtPassword" class="form-control" placeholder="Password">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <div class="icheck-primary">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">
+                            Remember Me
+                        </label>
+                    </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-4">
+                    <button type="button" id="btnLogin" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+        <div class="social-auth-links text-center mt-2 mb-3">
+            <a href="#" class="btn btn-block btn-primary">
+                <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+            </a>
+            <a href="#" class="btn btn-block btn-danger">
+                <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+            </a>
+        </div>
+        <!-- /.social-auth-links -->
+
+        <p class="mb-1">
+            <a href="forgot-password.html">I forgot my password</a>
+        </p>
+        <p class="mb-0">
+            <a href="register.html" class="text-center">Register a new membership</a>
+        </p>
     </div>
-    <button type="submit" class="btn btn-primary">Đăng nhập</button>
-</form>
-@section Scripts {
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
+
+   @section Scripts{
     <script>
-        function login(form) {
-            var data = {
-                Username: $("#username").val(),
-                Password: $("#password").val()
+        $(document).ready(function() {
+            $("#btnLogin").click(function() {
+                Login();
+            });
+        });
+
+        function Login(){
+            var email = $("#txtEmail").val();
+             var pass = $("#txtPassword").val();
+           
+            var param = {
+                email:email,
+                password:pass
             };
 
-            $.ajax({
-                type: "POST",
-                url: "/Account/Login",
-                data: data,
-                success: function (result) {
-                    if (result.success) {
-                        // Lưu trữ thông tin đăng nhập vào session
-                        sessionStorage.setItem("LoggedIn", true);
-
-                        // Chuyển hướng đến trang chủ
-                        window.location.href = "@Url.Action("Index", "Home")";
-                    } else {
-                        // Hiển thị thông báo lỗi đăng nhập
-                        $("#errorMessage").text(result.message);
+             $.ajax({
+                type: 'POST',
+                url: "/Account/Account_Login",
+                data: param,
+                async: true,
+                // dataType: "html",
+                dataType: "json",
+                success: function(rs) {
+                    if (rs.returnCode > 0) {
+                        window.location.href = "/";
                     }
+                    alert(rs.returnMsg);
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
                 }
             });
-
-            return false; // Ngăn chặn hành vi mặc định của trình duyệt
         }
-    </script>
-}
+
+      </script>
+ }

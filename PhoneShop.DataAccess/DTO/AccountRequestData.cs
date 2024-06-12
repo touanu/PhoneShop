@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class LoginRequestData
-    {
-        [Key] public int ID { get; set; }
+    public class AccountRequestData
+        {
+        public int ID { get; set; }
         public string FristName { get; set; }
         public string LastName { get; set; }
         public string UserName { get; set; }

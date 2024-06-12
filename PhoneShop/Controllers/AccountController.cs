@@ -1,82 +1,63 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PhoneShop.DataAccess.DBContext;
-using PhoneShop.DataAccess.DTO;
-using PhoneShop.DataAccess.IServices.IAccountServices;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
-namespace PhoneShop.Controllers
+namespace LENOVO.source.repos.PhoneShop.PhoneShop.Controllers
 {
-    public class AccountController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AccountController : ControllerBase
     {
         private readonly IAccountServices _accountServices ;
-        public AccountController(IAccountServices accountServices)
-        {
+        public AccountController(IAccountServices accountServices){
             _accountServices = accountServices ;
         }
-        [HttpGet]
-        public ActionResult Login()
+         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<JsonResult>Login(LoginRequestData requestData)
-        {
-            var rs = new ReturnData();
-            try
-            {            
-                if (requestData == null
-                    || string.IsNullOrEmpty(requestData.UserName)
-                    || string.IsNullOrEmpty(requestData.PassWord)
-                    )
-                {
-                    rs.ReturnCode = -1;
-                    rs.ReturnMsg = "Dữ liệu không được trống";
-                    return Json(rs);
-                }
-                var model = await new PhoneShop.DataAccess.Services.AccountServices().LogIn(requestData);
-                rs.ReturnCode = model.ReturnCode;
-                rs.ReturnMsg = model.ReturnMsg;
-            }   
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return Json(rs);
-        }
-        [HttpGet]
-        public ActionResult SingInCustomer()
+        public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost]
-        public async Task<JsonResult> SingInCustomer(LoginRequestData requestData)
+        public async Task<JsonRsult> AccountLogin(AccountRequestData requestData)
         {
-            var rs = new ReturnData();
+            var returnData = new ReturnData();
             try
             {
-                if (requestData == null
-                    || string.IsNullOrEmpty(requestData.UserName)
-                    || string.IsNullOrEmpty(requestData.PassWord)
-                    || string.IsNullOrEmpty(requestData.Email)
-                    || string.IsNullOrEmpty(requestData.FristName)
-                    || string.IsNullOrEmpty(requestData.LastName)
-                    || string.IsNullOrEmpty(requestData.PhoneNumber)
-                    )
+                if (requestData == null || string.IsNullOrEmpty(requestData.email)
+                    || string.IsNullOrEmpty(requestData.password))
                 {
-                    rs.ReturnCode = -1;
-                    rs.ReturnMsg = "Dữ liệu không được trống";
-                    return Json(rs);
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không được trống!";
+                    return Json(returnData);
                 }
-                var model = await new PhoneShop.DataAccess.Services.AccountServices().SingInCustomer(requestData);
-                rs.ReturnCode = model.ReturnCode;
-                rs.ReturnMsg = model.ReturnMsg;
+
+                // chuyển mật khẩu ở dạng plantext -> mã hóa 
+                // 12345 -> SSMG5a92ylYwR3dTvcnMjEn6gU90X1Ob
+                var salt = _configuration["Sercurity:SALT_KEY"] ?? "";
+                var passwordHash = PhoneShop.CommonLibs.Sercurity.EncryptPassword(requestData.password, salt);
+
+                requestData.password = passwordHash;
+
+               var result = await new AccountServices().Account_Login(requestData);
+                
+               var result = await _accountServices.Account_Login(requestData);
+
+                returnData.ReturnCode = result.ReturnCode;
+                returnData.ReturnMsg = result.ReturnMsg;
             }
             catch (Exception ex)
             {
+
                 throw;
             }
-            return Json(rs);
+
+            return Json(returnData);
         }
     }
 }
