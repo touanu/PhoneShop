@@ -1,4 +1,5 @@
-﻿
+﻿]
+
 ﻿@{
      ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
@@ -74,17 +75,17 @@
         });
 
         function Login(){
-            var email = $("#txtEmail").val();
+            var UserName = $("#txtEmail").val();
              var pass = $("#txtPassword").val();
            
             var param = {
-                email:email,
-                password:pass
+                UserName=UserName,
+                PassWord:pass
             };
 
              $.ajax({
                 type: 'POST',
-                url: "/Account/Account_Login",
+                url: "/Account/AccountLogin",
                 data: param,
                 async: true,
                 // dataType: "html",

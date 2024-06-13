@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CommonLibs
+namespace PhoneShop.Commonlibs
 {
     public partial class Validation
     {

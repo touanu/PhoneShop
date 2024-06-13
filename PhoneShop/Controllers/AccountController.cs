@@ -1,20 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PhoneShop.DataAccess.DTO;
+using PhoneShop.DataAccess.IServices;
+using PhoneShop.DataAccess.Services;
 
-namespace LENOVO.source.repos.PhoneShop.PhoneShop.Controllers
+namespace PhoneShop.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : Controller
     {
-        private readonly IAccountServices _accountServices ;
-        public AccountController(IAccountServices accountServices){
-            _accountServices = accountServices ;
+        readonly IConfiguration _configuration;
+        private readonly IAccountServices _accountServices;
+        public AccountController(IConfiguration configuration,IAccountServices accountServices)
+        {
+            _accountServices = accountServices;
+            _configuration = configuration;
+
         }
-         public IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -24,13 +28,13 @@ namespace LENOVO.source.repos.PhoneShop.PhoneShop.Controllers
             return View();
         }
 
-        public async Task<JsonRsult> AccountLogin(AccountRequestData requestData)
+        public async Task<JsonResult> AccountLogin(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
             try
             {
-                if (requestData == null || string.IsNullOrEmpty(requestData.email)
-                    || string.IsNullOrEmpty(requestData.password))
+                if (requestData == null || string.IsNullOrEmpty(requestData.UserName)
+                    || string.IsNullOrEmpty(requestData.PassWord))
                 {
                     returnData.ReturnCode = -2;
                     returnData.ReturnMsg = "Dữ liệu đầu vào không được trống!";
@@ -40,13 +44,11 @@ namespace LENOVO.source.repos.PhoneShop.PhoneShop.Controllers
                 // chuyển mật khẩu ở dạng plantext -> mã hóa 
                 // 12345 -> SSMG5a92ylYwR3dTvcnMjEn6gU90X1Ob
                 var salt = _configuration["Sercurity:SALT_KEY"] ?? "";
-                var passwordHash = PhoneShop.CommonLibs.Sercurity.EncryptPassword(requestData.password, salt);
+                var passwordHash = PhoneShop.Commonlibs.Sercuritys.EncryptPassword(requestData.PassWord, salt);
+                requestData.PassWord = passwordHash;
 
-                requestData.password = passwordHash;
 
-               var result = await new AccountServices().Account_Login(requestData);
-                
-               var result = await _accountServices.Account_Login(requestData);
+                var result = await _accountServices.AccountLogin(requestData);
 
                 returnData.ReturnCode = result.ReturnCode;
                 returnData.ReturnMsg = result.ReturnMsg;

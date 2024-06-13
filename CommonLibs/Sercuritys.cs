@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonLibs
+namespace PhoneShop.Commonlibs
 {
     public class Sercuritys
     {

@@ -9,7 +9,7 @@ namespace PhoneShop.DataAccess.Services
 {
     public class AccountServices : IAccountServices
     {
-        PhonShopDBcontext dbcontext= new PhonShopDBcontext();
+        PhonShopDBcontext dbcontext;
         public async Task<ReturnData> AccountLogin(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
