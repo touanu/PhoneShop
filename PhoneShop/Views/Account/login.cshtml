@@ -1,8 +1,6 @@
-﻿]
-
-﻿@{
-     ViewData["Title"] = "View";
-    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+﻿﻿@{
+     ViewData["Title"] = "Views";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!-- /.login-logo -->
 <div class="card card-outline card-primary">
@@ -13,7 +11,7 @@
         <p class="login-box-msg">Đăng nhập</p>
 
             <div class="input-group mb-3">
-                <input type="email" id="txtEmail" class="form-control" placeholder="Email">
+                <input type="text" id="txtEmail" class="form-control" placeholder="UserName">
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -84,7 +82,7 @@
             };
 
              $.ajax({
-                type: 'POST',
+                type: "POST",
                 url: "/Account/Login",
                 data: param,
                 async: true,

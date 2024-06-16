@@ -13,7 +13,7 @@ namespace PhoneShop.Controllers
     {
         readonly IConfiguration _configuration;
         private readonly IAccountServices _accountServices;
-        public AccountController(IConfiguration configuration,IAccountServices accountServices)
+        public AccountController(IConfiguration configuration, IAccountServices accountServices)
         {
             _accountServices = accountServices;
             _configuration = configuration;
@@ -23,13 +23,9 @@ namespace PhoneShop.Controllers
         {
             return View();
         }
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-        [HttpPost("Login")]
-        public async Task<JsonResult>Login(AccountRequestData requestData)
+        [HttpPost]
+        [HttpGet]
+        public async Task<JsonResult> Login(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
             try
@@ -62,23 +58,20 @@ namespace PhoneShop.Controllers
 
             return Json(returnData);
         }
-        public IActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost("Register")]
-        public async Task<JsonResult>Register(AccountRequestData user)
+        [HttpPost("api/Register")]
+        [HttpGet]
+        public async Task<JsonResult> Register(AccountRequestData user)
         {
             var returnData = new ReturnData();
             try
             {
-                if(string.IsNullOrEmpty(user.UserName)
-                    ||string.IsNullOrWhiteSpace(user.UserName)
-                    ||string.IsNullOrEmpty(user.FristName)
-                    ||string.IsNullOrEmpty(user.LastName)
-                    ||string.IsNullOrEmpty(user.PassWord)
-                    ||string.IsNullOrEmpty(user.PhoneNumber)
-                    ||string.IsNullOrEmpty(user.Email))
+                if (string.IsNullOrEmpty(user.UserName)
+                    || string.IsNullOrWhiteSpace(user.UserName)
+                    || string.IsNullOrEmpty(user.FristName)
+                    || string.IsNullOrEmpty(user.LastName)
+                    || string.IsNullOrEmpty(user.PassWord)
+                    || string.IsNullOrEmpty(user.PhoneNumber)
+                    || string.IsNullOrEmpty(user.Email))
                 {
                     returnData.ReturnCode = -2;
                     returnData.ReturnMsg = "Dữ liệu đầu vào không được trống!";
@@ -94,6 +87,33 @@ namespace PhoneShop.Controllers
                 throw;
             }
             return Json(returnData);
+        }
+        public IActionResult RemoveCustomer()
+        {
+            return View();
+        }
+        [HttpDelete]
+        public async Task<JsonResult> RemoveCustomer(AccountRequestData requestData)
+        {
+            ReturnData returnData = new ReturnData();
+            try
+            {
+                if (requestData.ID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ!";
+                    return Json(returnData);
+                }
+                var result = await _accountServices.RemoveCustomerByID(requestData);
+                returnData.ReturnCode = result.ReturnCode;
+                returnData.ReturnMsg = result.ReturnMsg;
+                return Json(returnData);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

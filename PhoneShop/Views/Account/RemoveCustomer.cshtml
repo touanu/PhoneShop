@@ -1,0 +1,22 @@
+﻿<form id="deleteUserForm">
+    <label for="userId">User ID:</label>
+    <input type="number" id="userId" name="userId" required>
+    <button type="button" onclick="deleteUser()">Xóa User</button>
+</form>
+
+<script>
+function deleteUser() {
+    var userId = $('#userId').val();
+
+    $.ajax({
+        url: '/Account/RemoveCustomer' + userId,
+        type: 'DELETE',
+        success: function(result) {
+            alert("Xóa user thành công!");
+        },
+        error: function(error) {
+            alert("Có lỗi xảy ra: " + error.responseText);
+        }
+    });
+}
+</script>
