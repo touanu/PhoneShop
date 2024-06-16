@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PhoneShop.DataAccess.DTO;
+using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess.IServices
 {
@@ -11,8 +12,8 @@ namespace PhoneShop.DataAccess.IServices
         Task<ReturnData> AccountLogin(AccountRequestData requestData);
         Task<ReturnData> SingInCustomer(AccountRequestData requestData);
         Task<ReturnData> AddCustomer(AccountRequestData requestData);
-        Task<ReturnData> RemoveCustomer(AccountRequestData requestData);
-        Task<ReturnData> GetCustomer(AccountRequestData requestData);
+        Task<ReturnData> RemoveCustomerByID(AccountRequestData requestData);
+        Task<List<Customers>> GetCustomerByUserNameorLastName(AccountRequestData requestData);
         Task<ReturnData> UpdateCustomer(AccountRequestData requestData);
     }
 }
