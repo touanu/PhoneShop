@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
@@ -27,8 +28,8 @@ namespace PhoneShop.Controllers
         {
             return View();
         }
-
-        public async Task<JsonResult> AccountLogin(AccountRequestData requestData)
+        [HttpPost("Login")]
+        public async Task<JsonResult>Login(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
             try
@@ -59,6 +60,39 @@ namespace PhoneShop.Controllers
                 throw;
             }
 
+            return Json(returnData);
+        }
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost("Register")]
+        public async Task<JsonResult>Register(AccountRequestData user)
+        {
+            var returnData = new ReturnData();
+            try
+            {
+                if(string.IsNullOrEmpty(user.UserName)
+                    ||string.IsNullOrWhiteSpace(user.UserName)
+                    ||string.IsNullOrEmpty(user.FristName)
+                    ||string.IsNullOrEmpty(user.LastName)
+                    ||string.IsNullOrEmpty(user.PassWord)
+                    ||string.IsNullOrEmpty(user.PhoneNumber)
+                    ||string.IsNullOrEmpty(user.Email))
+                {
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không được trống!";
+                    return Json(returnData);
+                }
+                var result = await _accountServices.SingInCustomer(user);
+                returnData.ReturnCode = result.ReturnCode;
+                returnData.ReturnMsg = result.ReturnMsg;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return Json(returnData);
         }
     }

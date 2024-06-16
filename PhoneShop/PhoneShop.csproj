@@ -14,8 +14,8 @@
   <ItemGroup>
     <None Include="Views\Account\.vs\Account\FileContentIndex\1ea9570e-d9ed-4627-b8ad-378f02fde9ac.vsidx" />
     <None Include="Views\Account\.vs\slnx.sqlite" />
-    <None Include="Views\Account\login.cshtml" />
-    <None Include="Views\Account\SingInCustomer.cshtml" />
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Account\Register.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
