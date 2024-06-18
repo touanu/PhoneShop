@@ -19,13 +19,19 @@ namespace PhoneShop.Controllers
             _configuration = configuration;
 
         }
+
         public IActionResult Index()
         {
             return View();
         }
-        [HttpPost]
-        [HttpGet]
-        public async Task<JsonResult> Login(AccountRequestData requestData)
+      
+        [HttpGet("/Account/Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost("/Account/Logins")]
+        public async Task<JsonResult> Logins(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
             try
@@ -49,6 +55,7 @@ namespace PhoneShop.Controllers
 
                 returnData.ReturnCode = result.ReturnCode;
                 returnData.ReturnMsg = result.ReturnMsg;
+                return Json(returnData);
             }
             catch (Exception ex)
             {
@@ -58,9 +65,13 @@ namespace PhoneShop.Controllers
 
             return Json(returnData);
         }
-        [HttpPost("api/Register")]
-        [HttpGet]
-        public async Task<JsonResult> Register(AccountRequestData user)
+        [HttpGet("/Account/Register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost("/Account/Registers")]
+        public async Task<JsonResult> Registers(AccountRequestData user)
         {
             var returnData = new ReturnData();
             try
@@ -84,16 +95,17 @@ namespace PhoneShop.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return Json(returnData);
         }
+        [HttpGet("/Account/RemoveCustomer")]
         public IActionResult RemoveCustomer()
         {
             return View();
         }
-        [HttpDelete]
-        public async Task<JsonResult> RemoveCustomer(AccountRequestData requestData)
+        [HttpDelete("/Account/RemoveCustomers")]
+        public async Task<JsonResult> RemoveCustomers(AccountRequestData requestData)
         {
             ReturnData returnData = new ReturnData();
             try

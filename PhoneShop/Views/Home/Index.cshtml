@@ -1,7 +1,7 @@
 ﻿]
 
 ﻿@{
-    ViewData["Title"] = "Views";
+    ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!-- /.login-logo -->
@@ -13,7 +13,7 @@
         <p class="login-box-msg">Đăng nhập</p>
 
         <div class="input-group mb-3">
-            <input type="text" id="txtEmail" class="form-control" placeholder="UserName">
+            <input type="text" id="txtUserName" class="form-control" placeholder="UserName">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -67,6 +67,7 @@
 <!-- /.card -->
 @section Scripts {
     <script>
+        debugger;
         $(document).ready(function () {
             $("#btnLogin").click(function () {
                 Login();
@@ -74,11 +75,11 @@
         });
 
         function Login() {
-            var UserName = $("#txtEmail").val();
+            var userName = $("#txtUserName").val();
             var pass = $("#txtPassword").val();
 
             var param = {
-                UserName:UserName,
+                UserName:userName,
                 PassWord: pass
             };
 
