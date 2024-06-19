@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PhoneShop.DataAccess.DTO;
 using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess
@@ -16,5 +17,7 @@ namespace PhoneShop.DataAccess
         //}
         public DbSet<Accounts> accounts{ get; set; }
         public DbSet<Customers> customers{ get; set; }
+
+        public DbSet<Brands> brands{ get; set; }
     }
 }

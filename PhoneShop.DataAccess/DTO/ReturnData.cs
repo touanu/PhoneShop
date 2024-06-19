@@ -15,4 +15,13 @@ namespace PhoneShop.DataAccess.DTO
     {
         public Customers customers{ get; set; }
     }
+    public class BrandInsertReturnData : ReturnData
+    {
+        public Brands brands { get; set; }
+    }
+
+    public class Brand_DeleteReturnData : ReturnData
+    {
+    }
+
 }
