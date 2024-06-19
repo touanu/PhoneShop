@@ -9,8 +9,9 @@ function deleteUser() {
     var userId = $('#userId').val();
 
     $.ajax({
-        url: '/Account/RemoveCustomer' + userId,
+        url: '/Account/RemoveCustomers',
         type: 'DELETE',
+        data: userId,
         success: function(result) {
             alert("Xóa user thành công!");
         },

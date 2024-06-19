@@ -19,22 +19,60 @@
     <input type="number" id="districtID" name="DistrictID" required><br>
     <label for="wardID">Ward ID:</label><br>
     <input type="number" id="wardID" name="WardID" required><br>
-    <input type="submit" value="Register">
+    <div class="col-4">
+        <button type="button" id="btnRegister" class="btn btn-primary btn-block">Đăng ký</button>
+    </div>
 </form>
-
+ @section Scripts{
 <script>
-    $("#registerForm").on("submit", function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: '/Account/Register',
-            type: 'POST',
-            data: JSON.stringify(user),
-            contentType: 'json',
-            success: function () {
-                alert("Đăng ký thành công!");
-            }
+    debugger;
+    $(document).ready(function () {
+            $("#btnRegister").click(function () {
+                Register();
         });
     });
+        function Register() {
+        var FName = $("#firstName").val();
+        var LName = $("#lastName").val();
+        var UName = $("#userName").val();
+        var Pasword = $("#password").val();
+        var PhoneNum = $("#phoneNumber").val();
+        var BirthD = $("#birthday").val();
+        var mail = $("#email").val();
+        var PID = $("#provinceID").val();
+        var DID = $("districtID").val();
+        var WID = $("wardID").val();
+        var param = {
+            FristName: FName,
+            LastName: LName,
+            UserName: UName,
+            PassWord: Pasword,
+            Birthday: BirthD,
+            PhoneNumber: PhoneNum,
+            Email: mail,
+            ProviceID: PID,
+            DistrictID: DID,
+            WardsID: WID
+        };
+
+        $.ajax({
+            url: "/Account/Registers",
+            type: "POST",
+            data: param,
+            async: true,
+            // dataType: "html",
+            dataType: "json",
+            success: function (rs) {
+                if (rs.returnCode > 0) {
+                    window.location.href = "/";
+                }
+                alert(rs.returnMsg);
+            },
+            error(rs) {
+                console.log(JSON.stringify(rs));
+            }
+        });
+    };
 </script>
+}
 
