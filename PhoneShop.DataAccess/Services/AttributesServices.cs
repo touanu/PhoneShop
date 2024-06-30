@@ -117,9 +117,36 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public Task<ReturnData> DeleteAtributesVallue(AttributesRequestData requestData)
+        public async Task<ReturnData> DeleteAtributesVallue(AttributesRequestData requestData)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ReturnData returnData = new ReturnData();
+                if(requestData.AttributeValluesName!=null)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "dữ liệu vào không hợp lệ!";
+                    return returnData;
+                }
+                var AttributesValue = new ProductAttributesVallues();
+                foreach (var attr in dbcontext.attributesVallues)
+                {
+                    if (attr.AttributeValluesName == requestData.AttributeValluesName)
+                    {
+                        AttributesValue= attr;
+                    }
+                }
+                dbcontext.attributesVallues.Remove(AttributesValue);
+                dbcontext.SaveChanges();
+                returnData.ReturnCode = -1;
+                returnData.ReturnMsg = "xóa thành công biến thể có tên"+requestData.AttributeValluesName;
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public Task<ReturnData> DeleteAttributes(AttributesRequestData requestData)

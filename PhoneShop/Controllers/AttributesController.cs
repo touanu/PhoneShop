@@ -63,5 +63,31 @@ namespace PhoneShop.Controllers
             }
             return Json(returnData);
         }
+        [HttpGet("/Attributes/DeleteAttributeValueByName")]
+        public IActionResult DeleteAttributeValueByName()
+        {
+            return View();
+        }
+        [HttpPost("/Attributes/DeleteAttributeValueByNames")]
+        public async Task<JsonResult> DeleteAttributeValueByNames(AttributesRequestData requestData)
+        {
+            var returnData = new ReturnData();
+            try
+            {
+                if (requestData.AttributeValluesName == null)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
+                    return Json(returnData);
+                }
+                returnData = await _attributesservices.DeleteAtributesVallue(requestData);
+                return Json(returnData) ;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

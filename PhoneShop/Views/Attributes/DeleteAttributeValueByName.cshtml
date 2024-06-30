@@ -1,0 +1,27 @@
+﻿<form id="deleteUserForm">
+    <label for="Tên biến thể">AttributesValueName:</label>
+    <input type="text" id="attributesValueName" name="AttributesValueName" required>
+    <button type="button" onclick="deleteAttributeValue()">Xóa biến thể</button>
+</form>
+
+<script>
+    function deleteAttributeValue() {
+        var AttributesValueName = $('#attributesValueName').val();
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: '/Attributes/DeleteAttributeValueByNames',
+            type: 'POST',
+            data: AttributesValueName,
+            success: function (result) {
+                alert("Xóa user thành công!");
+            },
+            error: function (error) {
+                alert("Có lỗi xảy ra: " + error.responseText);
+            }
+        });
+    }
+</script>
