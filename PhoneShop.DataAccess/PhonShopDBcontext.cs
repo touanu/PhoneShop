@@ -19,5 +19,8 @@ namespace PhoneShop.DataAccess
         public DbSet<Customers> customers{ get; set; }
 
         public DbSet<Brands> brands{ get; set; }
+
+        public DbSet<ProductAttributes> productAttributes { get; set; }
+        public DbSet<ProductAttributesVallues> attributesVallues { get; set; }
     }
 }

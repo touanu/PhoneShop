@@ -19,4 +19,9 @@ namespace PhoneShop.DataAccess.DTO
         public int DistrictID { get; set; }
         public int WardsID { get; set; }
     }
+    public class AccountResponseData
+    {
+        public string UserName { get; set; }
+        public string PassWord { get; set; }
+    }
 }

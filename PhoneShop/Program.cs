@@ -1,3 +1,4 @@
+
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAccountServices, AccountServices>();
+builder.Services.AddScoped<IAttributesservices, AttributesServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

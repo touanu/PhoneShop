@@ -82,13 +82,17 @@
                 PassWord:pass
             };
 
-             $.ajax({
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
                 type: "POST",
                 url: "/Account/Logins",
                 data: param,
                 async: true,
                 // dataType: "html",
-                dataType: "json",
+                dataType: "application/json",
                 success: function(rs) {
                     if (rs.returnCode > 0) {
                         window.location.href = "/";

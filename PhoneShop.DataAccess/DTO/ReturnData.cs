@@ -23,5 +23,10 @@ namespace PhoneShop.DataAccess.DTO
     public class Brand_DeleteReturnData : ReturnData
     {
     }
+    public class AttributesReturnData : ReturnData 
+    {
+       public ProductAttributesVallues vallues { get; set; }
+       public ProductAttributes attributes {  get; set; } 
+    }
 
 }
