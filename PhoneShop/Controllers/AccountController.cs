@@ -33,7 +33,7 @@ namespace PhoneShop.Controllers
             return View();
         }
         [HttpPost("/Account/Logins")]
-        public async Task<JsonResult> Logins(AccountRequestData requestData)
+        public async Task<JsonResult>Logins(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
             try
@@ -41,7 +41,7 @@ namespace PhoneShop.Controllers
                 // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Attributes/AddAttribute";
+                var url = "api/Account/Logins";
 
                 // bƯỚC 2: tạo json data ( object sang JSON)
                 var jsonData = JsonConvert.SerializeObject(requestData);

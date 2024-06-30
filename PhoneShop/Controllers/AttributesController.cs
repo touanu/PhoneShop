@@ -20,13 +20,13 @@ namespace PhoneShop.Controllers
             _configuration = configuration;
 
         }
-        [HttpGet("/Attributes/AddAtrribute")]
+        [HttpGet("/Attributes/AddAttribute")]
         public IActionResult AddAttribute()
         { 
             return View();
         }
         [HttpPost("/Attributes/AddAtrributes")]
-        public async Task<JsonResult> AddAtrributes(AttributesRequestData attributesRequestData)
+        public async Task<JsonResult>AddAtrributes(AttributesRequestData attributesRequestData)
         {
             var returnData = new AttributesReturnData();
             try
