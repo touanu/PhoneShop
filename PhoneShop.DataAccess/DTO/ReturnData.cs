@@ -10,6 +10,7 @@ namespace PhoneShop.DataAccess.DTO
     {
         public int ReturnCode { get; set; }
         public string ReturnMsg { get; set;}
+        public string token { get; set; }
     }
     public class ReturnDataReturnAccount : ReturnData
     {

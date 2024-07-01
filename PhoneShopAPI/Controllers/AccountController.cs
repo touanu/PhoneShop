@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -57,21 +59,21 @@ namespace PhoneShopAPI.Controllers
                 }
 
                 //bƯỚC 2: Dùng Claims để tạo token từ tài khoản có được ở bước 1.2
-                //var account = response.account;
+                var account = response.Accounts;
 
-                //var authClaims = new List<Claim> {
-                //    new Claim(ClaimTypes.Name, account.UserName),
-                //    new Claim(ClaimTypes.Sid,account.Id.ToString())
-                //    };
+                var authClaims = new List<Claim> {
+                    new Claim(ClaimTypes.Name, account.UserName),
+                    new Claim(ClaimTypes.Sid,account.AccountID.ToString())
+                    };
 
-                //var newToken = CreateToken(authClaims);
+                var newToken = CreateToken(authClaims);
 
                 //Bước 3: Trả về Token cho Client
 
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng nhập thành công!";
-                //returnData.Accounts = response.;
-                //returnData.token = new JwtSecurityTokenHandler().WriteToken(newToken);
+                returnData.Accounts = response.Accounts;
+                returnData.token = new JwtSecurityTokenHandler().WriteToken(newToken);
 
                 return Ok(returnData);
             }
@@ -80,7 +82,22 @@ namespace PhoneShopAPI.Controllers
                 returnData.ReturnCode = -969;
                 returnData.ReturnMsg = ex.Message;
                 return Ok(returnData);
-            }
+            } 
+        }
+        private JwtSecurityToken CreateToken(List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            _ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
         }
         //[HttpPost("Register")]
         //public async Task<ActionResult> Register(AccountRequestData requestData)
@@ -88,7 +105,7 @@ namespace PhoneShopAPI.Controllers
         //    ReturnData returnData = new ReturnData();
         //    try
         //    {
-                
+
         //    }
         //    catch (Exception ex)
         //    {

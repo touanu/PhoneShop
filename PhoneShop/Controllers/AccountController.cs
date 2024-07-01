@@ -34,25 +34,7 @@ namespace PhoneShop.Controllers
             var returnData = new ReturnData();
             try
             {
-                // Bước 1 : khai báo API URL
-
-                var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Account/Logins";
-
-                // bƯỚC 2: tạo json data ( object sang JSON)
-                var jsonData = JsonConvert.SerializeObject(requestData);
-
-                // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
-                var AccReq = new AccountRequestData();
-                // Bước 4: nhận dữ liệu về 
-                if (!string.IsNullOrEmpty(result))
-                {
-                    
-                    var response = JsonConvert.DeserializeObject<AccountResponseData>(result);
-                    AccReq.UserName = response.UserName;
-                    AccReq.PassWord = response.PassWord;
-                }
+                // Bước 1: Kiểm tra dữ liệu đầu vào 
                 if (requestData == null || string.IsNullOrEmpty(requestData.UserName)
                     || string.IsNullOrEmpty(requestData.PassWord))
                 {
@@ -61,26 +43,49 @@ namespace PhoneShop.Controllers
                     return Json(returnData);
                 }
 
-                // chuyển mật khẩu ở dạng plantext -> mã hóa 
-                // 12345 -> SSMG5a92ylYwR3dTvcnMjEn6gU90X1Ob
-                var salt = _configuration["Sercurity:SALT_KEY"] ?? "";
-                var passwordHash = PhoneShop.Commonlibs.Sercuritys.EncryptPassword(AccReq.PassWord, salt);
-                AccReq.PassWord = passwordHash;
+                // Bước 2 : GỌI API ĐỂ LẤY TOKEN 
+                // bƯỚC 2.1 kHAI BÁO URL CỦA API
+
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Account/Login";
+
+                //Bước 2.2 convert từ object requestData sang Json để đẩy lên API
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 2.3 dùng httpClient để đưa json lên URL của API
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Lỗi";
+                    return Json(returnData);
+                }
+
+                // Bước 2.4 : Convert từ json nhận được thành object 
+
+                var rs = JsonConvert.DeserializeObject<ReturnData>(result);
+                if (rs.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = rs.ReturnCode;
+                    returnData.ReturnMsg = rs.ReturnMsg;
+                    return Json(returnData);
+                }
 
 
-                var Req = await _accountServices.AccountLogin(AccReq);
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "Đăng nhập thành công!";
+                returnData.token = rs.token;
 
-                returnData.ReturnCode = Req.ReturnCode;
-                returnData.ReturnMsg = Req.ReturnMsg;
+                //  Session
                 return Json(returnData);
             }
             catch (Exception ex)
             {
-
-                return Json(ex) ;
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Json(returnData);
             }
-
-            return Json(returnData);
         }
         
         public IActionResult Register()

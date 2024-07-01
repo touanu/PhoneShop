@@ -14,7 +14,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddDbContext<PhonShopDBcontext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("ConnStr")));
+               options.UseSqlServer(configuration.GetConnectionString("MyConnect")));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
