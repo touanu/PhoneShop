@@ -17,7 +17,7 @@ namespace PhoneShop.DataAccess.Services
             var returnData = new ReturnData();
            try
            {
-                var account = dbcontext.accounts.Where(s => s.Email == requestData.UserName
+                var account = dbcontext.accounts.Where(s => s.UserName == requestData.UserName
                 && s.PassWord == requestData.PassWord).FirstOrDefault();
                 var customer = dbcontext.customers.Where(c=>c.UserName == requestData.UserName
                 &&c.PassWord == requestData.PassWord).FirstOrDefault();

@@ -9,8 +9,6 @@ using PhoneShop.DataAccess.Services;
 
 namespace PhoneShop.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class AccountController : Controller
     {
         readonly IConfiguration _configuration;
@@ -27,12 +25,10 @@ namespace PhoneShop.Controllers
             return View();
         }
       
-        [HttpGet("/Account/Login")]
         public IActionResult Login()
         {
             return View();
         }
-        [HttpPost("/Account/Logins")]
         public async Task<JsonResult>Logins(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
@@ -86,12 +82,11 @@ namespace PhoneShop.Controllers
 
             return Json(returnData);
         }
-        [HttpGet("/Account/Register")]
+        
         public IActionResult Register()
         {
             return View();
         }
-        [HttpPost("/Account/Registers")]
         public async Task<JsonResult> Registers(AccountRequestData user)
         {
             var returnData = new ReturnData();

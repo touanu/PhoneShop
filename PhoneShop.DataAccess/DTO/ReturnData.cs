@@ -11,8 +11,9 @@ namespace PhoneShop.DataAccess.DTO
         public int ReturnCode { get; set; }
         public string ReturnMsg { get; set;}
     }
-    public class ReturnDataReturnCustomer : ReturnData
+    public class ReturnDataReturnAccount : ReturnData
     {
+        public Accounts Accounts { get; set; }
         public Customers customers{ get; set; }
     }
     public class BrandInsertReturnData : ReturnData

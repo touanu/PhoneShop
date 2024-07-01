@@ -1,0 +1,6 @@
+@PhoneShopAPI_HostAddress = http://localhost:5124
+
+GET {{PhoneShopAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
