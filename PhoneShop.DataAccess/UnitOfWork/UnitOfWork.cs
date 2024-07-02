@@ -12,7 +12,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
         private PhonShopDBcontext _dbcontext { set; get; }
         public IAttributesservices _Attributesservices {  set; get; }
 
-        //public IBrandServices _BrandServices {  set; get; }
+        public IBrandServices _BrandServices {  set; get; }
 
         public IAccountServices _accountServices {  set; get; }
         public UnitOfWork(IAttributesservices attributesservices,/*IBrandServices brandServices*/PhonShopDBcontext dBcontext, IAccountServices accountServices)

@@ -10,7 +10,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
     public interface IUnitOfWork
     {
         public IAttributesservices _Attributesservices { get; }
-        //public IBrandServices _BrandServices { get; }
+        public IBrandServices _BrandServices { get; }
         public IAccountServices _accountServices { get; set; }
         int SaveChange();
     }

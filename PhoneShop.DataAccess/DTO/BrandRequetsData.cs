@@ -19,4 +19,11 @@ namespace PhoneShop.DataAccess.DTO
         public int BrandID { get; set; }
     }
 
+    public class BrandInsertRequestData
+    {
+        public int BrandID { get; set; }
+        public string BrandName { get; set; }
+        public string IconImages { get; set; }
+    }
+
 }

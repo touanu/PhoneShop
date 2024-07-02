@@ -10,7 +10,7 @@ using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess.Services
 {
-    public class BrandServices
+    public class BrandServices : IBrandServices
     {
         PhonShopDBcontext dbcontext;
         public BrandServices(PhonShopDBcontext _dbcontext)
@@ -63,11 +63,81 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Dữu liệu không hợp lệ";
                     return returnData;
                 }
+
+
+                // thêm sản phẩm vào database 
+
+                var BrandReq = new Brands
+                {
+                    BrandName = requestData.BrandName,
+                    IconImages = requestData.IconImages,
+
+                };
+
+                dbcontext.brands.Add(BrandReq);
+
+                dbcontext.SaveChangesAsync();
+
+
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "Thêm thương hiệu thành công";
+                return returnData;
             }
 
-            catch (Exception ex) { }
-            return returnData;
+            catch (Exception ex)
+            {
+
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!";
+                return returnData;
+            }
+   
+          }
+
+        public Task<BrandInsertReturnData> BrandInsertUpdate(BrandInsertRequestData requestData)
+        {
+            throw new NotImplementedException();
         }
 
+        public Task<List<Brands>> BrandsGetList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BrandInsertReturnData> Brand_Delete(BrandRequetsData requestData)
+        {
+            var returnData = new BrandInsertReturnData();
+            try
+            {
+                // cần kiểm tra xem id muốn xóa có tồn tại không
+                var Brand = dbcontext.brands.Where(s => s.BrandID == requestData.BrandID).FirstOrDefault();
+
+                if (Brand == null || Brand?.BrandID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Thương hiệu cần xóa không có trên hệ thống";
+                    return returnData;
+                }
+
+
+                dbcontext.brands.Remove(Brand);
+                dbcontext.SaveChangesAsync();
+
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "Xóa thương hiệu thành công";
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!";
+                return returnData;
+            }
+        }
+
+        public Task<Brand_DeleteReturnData> Brand_Delete(Brand_DeleteRequestData requestData)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
