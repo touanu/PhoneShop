@@ -99,20 +99,48 @@ namespace PhoneShopAPI.Controllers
 
             return token;
         }
-        //[HttpPost("Register")]
-        //public async Task<ActionResult> Register(AccountRequestData requestData)
-        //{
-        //    ReturnData returnData = new ReturnData();
-        //    try
-        //    {
+        [HttpPost("Register")]
+        public async Task<ActionResult> Register(AccountRequestData requestData)
+        {
+            ReturnDataReturnAccount returnData = new ReturnDataReturnAccount();
+            try
+            {
+                //validate du lieu
+                if (requestData == null
+                    || string.IsNullOrEmpty(requestData.UserName)
+                    || string.IsNullOrEmpty(requestData.PassWord)
+                    ||string.IsNullOrEmpty(requestData.FristName)
+                    ||string.IsNullOrEmpty(requestData.LastName))
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                    return Ok(returnData);
+                }
+                //ma hoa password
+                var salt = _configuration["Sercurity:Salt"] ?? "";
+                var passwordHash = PhoneShop.Commonlibs.Sercuritys.EncryptPassword(requestData.PassWord, salt);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
+                requestData.PassWord = passwordHash;
+                var response = await _unitOfWork._accountServices.AddCustomer(requestData);
 
-        //        throw;
-        //    }
-        //}
+                if (response.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = response.ReturnCode;
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "Đăng ký thành công!";
+                returnData.customers = response.customers;
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
 
     } 
 }

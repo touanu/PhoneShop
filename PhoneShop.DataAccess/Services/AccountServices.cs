@@ -65,18 +65,18 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;    
                 }
                 //check ten dung dinh dang
-                if(Validation.IsName(requestData.FristName)==false
-                ||Validation.IsName(requestData.LastName)==false
-                ||Validation.IsNumber(requestData.PhoneNumber)==false
-                ||Validation.IsContainHTMLTags(requestData.UserName)==true
-                ||Validation.IsContainSpecialCharacters(requestData.UserName)==true
-                ||Validation.IsContainHTMLTags(requestData.PassWord)==true
-                ||Validation.IsValidEmail(requestData.Email)==false)
-                {
-                    returnData.ReturnCode = -1;
-                    returnData.ReturnMsg = "dữ liệu vào không hợp lệ";
-                    return returnData;
-                }
+                //if(Validation.IsName(requestData.FristName)==false
+                //||Validation.IsName(requestData.LastName)==false
+                //||Validation.IsNumber(requestData.PhoneNumber)==false
+                //||Validation.IsContainHTMLTags(requestData.UserName)==true
+                //||Validation.IsContainSpecialCharacters(requestData.UserName)==true
+                //||Validation.IsContainHTMLTags(requestData.PassWord)==true
+                //||Validation.IsValidEmail(requestData.Email)==false)
+                //{
+                //    returnData.ReturnCode = -1;
+                //    returnData.ReturnMsg = "dữ liệu vào không hợp lệ";
+                //    return returnData;
+                //}
                 //check tài khoan ton tại hay không
                 var customer = _dbcontext.customers.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
                 if((customer!=null && customer.CustomerID>0))
@@ -100,6 +100,7 @@ namespace PhoneShop.DataAccess.Services
                 };
                 _dbcontext.customers.Add(customerreq);
                 _dbcontext.SaveChangesAsync();
+                returnData.customers = customerreq;
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm tài khoản thành công! ";
                 return returnData;
