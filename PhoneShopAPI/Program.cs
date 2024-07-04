@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
-builder.Services.AddDbContext<PhonShopDBcontext>(options =>
+builder.Services.AddDbContext<PhoneShopDBcontext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("MyConnect")));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

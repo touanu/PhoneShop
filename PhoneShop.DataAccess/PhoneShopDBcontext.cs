@@ -8,9 +8,9 @@ using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess
 {
-    public class PhonShopDBcontext:DbContext
+    public class PhoneShopDBcontext:DbContext
     {
-        public PhonShopDBcontext(DbContextOptions options):base(options) { }
+        public PhoneShopDBcontext(DbContextOptions options):base(options) { }
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-PBSFM7Q;Initial Catalog=PhoneShop;Integrated Security=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;TrustServerCertificate=True");
@@ -22,5 +22,9 @@ namespace PhoneShop.DataAccess
 
         public DbSet<ProductAttributes> productAttributes { get; set; }
         public DbSet<ProductAttributesVallues> attributesVallues { get; set; }
+        public DbSet<Orders> Orders { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<Promotions> Promotions { get; set; }
+        public DbSet<Products> Products { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace PhoneShop.DataAccess.Services
 {
     public class BrandServices : IBrandServices
     {
-        PhonShopDBcontext dbcontext;
-        public BrandServices(PhonShopDBcontext _dbcontext)
+        PhoneShopDBcontext dbcontext;
+        public BrandServices(PhoneShopDBcontext _dbcontext)
         {
             dbcontext = _dbcontext;
         }

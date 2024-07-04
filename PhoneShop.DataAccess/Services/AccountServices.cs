@@ -11,8 +11,8 @@ namespace PhoneShop.DataAccess.Services
 {
     public class AccountServices : IAccountServices
     {
-        PhonShopDBcontext _dbcontext;
-        public AccountServices(PhonShopDBcontext DBContext)
+        PhoneShopDBcontext _dbcontext;
+        public AccountServices(PhoneShopDBcontext DBContext)
         {
             _dbcontext = DBContext;
         }
