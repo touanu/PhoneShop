@@ -151,12 +151,10 @@ namespace PhoneShop.Controllers
                 return Json(returnData);
             }
         }
-        [HttpGet("/Account/RemoveCustomer")]
         public IActionResult RemoveCustomer()
         {
             return View();
         }
-        [HttpDelete("/Account/RemoveCustomers")]
         public async Task<JsonResult> RemoveCustomers(AccountRequestData requestData)
         {
             ReturnData returnData = new ReturnData();
@@ -176,7 +174,9 @@ namespace PhoneShop.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Json(returnData);
             }
         }
     }

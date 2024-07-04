@@ -17,6 +17,11 @@ namespace PhoneShop.DataAccess.DTO
         public Accounts Accounts { get; set; }
         public Customers customers{ get; set; }
     }
+    public class ReturnDataReturnAttributes: ReturnData
+    {
+        public ProductAttributes attribute { get; set; }
+        public ProductAttributesVallues ProductAttributesVallues { get; set; }
+    }
     public class BrandInsertReturnData : ReturnData
     {
         public Brands brands { get; set; }

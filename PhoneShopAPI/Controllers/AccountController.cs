@@ -82,7 +82,7 @@ namespace PhoneShopAPI.Controllers
                 returnData.ReturnCode = -969;
                 returnData.ReturnMsg = ex.Message;
                 return Ok(returnData);
-            } 
+            }
         }
         private JwtSecurityToken CreateToken(List<Claim> authClaims)
         {
@@ -109,8 +109,8 @@ namespace PhoneShopAPI.Controllers
                 if (requestData == null
                     || string.IsNullOrEmpty(requestData.UserName)
                     || string.IsNullOrEmpty(requestData.PassWord)
-                    ||string.IsNullOrEmpty(requestData.FristName)
-                    ||string.IsNullOrEmpty(requestData.LastName))
+                    || string.IsNullOrEmpty(requestData.FristName)
+                    || string.IsNullOrEmpty(requestData.LastName))
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
@@ -141,6 +141,39 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("RemoveCustomer")]
+        public async Task<ActionResult> RemoveCustomer(AccountRequestData requestData)
+        {
+            ReturnDataReturnAccount returnData = new ReturnDataReturnAccount();
+            try
+            {
+                //validate du lieu
+                if (requestData == null
+                    || requestData.ID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                    return Ok(returnData);
+                }
 
-    } 
+                var response = await _unitOfWork._accountServices.RemoveCustomerByID(requestData);
+
+                if (response.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = response.ReturnCode;
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "xóa khách hàng thành công!";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
+    }
 }

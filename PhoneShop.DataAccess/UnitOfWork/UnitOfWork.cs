@@ -15,11 +15,11 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IBrandServices _BrandServices {  set; get; }
 
         public IAccountServices _accountServices {  set; get; }
-        public UnitOfWork(IAttributesservices attributesservices,/*IBrandServices brandServices*/PhonShopDBcontext dBcontext, IAccountServices accountServices)
+        public UnitOfWork(IAttributesservices attributesservices,IBrandServices brandServices,PhonShopDBcontext dBcontext, IAccountServices accountServices)
         {
             _accountServices = accountServices;
             _dbcontext = dBcontext;
-            //_BrandServices = brandServices;
+            _BrandServices = brandServices;
             _Attributesservices = attributesservices;
         }
 

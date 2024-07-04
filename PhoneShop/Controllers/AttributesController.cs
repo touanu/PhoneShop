@@ -8,8 +8,6 @@ using System.Text;
 
 namespace PhoneShop.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class AttributesController : Controller
     {
         readonly IConfiguration _configuration;
@@ -20,12 +18,10 @@ namespace PhoneShop.Controllers
             _configuration = configuration;
 
         }
-        [HttpGet("/Attributes/AddAttribute")]
         public IActionResult AddAttribute()
         { 
             return View();
         }
-        [HttpPost("/Attributes/AddAtrributes")]
         public async Task<JsonResult>AddAtrributes(AttributesRequestData attributesRequestData)
         {
             var returnData = new AttributesReturnData();
@@ -63,12 +59,12 @@ namespace PhoneShop.Controllers
             }
             return Json(returnData);
         }
-        [HttpGet("/Attributes/DeleteAttributeValueByName")]
+ 
         public IActionResult DeleteAttributeValueByName()
         {
             return View();
         }
-        [HttpPost("/Attributes/DeleteAttributeValueByNames")]
+        
         public async Task<JsonResult> DeleteAttributeValueByNames(AttributesRequestData requestData)
         {
             var returnData = new ReturnData();

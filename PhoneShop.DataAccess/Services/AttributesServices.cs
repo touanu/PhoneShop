@@ -12,7 +12,11 @@ namespace PhoneShop.DataAccess.Services
 {
     public class AttributesServices : IAttributesservices
     {
-        private PhonShopDBcontext dbcontext;
+        private PhonShopDBcontext _dbcontext;
+        public AttributesServices(PhonShopDBcontext DBContext)
+        {
+            _dbcontext = DBContext;
+        }
         public async Task<ReturnData> AddAttributes(AttributesRequestData requestData)
         {
             AttributesReturnData result = new AttributesReturnData();
@@ -23,7 +27,7 @@ namespace PhoneShop.DataAccess.Services
                 if (requestData != null
                     && requestData.AttributesNameValue != null
                     && requestData.AttributeValuestring != null
-                    && requestData.ProductID >0)
+                    &&requestData.ProductID>0)
                     {
                     //them nhom thuoc tinh
                     var GroupAtri_cout = requestData.AttributesNameValue.Split('_').Length;
@@ -45,7 +49,8 @@ namespace PhoneShop.DataAccess.Services
                             ProductID = requestData.ProductID,
                         };
 
-                        dbcontext.productAttributes.Add(GroupAttr_Req);
+                        _dbcontext.productAttributes.Add(GroupAttr_Req);
+                        _dbcontext.SaveChangesAsync();
 
                     }
                     //them thuoc tinh
@@ -56,10 +61,10 @@ namespace PhoneShop.DataAccess.Services
                         var item = requestData.AttributeValuestring.Split('_')[i];
 
                         var attr_name = item.Split(',')[0];
-                        var attr_Price = item.Split(',')[2];
+                        var attr_Price = item.Split(',')[1];
 
-                        var attr_priceSale = item.Split(',')[3];
-                        var attr_Quantity = item.Split(',')[1];
+                        var attr_priceSale = item.Split(',')[2];
+                        var attr_Quantity = item.Split(',')[3];
 
                         // kiểm tra xem null 
 
@@ -95,16 +100,16 @@ namespace PhoneShop.DataAccess.Services
                             PriceSale = Convert.ToInt32(attr_priceSale),
                         };
 
-                        dbcontext.attributesVallues.Add(attr_Req);
+                        _dbcontext.attributesVallues.Add(attr_Req);
+                        _dbcontext.SaveChangesAsync();
                     }
-                   dbcontext.SaveChangesAsync();
 
                     result.ReturnCode = 1;
-                    result.ReturnMsg = "Thêm sản phẩm thành công";
+                    result.ReturnMsg = "Thêm thuộc tính thành công";
                     return result;
                 }
                 result.ReturnCode = -1;
-                result.ReturnMsg = "Dữ liệu vào không hợp lệ!";
+                result.ReturnMsg = "Dữ liệu vào không hợp lệ!" ;
                 return result;
 
 
@@ -129,15 +134,15 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
                 var AttributesValue = new ProductAttributesVallues();
-                foreach (var attr in dbcontext.attributesVallues)
+                foreach (var attr in _dbcontext.attributesVallues)
                 {
                     if (attr.AttributeValluesName == requestData.AttributeValluesName)
                     {
                         AttributesValue= attr;
                     }
                 }
-                dbcontext.attributesVallues.Remove(AttributesValue);
-                dbcontext.SaveChanges();
+                _dbcontext.attributesVallues.Remove(AttributesValue);
+                _dbcontext.SaveChanges();
                 returnData.ReturnCode = -1;
                 returnData.ReturnMsg = "xóa thành công biến thể có tên"+requestData.AttributeValluesName;
                 return returnData;
