@@ -35,7 +35,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IBrandServices , BrandServices>();
-
+builder.Services.AddScoped<IProductServices , ProductServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IAttributesservices, AttributesServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
