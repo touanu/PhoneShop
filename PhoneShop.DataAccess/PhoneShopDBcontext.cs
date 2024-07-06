@@ -22,7 +22,7 @@ namespace PhoneShop.DataAccess
 
         public DbSet<ProductAttributes> productAttributes { get; set; }
         public DbSet<ProductAttributesVallues> attributesVallues { get; set; }
-        public DbSet<Orders> Orders { get; set; }
+        public DbSet<Oders> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Promotions> Promotions { get; set; }
         public DbSet<Products> Products { get; set; }

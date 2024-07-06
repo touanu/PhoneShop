@@ -3,6 +3,7 @@ using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -144,7 +145,6 @@ namespace PhoneShop.DataAccess.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -152,6 +152,35 @@ namespace PhoneShop.DataAccess.Services
         public Task<ReturnData> DeleteAttributes(AttributesRequestData requestData)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<ProductAttributes>> GetAttributes(AttributesResponseData responseData)
+        {
+            var returnData= new List<ProductAttributes>();
+            try
+            {
+                returnData = dbcontext.productAttributes.ToList();
+
+                if (!string.IsNullOrEmpty(responseData.AttributesName))
+                {
+                    returnData = returnData.FindAll(s => s.AttributesName.ToLower().Contains(responseData.AttributesName.ToLower())).ToList();
+                }
+                //if (!string.IsNullOrEmpty(responseData.ProductName))
+                //{
+                //    var Products = dbcontext.Products.Find(responseData.ProductName);
+                //    if(Products != null)
+                //    {
+                //        returnData = returnData.FindAll(s => s.ProductID == Products.ProductID);
+                //    }
+                //}
+
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public Task<ReturnData> UpdateAttributes(AttributesRequestData requestData)

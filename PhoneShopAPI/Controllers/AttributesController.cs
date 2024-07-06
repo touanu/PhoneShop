@@ -46,5 +46,12 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("GetAttribute")]
+        public async Task<ActionResult> GetAttribute(AttributesResponseData requuestData)
+        {
+            var list = _unitOfWork._Attributesservices.GetAttributes(requuestData);
+
+            return Ok(list);
+        }
     }
 }
