@@ -23,6 +23,7 @@ namespace PhoneShop.Controllers
             _configuration = configuration;
             _BrandServices = brandServices;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -31,51 +32,43 @@ namespace PhoneShop.Controllers
 
        
 
-        public async Task<JsonResult> BrandList(BrandRequetsData requetsData) 
+        public async Task<JsonResult> BrandInsert(BrandInsertRequestData requetsData) 
         {
 
-            var model = new PhoneShopResponse();
+            var returnData = new BrandInsertReturnData();
             try
+
             {
-                if (requetsData == null
-                    || string.IsNullOrEmpty(requetsData.BrandName))
-                {
-                    model.ResponseCode = -1;
-                    model.ResponseMessage = "Dữ liệu không được trống";
-                    return Json(model);
-                }
-
-
-                // Bước 1.1 : khai báo API URL
+                // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Product/ProductInsert";
+                var url = "api/Brands/Brand";
 
-                // bƯỚC 1.2: tạo json data ( object sang JSON)
+                // bƯỚC 2: tạo json data ( object sang JSON)
                 var jsonData = JsonConvert.SerializeObject(requetsData);
 
-                // Bước 1.3 : gọi httpclient bên common để post lên api
+                // Bước 3 : gọi httpclient bên common để post lên api
                 var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
 
-                // Bước 1.4: nhận dữ liệu về 
-                var imageName = "";
+                // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    var rs = JsonConvert.DeserializeObject<ReturnData>(result);
-
+                    var BrandReq = new BrandInsertRequestData();
+                    var response = JsonConvert.DeserializeObject<BrandInsertRequestData>(result);
+                    BrandReq.BrandName = response.BrandName;
+                   BrandReq.IconImages= response.IconImages;
+                    BrandReq.BrandID = response.BrandID;
+                    returnData = (BrandInsertReturnData)await _BrandServices.BrandInsertUpdate(BrandReq);
                 }
 
-                model.ResponseCode = 1;
-                model.ResponseMessage = "";
-                return Json(model);
+                return Json(returnData);
+
             }
             catch (Exception ex)
             {
-
-                throw;
+                return Json(returnData);
             }
-
-            return Json(model);
+            return Json(returnData);
 
         }
 
