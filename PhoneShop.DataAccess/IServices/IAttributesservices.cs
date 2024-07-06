@@ -9,6 +9,7 @@ namespace PhoneShop.DataAccess.IServices
 {
     public interface IAttributesservices
     {
+        Task<List<ProductAttributes>> GetAttributes(AttributesResponseData responseData);
         Task<ReturnData> AddAttributes(AttributesRequestData requestData);
         Task<ReturnData> UpdateAttributes(AttributesRequestData requestData);
         Task<ReturnData> DeleteAttributes(AttributesRequestData requestData);

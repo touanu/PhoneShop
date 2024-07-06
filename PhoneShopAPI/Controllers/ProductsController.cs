@@ -11,7 +11,7 @@ namespace PhoneShopAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        ProductsController(IUnitOfWork unitOfWork, IConfiguration configuration)
+         public ProductsController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
