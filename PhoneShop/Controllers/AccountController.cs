@@ -75,7 +75,7 @@ namespace PhoneShop.Controllers
 
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng nhập thành công!";
-                returnData.token = rs.token;
+                returnData.Token = rs.Token;
 
                 //  Session
                 return Json(returnData);

@@ -12,6 +12,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IAttributesservices _Attributesservices { get; }
         public IBrandServices _BrandServices { get; }
         public IAccountServices _accountServices { get; set; }
+        public IProductServices _productServices { set; get; }
         int SaveChange();
     }
 }

@@ -73,7 +73,7 @@ namespace PhoneShopAPI.Controllers
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng nhập thành công!";
                 returnData.Accounts = response.Accounts;
-                returnData.token = new JwtSecurityTokenHandler().WriteToken(newToken);
+                returnData.Token = new JwtSecurityTokenHandler().WriteToken(newToken);
 
                 return Ok(returnData);
             }

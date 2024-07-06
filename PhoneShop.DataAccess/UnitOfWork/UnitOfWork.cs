@@ -15,6 +15,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IBrandServices _BrandServices {  set; get; }
 
         public IAccountServices _accountServices {  set; get; }
+        public IProductServices _productServices { set; get; }
         public UnitOfWork(IAttributesservices attributesservices,/*IBrandServices brandServices*/PhoneShopDBcontext dBcontext, IAccountServices accountServices)
         {
             _accountServices = accountServices;
