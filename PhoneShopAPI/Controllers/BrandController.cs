@@ -13,7 +13,6 @@ namespace PhoneShopAPI.Controllers
     public class BrandController : ControllerBase
     {
         public IUnitOfWork _unitOfWork;
-        public IBrandServices _BrandServices;
         private IConfiguration _configuration;
 
         public BrandController(IUnitOfWork unitOfWork, IConfiguration configuration , IBrandServices _BrandServices, IBrandServices brandServices)

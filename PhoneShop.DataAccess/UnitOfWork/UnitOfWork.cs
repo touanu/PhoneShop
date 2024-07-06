@@ -9,18 +9,23 @@ namespace PhoneShop.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private PhonShopDBcontext _dbcontext { set; get; }
+        private PhoneShopDBcontext _dbcontext { set; get; }
         public IAttributesservices _Attributesservices {  set; get; }
 
         public IBrandServices _BrandServices {  set; get; }
 
         public IAccountServices _accountServices {  set; get; }
-        public UnitOfWork(IAttributesservices attributesservices,/*IBrandServices brandServices*/PhonShopDBcontext dBcontext, IAccountServices accountServices)
+
+        public IPromotionsServices _promotionsServices { set; get; }
+
+        public IProductServices _productServices { set; get; }
+        public UnitOfWork(IAttributesservices attributesservices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionsServices promotionsServices)
         {
             _accountServices = accountServices;
             _dbcontext = dBcontext;
-            //_BrandServices = brandServices;
+            _BrandServices = brandServices;
             _Attributesservices = attributesservices;
+            _promotionsServices = promotionsServices;
         }
 
         public int SaveChange()

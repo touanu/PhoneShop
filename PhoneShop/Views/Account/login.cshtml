@@ -5,7 +5,7 @@
 <!-- /.login-logo -->
 <div class="card card-outline card-primary">
     <div class="card-header text-center">
-        <a href="../../index2.html" class="h1"><b>Admin</b>PhoneShop</a>
+        <a href="../../index2.html" class="h1"><b>PhonShopGroup1</b></a>
     </div>
     <div class="card-body">
         <p class="login-box-msg">Đăng nhập</p>
@@ -83,15 +83,18 @@
             };
 
             $.ajax({
-                type: "POST",
-                url: "/Account/Logins",
+                type: 'POST',
+                url: "/Account/Login",
                 data: param,
                 async: true,
                 // dataType: "html",
                 dataType: "json",
-                success: function(rs) {
+                success: function (rs) {
                     if (rs.returnCode > 0) {
-                        window.location.href = "/";
+                        ///  window.location.href = "/";
+
+                        // set cookies
+                        setCookie("MY_JWT_TOKEN", rs.token, 1);
                     }
                     alert(rs.returnMsg);
                 },
@@ -99,6 +102,13 @@
                     console.log(JSON.stringify(rs));
                 }
             });
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
 
       </script>
