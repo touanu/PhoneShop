@@ -11,7 +11,7 @@ namespace PhoneShop.Controllers
     public class AttributesController : Controller
     {
         readonly IConfiguration _configuration;
-        private readonly  IAttributesservices _attributesservices;
+        readonly IAttributesservices _attributesservices;
         public AttributesController(IConfiguration configuration, IAttributesservices attributesservices)
         {
             _attributesservices = attributesservices;

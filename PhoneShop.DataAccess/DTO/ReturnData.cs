@@ -54,4 +54,8 @@ namespace PhoneShop.DataAccess.DTO
     {
         public Products? Product { get; set; }
     }
+    public class GetPromotionsReturnData : ReturnData
+    {
+        public Promotions? promotions { get; set; }
+    }
 }

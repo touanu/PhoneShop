@@ -29,7 +29,7 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
 
-                _phoneShopDBContext.Orders.Add(requestData.Order);
+                //_phoneShopDBContext.Orders.Add(requestData.Order);
 
                 foreach (var item in requestData.Details)
                 {

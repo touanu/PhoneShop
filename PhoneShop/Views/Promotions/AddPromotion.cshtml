@@ -1,0 +1,39 @@
+﻿
+<form id="AddPromotionsForm">
+    <label for="PromotionName">Promotions Name:</label><br>
+    <input type="text" id="PromotionName" name="PromotionName" required><br>
+    <label for="StartDate">StartDate:</label><br>
+    <input type="date" id="StartDate" name="StartDate" required><br>
+    <label for="EndDate">EndDate:</label><br>
+    <input type="date" id="EndDate" name="EndDate" required><br>
+    <label for="Quantity">So luong:</label><br>
+    <input type="number" id="Quantity" name="Quantity" required><br>
+    <label for="ProductID">ProductID:</label><br>
+    <input type="number" id="ProductID" name="ProductID" required><br>
+    <label for="CustomerID">CustomerID:</label><br>
+    <input type="number" id="CustomerID" name="CustomerID" required><br>
+    <label for="PercentageDiscount">PercentageDiscount:</label><br>
+    <input type="number" id="PercentageDiscount" name="PercentageDiscount" required><br>
+    <label for="TotalDiscount">TotalDiscount:</label><br>
+    <input type="number" id="TotalDiscount" name="TotalDiscount" required><br>
+    <label for="QuantityOneDay">Quantity OneDay:</label><br>
+    <input type="number" id="QuantityOneDay" name="QuantityOneDay" required><br>
+    <label for="MinimumAmount">Minimum Amount:</label><br>
+    <input type="number" id="MinimumAmount" name="MinimumAmount" required><br>
+    <div class="col-4">
+        <button type="button" id="btnAddPromotions" class="btn btn-primary btn-block">Thêm </button>
+    </div>
+</form>
+@section Scripts{
+    <script>
+        debugger;
+        $(document).ready(function () {
+            $("#btnAddPromotions").click(function () {
+                AddPromotions();
+            });
+        });
+        function AddPromotions() {
+
+        }
+    </script>
+}

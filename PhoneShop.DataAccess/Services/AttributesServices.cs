@@ -14,6 +14,10 @@ namespace PhoneShop.DataAccess.Services
     public class AttributesServices : IAttributesservices
     {
         private PhoneShopDBcontext dbcontext;
+        public AttributesServices(PhoneShopDBcontext _dbcontext)
+        {
+            dbcontext = _dbcontext;
+        }
         public async Task<ReturnData> AddAttributes(AttributesRequestData requestData)
         {
             AttributesReturnData result = new AttributesReturnData();
@@ -165,14 +169,14 @@ namespace PhoneShop.DataAccess.Services
                 {
                     returnData = returnData.FindAll(s => s.AttributesName.ToLower().Contains(responseData.AttributesName.ToLower())).ToList();
                 }
-                //if (!string.IsNullOrEmpty(responseData.ProductName))
-                //{
-                //    var Products = dbcontext.Products.Find(responseData.ProductName);
-                //    if(Products != null)
-                //    {
-                //        returnData = returnData.FindAll(s => s.ProductID == Products.ProductID);
-                //    }
-                //}
+                if (!string.IsNullOrEmpty(responseData.ProductName))
+                {
+                    var Products = dbcontext.Products.Find(responseData.ProductName);
+                    if(Products != null)
+                    {
+                        returnData = returnData.FindAll(s => s.ProductID == Products.ProductID);
+                    }
+                }
 
                 return returnData;
             }
