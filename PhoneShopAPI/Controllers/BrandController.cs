@@ -24,7 +24,7 @@ namespace PhoneShopAPI.Controllers
         }
 
         [HttpPost("BrandGetList")]
-        public async Task<ActionResult> BRandGetList()
+        public async Task<ActionResult> BrandsGetList()
         {
             var lstBrand = new List<Brands>();
             try
@@ -41,7 +41,7 @@ namespace PhoneShopAPI.Controllers
         }
 
         [HttpPost("BrandInsert")]
-        public async Task<ActionResult> BrandInsert(BrandRequetsData requestData)
+        public async Task<ActionResult> BrandInsert(BrandInsertRequestData requestData)
         {
             var returnData = new ReturnData();
             try
@@ -92,6 +92,22 @@ namespace PhoneShopAPI.Controllers
 
                 throw;
             }
+
+
+        }
+
+        [HttpDelete("DeleteBrand")]
+        public async Task<IActionResult> DeleteBrand(Brand_DeleteRequestData requestData)
+        {
+            var BrandDeleteRtdata = new Brand_DeleteRequestData(); 
+
+            var result = await _unitOfWork._BrandServices.Brand_Delete(BrandDeleteRtdata);
+            if (result == null)
+            {
+                return NotFound();
+            }
+         
+            return NoContent();
         }
     }
 }

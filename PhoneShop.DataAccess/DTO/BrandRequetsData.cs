@@ -14,16 +14,14 @@ namespace PhoneShop.DataAccess.DTO
         public string IconImages { get; set; }
     }
 
-    public class Brand_DeleteRequestData
+    public class Brand_DeleteRequestData : BrandRequetsData
     {
-        public int BrandID { get; set; }
+
     }
 
-    public class BrandInsertRequestData
+    public class BrandInsertRequestData :BrandRequetsData
     {
-        public int BrandID { get; set; }
-        public string BrandName { get; set; }
-        public string IconImages { get; set; }
+       
     }
 
 }

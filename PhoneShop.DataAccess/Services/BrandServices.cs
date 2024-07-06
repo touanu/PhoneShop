@@ -18,23 +18,23 @@ namespace PhoneShop.DataAccess.Services
             dbcontext = _dbcontext;
         }
 
-        public async Task<List<Brands>> BrandGetList()
+        public async Task<List<Brands>> BrandsGetList()
         {
             var list = new List<Brands>();
             try
             {
-                var listProduct = dbcontext.brands.ToList();
-                foreach (var item in listProduct)
+                var listBrand = dbcontext.brands.ToList();
+                foreach (var item in listBrand)
                 {
-                    // lấy attribute theo productId 
-                    var p_attr = dbcontext.brands.ToList().FindAll(x => x.BrandID == item.BrandID);
+                    
+                    var brand_attb = dbcontext.brands.ToList().FindAll(x => x.BrandID == item.BrandID);
 
-                    var product = new Brands();
+                    var brand = new Brands();
 
-                    product.BrandID = item.BrandID;
-                    product.BrandName = item.BrandName;
+                    brand.BrandID = item.BrandID;
+                    brand.BrandName = item.BrandName;
 
-                    list.Add(product);
+                    list.Add(brand);
 
                 }
 
@@ -47,7 +47,7 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public async Task<BrandInsertReturnData> BrandInsertUpdate(BrandRequetsData requestData)
+        public async Task<BrandInsertReturnData> BrandInsertUpdate(BrandInsertRequestData requestData)
         {
             var returnData = new BrandInsertReturnData();
             var errItem = string.Empty;
@@ -94,19 +94,11 @@ namespace PhoneShop.DataAccess.Services
    
           }
 
-        public Task<BrandInsertReturnData> BrandInsertUpdate(BrandInsertRequestData requestData)
-        {
-            throw new NotImplementedException();
-        }
+    
 
-        public Task<List<Brands>> BrandsGetList()
+        public async Task<Brand_DeleteReturnData> Brand_Delete(Brand_DeleteRequestData requestData)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<BrandInsertReturnData> Brand_Delete(BrandRequetsData requestData)
-        {
-            var returnData = new BrandInsertReturnData();
+            var returnData = new Brand_DeleteReturnData();
             try
             {
                 // cần kiểm tra xem id muốn xóa có tồn tại không
@@ -135,9 +127,6 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public Task<Brand_DeleteReturnData> Brand_Delete(Brand_DeleteRequestData requestData)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
