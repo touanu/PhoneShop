@@ -20,32 +20,32 @@ namespace PhoneShop.DataAccess.Services
             var returnData = new GetPromotionsReturnData();
             try
             {
-                if (requestData==null
-                    ||requestData.PromotionName==null
-                    ||requestData.ProductID<0
-                    ||requestData.CustomerID<0
-                    ||requestData.StartDate==null
-                    ||requestData.EndDate==null
-                    ||requestData.TotalDiscount<0
-                    ||requestData.MinimumAmount<0
-                    ||requestData.PercentageDiscount<0
-                    ||requestData.Quantity<0
-                    ||requestData.QuantityOneDay<0)
+                if (requestData == null
+                    || requestData.PromotionName == null
+                    || requestData.ProductID < 0
+                    || requestData.CustomerID < 0
+                    || requestData.StartDate == null
+                    || requestData.EndDate == null
+                    || requestData.TotalDiscount < 0
+                    || requestData.MinimumAmount < 0
+                    || requestData.PercentageDiscount < 0
+                    || requestData.Quantity < 0
+                    || requestData.QuantityOneDay < 0)
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                foreach(var Promo in _dbcontext.Promotions)
+                foreach (var Promo in _dbcontext.Promotions)
                 {
-                    if(Promo.PromotionName==requestData.PromotionName)
+                    if (Promo.PromotionName == requestData.PromotionName)
                     {
                         returnData.ReturnCode = -1;
                         returnData.ReturnMsg = "Tên khuyến mãi bị trùng!";
                         return returnData;
                     }
                 }
-                var T =DateTime.Compare(requestData.EndDate, requestData.StartDate);
+                var T = DateTime.Compare(requestData.EndDate, requestData.StartDate);
                 if (T < 0)
                 {
                     returnData.ReturnCode = -1;
@@ -69,7 +69,7 @@ namespace PhoneShop.DataAccess.Services
                 _dbcontext.SaveChanges();
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm khuyến mãi thành công!";
-                returnData.promotions=PromotonsReq;
+                returnData.promotions = PromotonsReq;
                 return returnData;
 
             }
@@ -89,18 +89,18 @@ namespace PhoneShop.DataAccess.Services
             var list = new List<Promotions>();
             try
             {
-                list= _dbcontext.Promotions.ToList();
-                 if (!string.IsNullOrEmpty(requestData.PromotionName))
+                list = _dbcontext.Promotions.ToList();
+                if (!string.IsNullOrEmpty(requestData.PromotionName))
                 {
                     list = list.FindAll(s => s.PromotionName.ToLower().Contains(requestData.PromotionName.ToLower())).ToList();
                 }
-                if (requestData.ProductID>0)
+                if (requestData.ProductID > 0)
                 {
                     var Products = _dbcontext.Products.Find(requestData.ProductID);
-                    if(Products != null)
+                    if (Products != null)
                     {
                         list = list.FindAll(s => s.ProductID == Products.ProductID);
-                   }
+                    }
                 }
                 return list;
             }
