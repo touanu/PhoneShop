@@ -6,6 +6,7 @@ using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PhoneShop.DataAccess.Services
 {
@@ -141,6 +142,23 @@ namespace PhoneShop.DataAccess.Services
             {
                 throw;
             }
+        }
+
+        public async  Task<Functions> GetFunction(string functionCode)
+        {
+            var model = new Functions();
+            try
+            {
+            
+                model = _dbcontext.functions.Where(s => s.FunctionCode == functionCode).FirstOrDefault();
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return model;
         }
 
         public async Task<ReturnData> RemoveCustomerByID(AccountRequestData requestData)
@@ -318,7 +336,21 @@ namespace PhoneShop.DataAccess.Services
 
         }
 
+        public async Task<User_Permission> User_PermissionById(int functionId, int UserID)
+        {
+            var model = new User_Permission();
 
+            try
+            {
+                model = _dbcontext.user_Permissions.Where(s => s.FunctionID == functionId && s.UserID == UserID).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+
+            return model;
+        }
     }
 }

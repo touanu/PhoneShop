@@ -46,5 +46,11 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("GetPromotion")]
+        public async Task<ActionResult> GetPromotion(PromotionsRequestData requestData )
+        {
+            var list = _unitOfWork._promotionsServices.GetPromotions(requestData);
+            return Ok(list);
+        }
     }
 }

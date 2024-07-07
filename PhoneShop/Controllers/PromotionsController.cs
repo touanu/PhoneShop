@@ -51,5 +51,36 @@ namespace PhoneShop.Controllers
 
 
         }
+        public IActionResult GetPromotion()
+        {
+            return View();
+        }
+        public async Task<JsonResult> GetPromotions(PromotionsRequestData requestData)
+        {
+            var list = new List<Promotions>();
+            try
+            {
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Promotions/GetPromotion";
+
+                // bƯỚC 2: tạo json data ( object sang JSON)
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 3 : gọi httpclient bên common để post lên api
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+
+                // Bước 4: nhận dữ liệu về 
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var response = JsonConvert.DeserializeObject<PromotionsRequestData>(result);
+                    list= await _promotionsServices.GetPromotions(response);
+                }
+                return Json(list);
+            }
+            catch (Exception ex)
+            {
+                return Json(list);
+            }
+        }
     }
 }

@@ -26,5 +26,7 @@ namespace PhoneShop.DataAccess
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Promotions> Promotions { get; set; }
         public DbSet<Products> Products { get; set; }
+        public DbSet<Functions>? functions { get; set; }
+        public DbSet<User_Permission>? user_Permissions { get; set; }
     }
 }

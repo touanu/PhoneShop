@@ -66,7 +66,7 @@ namespace PhoneShop.DataAccess.Services
                     TotalDiscount = requestData.TotalDiscount,
                 };
                 _dbcontext.Promotions.Add(PromotonsReq);
-                _dbcontext.SaveChanges();
+                _dbcontext.SaveChangesAsync();
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm khuyến mãi thành công!";
                 returnData.promotions = PromotonsReq;
