@@ -44,7 +44,14 @@ namespace PhoneShop.Controllers
                     returnData.ReturnMsg = "Dữ liệu đầu vào không được trống!";
                     return Json(returnData);
                 }
-
+                if (requestData.Birthday == DateTime.MinValue)
+                {
+                    requestData.FristName = "";
+                    requestData.LastName = "";
+                    requestData.PhoneNumber = "";
+                    requestData.Email = "";
+                    requestData.Birthday = DateTime.Now;
+                }
                 // Bước 2 : GỌI API ĐỂ LẤY TOKEN 
                 // bƯỚC 2.1 kHAI BÁO URL CỦA API
 

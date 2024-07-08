@@ -39,7 +39,7 @@ namespace PhoneShopAPI.Controllers
                     returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
                     return Ok(returnData);
                 }
-
+               
                 // Bước 1.2 : text 123456 -> n2zmy77Xfb4cnD7ca8VYip/kGpT4q+1gcONNT5 dùng
                 //  Thuật toán mã hóa : RSA265
                 var salt = _configuration["Sercurity:Salt"] ?? "";
