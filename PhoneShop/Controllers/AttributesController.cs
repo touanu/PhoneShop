@@ -11,17 +11,25 @@ namespace PhoneShop.Controllers
     public class AttributesController : Controller
     {
         readonly IConfiguration _configuration;
-        readonly IAttributesservices _attributesservices;
-        public AttributesController(IConfiguration configuration, IAttributesservices attributesservices)
+        public AttributesController(IConfiguration configuration)
         {
-            _attributesservices = attributesservices;
             _configuration = configuration;
 
+        }
+        public IActionResult Index()
+        {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
+            return View();
         }
         public IActionResult AddAttribute()
         { 
             return View();
         }
+       
         public async Task<JsonResult>AddAtrributes(AttributesRequestData attributesRequestData)
         {
             var returnData = new AttributesReturnData();
@@ -42,14 +50,17 @@ namespace PhoneShop.Controllers
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    var AttReq = new AttributesRequestData();
-                    var response = JsonConvert.DeserializeObject<AttributesResponseData>(result);
-                    AttReq.AttributeValuestring = response.AttributeValuestring;
-                    AttReq.AttributesNameValue = response.AttributesName;
-                    AttReq.ProductID = response.ProductID;
-                    returnData = (AttributesReturnData)await _attributesservices.AddAttributes(AttReq);
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Lỗi";
+                    return Json(returnData);
                 }
-
+                var rs = JsonConvert.DeserializeObject<ReturnData>(result);
+                if (rs.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = rs.ReturnCode;
+                    returnData.ReturnMsg = rs.ReturnMsg;
+                    return Json(returnData);
+                }
                 return Json(returnData);
 
             }
@@ -76,7 +87,6 @@ namespace PhoneShop.Controllers
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return Json(returnData);
                 }
-                returnData = await _attributesservices.DeleteAtributesVallue(requestData);
                 return Json(returnData) ;
             }
             catch (Exception ex)

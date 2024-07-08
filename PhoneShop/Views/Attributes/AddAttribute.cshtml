@@ -13,29 +13,6 @@
         <input type="number" class="form-control" id="txtProductID">
     </div>
 
-    <div class="form-group" style="padding-bottom: 60px;">
-        <label for="Title" class="control-label col-md-3">Ảnh sản phẩm:<span class="required">*</span></label>
-        <div class="col-md-6">
-            <div class="input-icon right">
-                <input id="upload" class="form-control" type="file" name="upload" accept="image/*" multiple="multiple" />
-                <p style="color:red">Chọn từ 1 - 3 ảnh sản phẩm</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label for="Title" class="control-label col-md-3">ảnh đã chọn:<span class="required">*</span></label>
-        <div class="col-md-6">
-            <div class="input-icon right">
-                <div id="dvPreview">
-                </div>
-                <div id="divAddMoreImage" style="display:none;">
-                    <input type="file" id="fileaddMore" style="display:none">
-                    <a style="cursor:pointer;" onclick="openFileOption();"><i class="fa fa-plus-circle"></i>Thêm ảnh</a>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="ProductClassify">
         <div class="Add_Attr">
             <div class="col-md-2"><input type="text" id="txtGroupAttr_0" value="" class="form-control" placeholder="Tên nhóm phân loại" /></div>
@@ -46,12 +23,11 @@
                 <div class="col-md-2"><input type="text" id="txtPriceSale_0" value="" class="form-control" placeholder="giá sale" /></div>
                 <div class="col-md-2"><a style="cursor:pointer;" onclick="ProductClassify_AddAttValue()"><i class="fa fa-plus-circle"></i>Thêm phân loại</a></div>
             </div>
-            <div class="col-md-2"><a style="cursor:pointer;" onclick="ProductClassify_AddAttr()"><i class="fa fa-plus-circle"></i>Thêm nhóm phân loại</a></div>
         </div>
     </div>
 
 </div>
-<button type="button" id="btnSave" class="btn btn-success">Thêm</button>
+<button type="button" id="btnSave" class="btn btn-success">Thêm thuộc tính sản phẩm</button>
 
 <div id="Test_PartialView"></div>
 
@@ -64,66 +40,9 @@
                 SaveData();
             });
 
-            $('#upload').on('change', function () {
-                // statusEditAva = 1;
-                if (typeof (FileReader) != "undefined") {
-                    var dvPreview = $("#dvPreview");
-                    dvPreview.html("");
-                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
-                    var index = 0;
-                    $($(this)[0].files).each(function () {
-                        var file = $(this);
-                        if (regex.test(file[0].name.toLowerCase())) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                var img = $("<img class='img_" + index + "'/> <span id='span_img_" + index + "'><a onclick='RemoveProductImage(" + index + ")'>Xóa</a></span> <br/>");
-                                img.attr("style", "height:250px;width: 250px");
-                                img.attr("src", e.target.result);
-                                //  console.log(e.target.result);
-                                dvPreview.append(img);
-                                index++;
-                            }
-                            reader.readAsDataURL(file[0]);
-                        } else {
-                            alert(file[0].name + " is not a valid image file.");
-                            dvPreview.html("");
-                            return false;
-                        }
-
-
-                    });
-                    $("#divAddMoreImage").show();
-                } else {
-                    alert("This browser does not support HTML5 FileReader.");
-                }
-            });
-
-
 
         });
 
-        function ProductClassify_AddAttr() {
-            var index_count = [];
-            $(".ProductClassify .Add_Attr").each(function (index, value) {
-                index_count.push(index);
-            });
-            console.log(index_count.length);
-            var item_index = index_count.length;
-            console.log("item_index:" + item_index);
-            var html = "";
-            html += "<div class=\"row row_marging productClassify_Row_" + item_index + "\" >";
-            html += "<div class=\"col-md-2\" > <input type=\"text\" id = \"txtGroupAttr_" + item_index + "\" value = \"\" class=\"form-control\" placeholder = \"Tên nhóm phân loại\" /> </div>";
-            html += "<div class=\"Add_AttValue" + item_index + "\">";
-            html += "<div class=\"col-md-2\" > <input type=\"text\" id = \"txtAttributeName_" + item_index + "\" value = \"\" class=\"form-control\" placeholder = \"Tên phân loại\" /> </div>";
-            html += "<div class=\"col-md-2\" > <input type=\"text\" id = \"txtQuantity_" + item_index + "\" value = \"\" class=\"form-control\" placeholder = \"Số lượng\" /> </div>";
-            html += "<div class=\"col-md-2\" > <input type=\"text\" id = \"txtPrice_" + item_index + "\" value = \"\" class=\"form-control\" placeholder = \"giá\" /> </div>";
-            html += "<div class=\"col-md-2\" > <input type=\"text\" id = \"txtPriceSale_" + item_index + "\" value = \"\" class=\"form-control\" placeholder = \"giá sale\" /> </div>";
-            html += "<div class=\"col-md-2\" > <a style=\"cursor:pointer;\" onclick = \"ProductClassify_AddAttValue()\" > <i class=\"fa fa-plus-circle\" > </i>Thêm phân loại</a > </div>";
-            html += "</div>";
-            html += "<div class=\"col-md-2\" > <a style=\"cursor:pointer;\" onclick = \"ProductClassify_RemoveGrAtt(" + item_index + ")\" > <i class=\"fa fa - plus - circle\" > </i>Xóanhóm phân loại</a > </div>";
-            html += "</div>";
-            $(".ProductClassify").append(html);
-        }
 
         function ProductClassify_AddAttValue() {
             var index_count = [];
@@ -148,19 +67,12 @@
             debugger;
             $(".ProductClassify .productClassify_Row_" + remove_index).remove();
         }
-        function ProductClassify_RemoveGrAtt(remove_index) {
-            debugger;
-            $(".ProductClassify .productClassify_Row_ " + remove_index).remove();
-        }
         function SaveData() {
 
             debugger;
             var PID = $("#txtProductID").val();
-            var GrAtt = "";
+            var GrAtt = $("txtGroupAttr").val();
             var attributes = "";
-            $(".ProductClassify .Add_Attr").each(function (index, value) {
-                GrAtt += $("txtGroupAttr_" + index).val() + "_";
-            });
             $(".ProductClassify .Add_AttValue").each(function (index, value) {
                 var ProductClassifyName = $("#txtAttributeName_" + index).val();
                 var ProductClassifyQ = $("#txtQuantity_" + index).val();

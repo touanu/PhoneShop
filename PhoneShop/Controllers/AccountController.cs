@@ -6,18 +6,19 @@ using Newtonsoft.Json;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
+using PhoneShop.DataAccess.UnitOfWork;
 
 namespace PhoneShop.Controllers
 {
     public class AccountController : Controller
     {
         readonly IConfiguration _configuration;
-        private readonly IAccountServices _accountServices;
-        public AccountController(IConfiguration configuration, IAccountServices accountServices)
+        
+        public AccountController(IConfiguration configuration)
         {
-            _accountServices = accountServices;
+            
             _configuration = configuration;
-
+           
         }
 
         public IActionResult Index()
@@ -29,6 +30,7 @@ namespace PhoneShop.Controllers
         {
             return View();
         }
+
         public async Task<JsonResult>Logins(AccountRequestData requestData)
         {
             var returnData = new ReturnData();
@@ -139,7 +141,7 @@ namespace PhoneShop.Controllers
 
 
                 returnData.ReturnCode = 1;
-                returnData.ReturnMsg = "Đăng nhập thành công!";
+                returnData.ReturnMsg = "Đăng ký thành công!";
 
                 //  Session
                 return Json(returnData);
@@ -166,9 +168,9 @@ namespace PhoneShop.Controllers
                     returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ!";
                     return Json(returnData);
                 }
-                var result = await _accountServices.RemoveCustomerByID(requestData);
-                returnData.ReturnCode = result.ReturnCode;
-                returnData.ReturnMsg = result.ReturnMsg;
+                //var result = await _unitOfWork._accountServices.RemoveCustomerByID(requestData);
+                //returnData.ReturnCode = result.ReturnCode;
+                //returnData.ReturnMsg = result.ReturnMsg;
                 return Json(returnData);
             }
             catch (Exception ex)
