@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class Promotions
+    public class Promotion
     {
         [Key]public int PromotionID { get; set; }
         public string? PromotionName { get; set; }

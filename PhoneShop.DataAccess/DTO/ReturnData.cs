@@ -26,8 +26,8 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class ReturnDataReturnAccount : ReturnData
     {
-        public Accounts Accounts { get; set; }
-        public Customers customers{ get; set; }
+        public Account Account { get; set; }
+        public Customer customer{ get; set; }
     }
 
     public class ReturnDataReturnAttributes: ReturnData
@@ -56,6 +56,6 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class GetPromotionsReturnData : ReturnData
     {
-        public Promotions? promotions { get; set; }
+        public Promotion? promotion { get; set; }
     }
 }

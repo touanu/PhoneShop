@@ -15,8 +15,8 @@ namespace PhoneShop.DataAccess
         //{
         //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-PBSFM7Q;Initial Catalog=PhoneShop;Integrated Security=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;TrustServerCertificate=True");
         //}
-        public DbSet<Accounts> accounts{ get; set; }
-        public DbSet<Customers> customers{ get; set; }
+        public DbSet<Account> account{ get; set; }
+        public DbSet<Customer> customer{ get; set; }
 
         public DbSet<Brands> brands{ get; set; }
 
@@ -24,7 +24,7 @@ namespace PhoneShop.DataAccess
         public DbSet<ProductAttributesVallues> attributesVallues { get; set; }
         public DbSet<Oders> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-        public DbSet<Promotions> Promotions { get; set; }
+        public DbSet<Promotion> Promotion { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Functions>? functions { get; set; }
         public DbSet<User_Permission>? user_Permissions { get; set; }

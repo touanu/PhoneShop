@@ -36,7 +36,7 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                foreach (var Promo in _dbcontext.Promotions)
+                foreach (var Promo in _dbcontext.Promotion)
                 {
                     if (Promo.PromotionName == requestData.PromotionName)
                     {
@@ -52,7 +52,7 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                var PromotonsReq = new Promotions
+                var PromotonsReq = new Promotion
                 {
                     CustomerID = requestData.CustomerID,
                     StartDate = requestData.StartDate,
@@ -65,11 +65,10 @@ namespace PhoneShop.DataAccess.Services
                     QuantityOneDay = requestData.QuantityOneDay,
                     TotalDiscount = requestData.TotalDiscount,
                 };
-                _dbcontext.Promotions.Add(PromotonsReq);
-                _dbcontext.SaveChangesAsync();
+                _dbcontext.Promotion.Add(PromotonsReq);
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm khuyến mãi thành công!";
-                returnData.promotions = PromotonsReq;
+                returnData.promotion = PromotonsReq;
                 return returnData;
 
             }
@@ -84,12 +83,12 @@ namespace PhoneShop.DataAccess.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<Promotions>> GetPromotions(PromotionsRequestData requestData)
+        public async Task<List<Promotion>> GetPromotions(PromotionsRequestData requestData)
         {
-            var list = new List<Promotions>();
+            var list = new List<Promotion>();
             try
             {
-                list = _dbcontext.Promotions.ToList();
+                list = _dbcontext.Promotion.ToList();
                 if (!string.IsNullOrEmpty(requestData.PromotionName))
                 {
                     list = list.FindAll(s => s.PromotionName.ToLower().Contains(requestData.PromotionName.ToLower())).ToList();
@@ -132,8 +131,8 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                var p = new Promotions();
-                foreach (var Promo in _dbcontext.Promotions)
+                var p = new Promotion();
+                foreach (var Promo in _dbcontext.Promotion)
                 {
                     if (Promo.PromotionName == requestData.PromotionName)
                     {
@@ -153,7 +152,7 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                var PromotonsReq = new Promotions
+                var PromotonsReq = new Promotion
                 {
                     CustomerID = requestData.CustomerID,
                     StartDate = requestData.StartDate,
@@ -166,8 +165,7 @@ namespace PhoneShop.DataAccess.Services
                     QuantityOneDay = requestData.QuantityOneDay,
                     TotalDiscount = requestData.TotalDiscount,
                 };
-                _dbcontext.Promotions.Update(PromotonsReq);
-                _dbcontext.SaveChanges();
+                _dbcontext.Promotion.Update(PromotonsReq);
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Cập nhật khuyến mãi thành công!";
                 return returnData;

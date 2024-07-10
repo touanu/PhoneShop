@@ -57,7 +57,7 @@ namespace PhoneShop.Controllers
         }
         public async Task<JsonResult> GetPromotions(PromotionsRequestData requestData)
         {
-            var list = new List<Promotions>();
+            var list = new List<Promotion>();
             try
             {
                 var baseurl = _configuration["API_URL:URL"] ?? "";

@@ -9,7 +9,7 @@ namespace PhoneShop.DataAccess.IServices
 {
     public interface IPromotionsServices
     {
-        Task<List<Promotions>> GetPromotions(PromotionsRequestData requestData);
+        Task<List<Promotion>> GetPromotions(PromotionsRequestData requestData);
         Task<GetPromotionsReturnData> AddPromotions(PromotionsRequestData requestData);
         Task<ReturnData> DeletePromotions(PromotionsRequestData requestData);
         Task<ReturnData> UpdateTimePromotions(PromotionsRequestData requestData);

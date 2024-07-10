@@ -22,9 +22,9 @@ namespace PhoneShop.DataAccess.Services
             var returnData = new ReturnDataReturnAccount();
            try
            {
-                var account = _dbcontext.accounts.Where(s => s.UserName == requestData.UserName
+                var account = _dbcontext.account.Where(s => s.UserName == requestData.UserName
                 && s.PassWord == requestData.PassWord).FirstOrDefault();
-                var customer = _dbcontext.customers.Where(c=>c.UserName == requestData.UserName
+                var customer = _dbcontext.customer.Where(c=>c.UserName == requestData.UserName
                 &&c.PassWord == requestData.PassWord).FirstOrDefault();
                 if(account==null && customer == null)
                 {
@@ -33,7 +33,7 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
             returnData.ReturnCode = 1;
-            returnData.Accounts = account;
+            returnData.Account = account;
             returnData.ReturnMsg = "đăng nhập thành công";
             return returnData;
            }
@@ -79,14 +79,14 @@ namespace PhoneShop.DataAccess.Services
                 //    return returnData;
                 //}
                 //check tài khoan ton tại hay không
-                var customer = _dbcontext.customers.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
+                var customer = _dbcontext.customer.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
                 if((customer!=null && customer.CustomerID>0))
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Tên đăng nhập đã tồn tại";
                     return returnData;
                 }
-                var customerreq = new Customers
+                var customerreq = new Customer  
                 {
                     FirstName = requestData.FristName,
                     LastName = requestData.LastName,
@@ -99,9 +99,8 @@ namespace PhoneShop.DataAccess.Services
                     DistrictID = requestData.DistrictID,
                     WardsID = requestData.WardsID,
                 };
-                _dbcontext.customers.Add(customerreq);
-                _dbcontext.SaveChangesAsync();
-                returnData.customers = customerreq;
+                _dbcontext.customer.Add(customerreq);
+                returnData.customer = customerreq;
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm tài khoản thành công! ";
                 return returnData;
@@ -112,11 +111,11 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public async Task<List<Customers>> GetCustomerByUserNameorLastName(AccountRequestData requestData)
+        public async Task<List<Customer>> GetCustomerByUserNameorLastName(AccountRequestData requestData)
         {
             try
             {
-                var customers = new List<Customers>();
+                var customers = new List<Customer>();
                 if (requestData.UserName!=null
                 &&requestData.LastName!=null)
                 {
@@ -124,7 +123,7 @@ namespace PhoneShop.DataAccess.Services
                 }
                 if (requestData.UserName!=null)
                 {
-                    foreach(var user in _dbcontext.customers)
+                    foreach(var user in _dbcontext.customer)
                     {
                         if(user.LastName==requestData.UserName)
                         {
@@ -133,7 +132,7 @@ namespace PhoneShop.DataAccess.Services
                     }
                 }
                 if(requestData.LastName!=null){
-                    var customer = _dbcontext.customers.Where(c=>c.UserName==requestData.UserName).FirstOrDefault();
+                    var customer = _dbcontext.customer.Where(c=>c.UserName==requestData.UserName).FirstOrDefault();
                     customers.Add(customer);
                 }
                 return customers;
@@ -173,8 +172,8 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "dữ liệu vào không hợp lệ";
                     return returnData; 
                 }
-                Customers customer=new Customers();
-                foreach (var c in _dbcontext.customers)
+                Customer customer=new Customer();
+                foreach (var c in _dbcontext.customer)
                 {
                     if (c.CustomerID==requestData.ID)
                     {
@@ -187,8 +186,7 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "Không có khách hàng có ID bạn vừa nhập";
                     return returnData; 
                 }
-                _dbcontext.customers.Remove(customer);
-                _dbcontext.SaveChangesAsync();
+                _dbcontext.customer.Remove(customer);
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "xóa khách hàng thành công";
                 return returnData;
@@ -235,14 +233,14 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
                 //check tài khoan ton tại hay không
-                var customer = _dbcontext.customers.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
+                var customer = _dbcontext.customer.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
                 if((customer!=null && customer.CustomerID>0))
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Tên đăng nhập đã tồn tại";
                     return returnData;
                 }
-                var customerreq = new Customers
+                var customerreq = new Customer
                 {
                     FirstName = requestData.FristName,
                     LastName = requestData.LastName,
@@ -255,8 +253,7 @@ namespace PhoneShop.DataAccess.Services
                     DistrictID = requestData.DistrictID,
                     WardsID = requestData.WardsID,
                 };
-                _dbcontext.customers.Add(customerreq);
-                _dbcontext.SaveChangesAsync();
+                _dbcontext.customer.Add(customerreq);
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng ký tài khoản thành công! ";
                 return returnData;
@@ -303,14 +300,14 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
                 //check tài khoan ton tại hay không
-                var customer = _dbcontext.customers.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
+                var customer = _dbcontext.customer.Where(c=>c.UserName == requestData.UserName).FirstOrDefault();
                 if((customer==null && customer.CustomerID>0))
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Tên đăng nhập không tồn tại";
                     return returnData;
                 }
-                var customerreq = new Customers
+                var customerreq = new Customer
                 {
                     FirstName = requestData.FristName,
                     LastName = requestData.LastName,
@@ -323,8 +320,7 @@ namespace PhoneShop.DataAccess.Services
                     DistrictID = requestData.DistrictID,
                     WardsID = requestData.WardsID,
                 };
-                _dbcontext.customers.Update(customerreq);
-                _dbcontext.SaveChangesAsync();
+                _dbcontext.customer.Update(customerreq);
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Cập nhật tài khoản thành công! ";
                 return returnData;
@@ -336,13 +332,13 @@ namespace PhoneShop.DataAccess.Services
 
         }
 
-        public async Task<User_Permission> User_PermissionById(int functionId, int UserID)
+        public async Task<User_Permission> User_PermissionById(int functionId, int AccountID)
         {
             var model = new User_Permission();
 
             try
             {
-                model = _dbcontext.user_Permissions.Where(s => s.FunctionID == functionId && s.UserID == UserID).FirstOrDefault();
+                model = _dbcontext.user_Permissions.Where(s => s.FunctionID == functionId && s.AccountID == AccountID).FirstOrDefault();
             }
             catch (Exception ex)
             {

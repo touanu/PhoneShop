@@ -11,7 +11,7 @@ namespace PhoneShop.DataAccess.DTO
     {
         [Key]
         public int UserFunctionID { get; set; }
-        public int UserID { get; set; }
+        public int AccountID { get; set; }
         public int FunctionID { get; set; }
         public int IViews { get; set; }
         public int IUpdate { get; set; }

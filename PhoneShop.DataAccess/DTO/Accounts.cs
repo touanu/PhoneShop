@@ -2,7 +2,7 @@
 
 namespace PhoneShop.Models
 {
-    public class Accounts
+    public class Account
     {
         [Key]public int AccountID { get; set; }
         public string FirstName { get; set; }

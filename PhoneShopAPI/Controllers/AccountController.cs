@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI.Filter;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -39,7 +40,7 @@ namespace PhoneShopAPI.Controllers
                     returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
                     return Ok(returnData);
                 }
-               
+
                 // Bước 1.2 : text 123456 -> n2zmy77Xfb4cnD7ca8VYip/kGpT4q+1gcONNT5 dùng
                 //  Thuật toán mã hóa : RSA265
                 var salt = _configuration["Sercurity:Salt"] ?? "";
@@ -50,6 +51,7 @@ namespace PhoneShopAPI.Controllers
 
                 requestData.PassWord = passwordHash;
                 var response = await _unitOfWork._accountServices.AccountLogin(requestData);
+                _unitOfWork.SaveChange();
 
                 if (response.ReturnCode <= 0)
                 {
@@ -59,7 +61,7 @@ namespace PhoneShopAPI.Controllers
                 }
 
                 //bƯỚC 2: Dùng Claims để tạo token từ tài khoản có được ở bước 1.2
-                var account = response.Accounts;
+                var account = response.Account;
 
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Name, account.UserName),
@@ -72,7 +74,7 @@ namespace PhoneShopAPI.Controllers
 
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng nhập thành công!";
-                returnData.Accounts = response.Accounts;
+                returnData.Account = response.Account;
                 returnData.Token = new JwtSecurityTokenHandler().WriteToken(newToken);
 
                 return Ok(returnData);
@@ -122,7 +124,7 @@ namespace PhoneShopAPI.Controllers
 
                 requestData.PassWord = passwordHash;
                 var response = await _unitOfWork._accountServices.AddCustomer(requestData);
-
+                _unitOfWork.SaveChange();
                 if (response.ReturnCode <= 0)
                 {
                     returnData.ReturnCode = response.ReturnCode;
@@ -131,7 +133,7 @@ namespace PhoneShopAPI.Controllers
                 }
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Đăng ký thành công!";
-                returnData.customers = response.customers;
+                returnData.customer = response.customer;
                 return Ok(returnData);
             }
             catch (Exception ex)
@@ -142,6 +144,7 @@ namespace PhoneShopAPI.Controllers
             }
         }
         [HttpPost("RemoveCustomer")]
+        [PhoneShopAuthorize("DELETE_ACCOUNT", "DELETE")]
         public async Task<ActionResult> RemoveCustomer(AccountRequestData requestData)
         {
             ReturnDataReturnAccount returnData = new ReturnDataReturnAccount();
@@ -157,7 +160,7 @@ namespace PhoneShopAPI.Controllers
                 }
 
                 var response = await _unitOfWork._accountServices.RemoveCustomerByID(requestData);
-
+                _unitOfWork.SaveChange();
                 if (response.ReturnCode <= 0)
                 {
                     returnData.ReturnCode = response.ReturnCode;
@@ -175,5 +178,6 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+
     }
 }

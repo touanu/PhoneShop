@@ -34,7 +34,7 @@ namespace PhoneShop.DataAccess.Services
                 foreach (var item in requestData.Details)
                 {
                     if (item.PromotionID != null
-                        || !_phoneShopDBContext.Promotions.Any(a => a.PromotionID == item.PromotionID))
+                        || !_phoneShopDBContext.Promotion.Any(a => a.PromotionID == item.PromotionID))
                     {
                         _phoneShopDBContext.ChangeTracker.Clear();
                         returnData.ReturnCode = (int)ReturnCode.NotExist;

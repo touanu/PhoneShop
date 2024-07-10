@@ -34,9 +34,10 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
                 var response = await _unitOfWork._promotionsServices.AddPromotions(requestData);
+                _unitOfWork.SaveChange();
                 returnData.ReturnMsg = response.ReturnMsg;
                 returnData.ReturnCode=response.ReturnCode;
-                returnData.promotions=response.promotions;
+                returnData.promotion=response.promotion;
                 return Ok(returnData);
             }
             catch (Exception ex)

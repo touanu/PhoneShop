@@ -66,5 +66,30 @@ namespace PhoneShop.Commonlibs
                 throw;
             }
         }
+        public static async Task<string> HttpSenPostWithToken(string baseUrl, string api, string jsonData, string token)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    //client.DefaultRequestHeaders.Accept.Clear();
+                    //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    StringContent queryString = new StringContent(jsonData, UnicodeEncoding.UTF8, "application/json");
+                    var url = baseUrl + api;
+                    HttpResponseMessage response = await client.PostAsync(new Uri(url), queryString);
+
+                    return await response.Content.ReadAsStringAsync();
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

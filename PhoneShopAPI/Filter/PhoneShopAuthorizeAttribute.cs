@@ -103,9 +103,48 @@ namespace PhoneShopAPI.Filter
                             }
                             break;
 
-                        case "INSERT": break;
-                        case "UPDATE": break;
-                        case "DELETE": break;
+                        case "INSERT":
+                            if (permission.IsExport == 0)
+                            {
+                                context.HttpContext.Response.ContentType = "application/json";
+                                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Result = new JsonResult(new
+                                {
+                                    Code = HttpStatusCode.Unauthorized,
+                                    Message = "Bạn không có quyền"
+                                });
+
+                                return;
+                            }
+                            break; 
+                        case "UPDATE":
+                            if (permission.IUpdate == 0)
+                            {
+                                context.HttpContext.Response.ContentType = "application/json";
+                                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Result = new JsonResult(new
+                                {
+                                    Code = HttpStatusCode.Unauthorized,
+                                    Message = "Bạn không có quyền"
+                                });
+
+                                return;
+                            }
+                            break;
+                        case "DELETE":
+                            if (permission.IsDelete == 0)
+                            {
+                                context.HttpContext.Response.ContentType = "application/json";
+                                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Result = new JsonResult(new
+                                {
+                                    Code = HttpStatusCode.Unauthorized,
+                                    Message = "Bạn không có quyền"
+                                });
+
+                                return;
+                            }
+                            break;
                     }
                 }
 

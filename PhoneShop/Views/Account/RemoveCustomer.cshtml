@@ -1,23 +1,49 @@
 ﻿<form id="deleteUserForm">
     <label for="userId">User ID:</label>
     <input type="number" id="userId" name="userId" required>
-    <button type="button" onclick="deleteUser()">Xóa User</button>
+    <div class="col-4">
+        <button type="button" id="btndeleteUser" class="btn btn-primary btn-block">Xóa</button>
+    </div>
 </form>
-
-<script>
-function deleteUser() {
-    var userId = $('#userId').val();
-
-    $.ajax({
-        url: '/Account/RemoveCustomers',
-        type: 'DELETE',
-        data: userId,
-        success: function(result) {
-            alert("Xóa user thành công!");
-        },
-        error: function(error) {
-            alert("Có lỗi xảy ra: " + error.responseText);
+@section Scripts{
+    <script>
+       debugger;
+        $(document).ready(function () {
+            $("#btndeleteUser").click(function () {
+                DeleteUser();
+            });
+        });
+        function DeleteUser() {
+            var CusID = $("#userId").val();
+            var param = {
+                ID:CusID,
+                FristName: "",
+                LastName: "",
+                UserName: "",
+                PassWord: "",
+                PhoneNumber:"",
+                Email: "",
+                ProviceID: 0,
+                DistrictID: 0,
+                WardsID: 0
+            };
+            $.ajax({
+                url: "/Account/RemoveCustomers",
+                type: "POST",
+                data: param,
+                async: true,
+                // dataType: "html",
+                dataType: "json",
+                success: function (rs) {
+                    if (rs.returnCode > 0) {
+                        window.location.href = "/";
+                    }
+                    alert(rs.returnMsg);
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
+                }
+            });
         }
-    });
+    </script>
 }
-</script>

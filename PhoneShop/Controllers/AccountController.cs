@@ -7,6 +7,7 @@ using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
 using PhoneShop.DataAccess.UnitOfWork;
+using System.Collections.Generic;
 
 namespace PhoneShop.Controllers
 {
@@ -23,6 +24,11 @@ namespace PhoneShop.Controllers
 
         public IActionResult Index()
         {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
             return View();
         }
       
@@ -145,11 +151,6 @@ namespace PhoneShop.Controllers
                     returnData.ReturnMsg = rs.ReturnMsg;
                     return Json(returnData);
                 }
-
-
-                returnData.ReturnCode = 1;
-                returnData.ReturnMsg = "Đăng ký thành công!";
-
                 //  Session
                 return Json(returnData);
             }
@@ -162,22 +163,69 @@ namespace PhoneShop.Controllers
         }
         public IActionResult RemoveCustomer()
         {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
+           
             return View();
         }
         public async Task<JsonResult> RemoveCustomers(AccountRequestData requestData)
         {
             ReturnData returnData = new ReturnData();
+            var messageFromServer = string.Empty;
             try
             {
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return Json(messageFromServer);
+                }
+                // Bước 1: Kiểm tra dữ liệu đầu vào 
                 if (requestData.ID <= 0)
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ!";
                     return Json(returnData);
                 }
-                //var result = await _unitOfWork._accountServices.RemoveCustomerByID(requestData);
-                //returnData.ReturnCode = result.ReturnCode;
-                //returnData.ReturnMsg = result.ReturnMsg;
+                requestData.Email = "";
+                requestData.FristName = "";
+                requestData.LastName = "";
+                requestData.PhoneNumber = "";
+                requestData.UserName = "";
+                requestData.PassWord = "";
+                // Bước 2 : GỌI API ĐỂ LẤY TOKEN 
+                // bƯỚC 2.1 kHAI BÁO URL CỦA API
+
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Account/RemoveCustomer";
+
+                //Bước 2.2 convert từ object requestData sang Json để đẩy lên API
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 2.3 dùng httpClient để đưa json lên URL của API
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Lỗi";
+                    return Json(returnData);
+                }
+
+                // Bước 2.4 : Convert từ json nhận được thành object 
+
+                var rs = JsonConvert.DeserializeObject<ReturnData>(result);
+                if (rs.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = rs.ReturnCode;
+                    returnData.ReturnMsg = rs.ReturnMsg;
+                    return Json(returnData);
+                }
+                returnData.ReturnMsg=rs.ReturnMsg;
+                returnData.ReturnCode=rs.ReturnCode;
                 return Json(returnData);
             }
             catch (Exception ex)
