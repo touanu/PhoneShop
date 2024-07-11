@@ -35,13 +35,14 @@ namespace PhoneShop.Controllers
             return View();
         }
        
-        public async Task<JsonResult>AddAtrributes(AttributesRequestData attributesRequestData)
+        public async Task<JsonResult>AddAttributes(AttributesRequestData attributesRequestData)
         {
             var returnData = new AttributesReturnData();
+            var messageFromServer = string.Empty;
             try
-
             {
-                var messageFromServer = string.Empty;
+                attributesRequestData.AttributesName = "";
+                attributesRequestData.AttributeValluesName = "";
                 var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
                 if (string.IsNullOrEmpty(token))
                 {
@@ -107,9 +108,13 @@ namespace PhoneShop.Controllers
                 throw ex;
             }
         }
-        public async Task<IActionResult> GetAttribute(AttributesResponseData requestData)
+        public IActionResult GetAttribute()
         {
-            var list = new List<ProductAttributes>();
+            return PartialView();
+        }
+        public async Task<IActionResult> GetAttributes(AttributesResponseData requestData)
+        {
+            var list = new List<ProductAttribute>();
             try
 
             {
@@ -132,7 +137,7 @@ namespace PhoneShop.Controllers
                     {
                         foreach (var item in response.AttributesName)
                         {
-                            list.Add(new ProductAttributes
+                            list.Add(new ProductAttribute
                             {
                                 AttributesName = item.ToString(),
                             }) ;

@@ -8,22 +8,22 @@
     }
 </style>
 <div class="row">
-    <div class="form-group">
+    <div class="col-md-2">
         <label for="email">ProductID:</label>
         <input type="number" class="form-control" id="txtProductID">
     </div>
-
+    <div class="col-md-2">
+        <label for="email">Tên nhóm phân loại:</label>
+        <input type="text" class="form-control" id="txtGroupAttr">
+    </div>
     <div class="ProductClassify">
-        <div class="Add_Attr">
-            <div class="col-md-2"><input type="text" id="txtGroupAttr_0" value="" class="form-control" placeholder="Tên nhóm phân loại" /></div>
-            <div class="Add_AttValue">
+            <div class="row">
                 <div class="col-md-2"><input type="text" id="txtAttributeName_0" value="" class="form-control" placeholder="Tên phân loại" /></div>
                 <div class="col-md-2"><input type="text" id="txtQuantity_0" value="" class="form-control" placeholder="Số lượng" /></div>
                 <div class="col-md-2"><input type="text" id="txtPrice_0" value="" class="form-control" placeholder="giá" /></div>
                 <div class="col-md-2"><input type="text" id="txtPriceSale_0" value="" class="form-control" placeholder="giá sale" /></div>
                 <div class="col-md-2"><a style="cursor:pointer;" onclick="ProductClassify_AddAttValue()"><i class="fa fa-plus-circle"></i>Thêm phân loại</a></div>
             </div>
-        </div>
     </div>
 
 </div>
@@ -46,7 +46,7 @@
 
         function ProductClassify_AddAttValue() {
             var index_count = [];
-            $(".ProductClassify .Add_AttValue").each(function (index, value) {
+            $(".ProductClassify .row").each(function (index, value) {
                 index_count.push(index);
             });
             console.log(index_count.length);
@@ -71,9 +71,9 @@
 
             debugger;
             var PID = $("#txtProductID").val();
-            var GrAtt = $("txtGroupAttr").val();
+            var GrAtt = $("#txtGroupAttr").val();
             var attributes = "";
-            $(".ProductClassify .Add_AttValue").each(function (index, value) {
+            $(".ProductClassify .row").each(function (index, value) {
                 var ProductClassifyName = $("#txtAttributeName_" + index).val();
                 var ProductClassifyQ = $("#txtQuantity_" + index).val();
                 var ProductClassifyPrice = $("#txtPrice_" + index).val();
@@ -91,13 +91,13 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Attributes/AddAtrributes",
+                url: "/Attributes/AddAttributes",
                 data: param,
                 async: true,
                 // dataType: "html",
                 dataType: "json",
                 success: function (rs) {
-                    if (rs.responseCode > 0) {
+                    if (rs.ReturnCode > 0) {
 
                         LoadData();
                     }

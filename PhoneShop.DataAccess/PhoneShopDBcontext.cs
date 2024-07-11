@@ -20,8 +20,8 @@ namespace PhoneShop.DataAccess
 
         public DbSet<Brands> brands{ get; set; }
 
-        public DbSet<ProductAttributes> productAttributes { get; set; }
-        public DbSet<ProductAttributesVallues> attributesVallues { get; set; }
+        public DbSet<ProductAttribute> ProductAttribute { get; set; }
+        public DbSet<ProductAttributesVallue> ProductAttributesVallue { get; set; }
         public DbSet<Oders> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Promotion> Promotion { get; set; }

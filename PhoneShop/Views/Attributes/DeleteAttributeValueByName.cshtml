@@ -9,10 +9,6 @@
         var AttributesValueName = $('#attributesValueName').val();
 
         $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
             url: '/Attributes/DeleteAttributeValueByNames',
             type: 'POST',
             data: AttributesValueName,

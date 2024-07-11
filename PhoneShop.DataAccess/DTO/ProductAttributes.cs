@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class ProductAttributes
+    public class ProductAttribute
     {
         [Key] public int ProductAttributeID { get; set; }
+        public int ProductID { get; set; }
+        public string AttributesName { get; set; }
+    }
+    public class ProductAttribteReq
+    {
         public int ProductID { get; set; }
         public string AttributesName { get; set; }
     }

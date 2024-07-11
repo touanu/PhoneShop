@@ -34,6 +34,7 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
                 var response = await _unitOfWork._Attributesservices.AddAttributes(requestData);
+                _unitOfWork.SaveChange();
                 returnData.ReturnCode = response.ReturnCode;
                 returnData.ReturnMsg = response.ReturnMsg;
                 return Ok(returnData);

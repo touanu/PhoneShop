@@ -32,8 +32,8 @@ namespace PhoneShop.DataAccess.DTO
 
     public class ReturnDataReturnAttributes: ReturnData
     {
-        public ProductAttributes attribute { get; set; }
-        public ProductAttributesVallues ProductAttributesVallues { get; set; }
+        public ProductAttribute attribute { get; set; }
+        public ProductAttributesVallue ProductAttributesVallues { get; set; }
     }
 
     public class BrandInsertReturnData : ReturnData
@@ -46,8 +46,8 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class AttributesReturnData : ReturnData 
     {
-        public ProductAttributesVallues vallues { get; set; }
-        public ProductAttributes attributes {  get; set; } 
+        public ProductAttributesVallue vallues { get; set; }
+        public ProductAttribute attributes {  get; set; } 
           
     }
     public class GetProductReturnData : ReturnData

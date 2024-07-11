@@ -22,6 +22,7 @@ namespace PhoneShop.DataAccess.Services
         {
             AttributesReturnData result = new AttributesReturnData();
             var errItem = string.Empty;
+            var GrAttID = 0;
             try
             {
 
@@ -36,7 +37,7 @@ namespace PhoneShop.DataAccess.Services
                     {
                         var Grattr_name = requestData.AttributesNameValue.Split('_')[i];
                         // kiểm tra xem null 
-
+                        var Grattr_PID = requestData.ProductID;
                         if (string.IsNullOrEmpty(Grattr_name))
                         {
                             errItem += "tên thuộc tính bị trống hoặc không hợp lệ ";
@@ -44,15 +45,18 @@ namespace PhoneShop.DataAccess.Services
                         }
 
 
-                        var GroupAttr_Req = new ProductAttributes()
+                        var GroupAttr_Req = new ProductAttribute
                         {
                             AttributesName = Grattr_name,
-                            ProductID = requestData.ProductID,
+                            ProductID = Grattr_PID,
                         };
 
-                        dbcontext.productAttributes.Add(GroupAttr_Req);
+                        dbcontext.ProductAttribute.Add(GroupAttr_Req);
+                        
+                        GrAttID = GroupAttr_Req.ProductAttributeID;
 
                     }
+                    
                     //them thuoc tinh
                     var attr_count = requestData.AttributeValuestring.Split('_').Length;
 
@@ -92,17 +96,18 @@ namespace PhoneShop.DataAccess.Services
                             continue;
                         }
 
-                        var attr_Req = new ProductAttributesVallues()
+                        var attr_Req = new ProductAttributesVallue()
                         {
+                            ProductAttributeID = GrAttID,
                             AttributeValluesName = attr_name,
                             Quantity = Convert.ToInt32(attr_Quantity),
                             Price = Convert.ToInt32(attr_Price),
                             PriceSale = Convert.ToInt32(attr_priceSale),
                         };
 
-                        dbcontext.attributesVallues.Add(attr_Req);
+                        dbcontext.ProductAttributesVallue.Add(attr_Req);
                     }
-                   dbcontext.SaveChangesAsync();
+                   
 
                     result.ReturnCode = 1;
                     result.ReturnMsg = "Thêm sản phẩm thành công";
@@ -133,15 +138,15 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                var AttributesValue = new ProductAttributesVallues();
-                foreach (var attr in dbcontext.attributesVallues)
+                var AttributesValue = new ProductAttributesVallue();
+                foreach (var attr in dbcontext.ProductAttributesVallue)
                 {
                     if (attr.AttributeValluesName == requestData.AttributeValluesName)
                     {
                         AttributesValue= attr;
                     }
                 }
-                dbcontext.attributesVallues.Remove(AttributesValue);
+                dbcontext.ProductAttributesVallue.Remove(AttributesValue);
                 dbcontext.SaveChanges();
                 returnData.ReturnCode = -1;
                 returnData.ReturnMsg = "xóa thành công biến thể có tên"+requestData.AttributeValluesName;
@@ -158,12 +163,12 @@ namespace PhoneShop.DataAccess.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<ProductAttributes>> GetAttributes(AttributesResponseData responseData)
+        public async Task<List<ProductAttribute>> GetAttributes(AttributesResponseData responseData)
         {
-            var returnData= new List<ProductAttributes>();
+            var returnData= new List<ProductAttribute>();
             try
             {
-                returnData = dbcontext.productAttributes.ToList();
+                returnData = dbcontext.ProductAttribute.ToList();
 
                 if (!string.IsNullOrEmpty(responseData.AttributesName))
                 {
