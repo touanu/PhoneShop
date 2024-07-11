@@ -26,7 +26,12 @@ namespace PhoneShop.Controllers
             return View();
         }
         public IActionResult AddAttribute()
-        { 
+        {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
             return View();
         }
        
@@ -36,6 +41,13 @@ namespace PhoneShop.Controllers
             try
 
             {
+                var messageFromServer = string.Empty;
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return Json(messageFromServer);
+                }
                 // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
@@ -45,7 +57,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(attributesRequestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))

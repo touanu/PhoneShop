@@ -207,7 +207,7 @@ namespace PhoneShop.Controllers
 
                 // Bước 2.3 dùng httpClient để đưa json lên URL của API
                 var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
-
+                
                 if (string.IsNullOrEmpty(result))
                 {
                     returnData.ReturnCode = -2;

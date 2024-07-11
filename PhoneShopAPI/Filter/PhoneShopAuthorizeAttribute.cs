@@ -42,8 +42,8 @@ namespace PhoneShopAPI.Filter
                         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         context.Result = new JsonResult(new
                         {
-                            Code = HttpStatusCode.Unauthorized,
-                            Message = "Vui lòng đăng nhập để thực hiện chức năng này "
+                            ReturnCode =-401,
+                            ReturnMsg = "Vui lòng đăng nhập để thực hiện chức năng này "
                         });
 
                         return;
@@ -57,8 +57,8 @@ namespace PhoneShopAPI.Filter
                         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         context.Result = new JsonResult(new
                         {
-                            Code = HttpStatusCode.Unauthorized,
-                            Message = "Vui lòng đăng nhập để thực hiện chức năng này "
+                            ReturnCode =-401,
+                            ReturnMsg = "Vui lòng đăng nhập để thực hiện chức năng này "
                         });
 
                         return;
@@ -75,8 +75,8 @@ namespace PhoneShopAPI.Filter
                         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         context.Result = new JsonResult(new
                         {
-                            Code = HttpStatusCode.Unauthorized,
-                            Message = "Chức năng không hợp lệ "
+                            ReturnCode = -402,
+                            ReturnMsg = "Chức năng không hợp lệ "
                         });
 
                         return;
@@ -95,8 +95,8 @@ namespace PhoneShopAPI.Filter
                                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Result = new JsonResult(new
                                 {
-                                    Code = HttpStatusCode.Unauthorized,
-                                    Message = "Bạn không có quyền"
+                                    ReturnCode = -404,
+                                    ReturnMsg = "Bạn không có quyền"
                                 });
 
                                 return;
@@ -110,8 +110,8 @@ namespace PhoneShopAPI.Filter
                                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Result = new JsonResult(new
                                 {
-                                    Code = HttpStatusCode.Unauthorized,
-                                    Message = "Bạn không có quyền"
+                                    ReturnCode = -404,
+                                    ReturnMsg = "Bạn không có quyền"
                                 });
 
                                 return;
@@ -124,8 +124,8 @@ namespace PhoneShopAPI.Filter
                                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Result = new JsonResult(new
                                 {
-                                    Code = HttpStatusCode.Unauthorized,
-                                    Message = "Bạn không có quyền"
+                                    ReturnCode = -404,
+                                    ReturnMsg = "Bạn không có quyền"
                                 });
 
                                 return;
@@ -138,8 +138,8 @@ namespace PhoneShopAPI.Filter
                                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Result = new JsonResult(new
                                 {
-                                    Code = HttpStatusCode.Unauthorized,
-                                    Message = "Bạn không có quyền"
+                                    ReturnCode = -404,
+                                    ReturnMsg = "Bạn không có quyền"
                                 });
 
                                 return;

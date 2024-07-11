@@ -14,7 +14,7 @@ namespace PhoneShop.DataAccess.DTO
     }
     public enum ReturnCode
     {
-        Success = 0,
+        Success = 1,
         Failure = -1,
         Exception = -99,
         EqualNull = -2,
