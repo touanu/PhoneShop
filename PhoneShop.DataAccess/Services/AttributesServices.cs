@@ -22,7 +22,7 @@ namespace PhoneShop.DataAccess.Services
         {
             AttributesReturnData result = new AttributesReturnData();
             var errItem = string.Empty;
-            var GrAttID = 0;
+            var GrattID = requestData.ProductAttributeID;
             try
             {
 
@@ -52,9 +52,8 @@ namespace PhoneShop.DataAccess.Services
                         };
 
                         dbcontext.ProductAttribute.Add(GroupAttr_Req);
-                        
-                        GrAttID = GroupAttr_Req.ProductAttributeID;
-
+                        dbcontext.SaveChanges();
+                        GrattID = GroupAttr_Req.ProductAttributeID;
                     }
                     
                     //them thuoc tinh
@@ -98,7 +97,7 @@ namespace PhoneShop.DataAccess.Services
 
                         var attr_Req = new ProductAttributesVallue()
                         {
-                            ProductAttributeID = GrAttID,
+                            ProductAttributeID = GrattID,
                             AttributeValluesName = attr_name,
                             Quantity = Convert.ToInt32(attr_Quantity),
                             Price = Convert.ToInt32(attr_Price),

@@ -61,7 +61,7 @@ namespace PhoneShop.Controllers
                 var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 4: nhận dữ liệu về 
-                if (!string.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(result))
                 {
                     returnData.ReturnCode = -2;
                     returnData.ReturnMsg = "Lỗi";
@@ -81,7 +81,6 @@ namespace PhoneShop.Controllers
             {
                 return Json(returnData);
             }
-            return Json(returnData);
         }
  
         public IActionResult DeleteAttributeValueByName()

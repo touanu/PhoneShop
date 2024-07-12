@@ -90,23 +90,36 @@
             };
 
             $.ajax({
-                type: "POST",
                 url: "/Attributes/AddAttributes",
+                type: "POST",
                 data: param,
                 async: true,
                 // dataType: "html",
                 dataType: "json",
                 success: function (rs) {
-                    if (rs.ReturnCode > 0) {
+                    if (rs.returnCode == -401) {
+                        window.location.href = "/Account/Login";
+                    } else {
+                        setTimeout(function () {
 
-                        LoadData();
+
+                            Swal.fire({
+                                title: "Good job!",
+                                text: mes,
+                                icon: "success"
+                            });
+                        }, 500);
                     }
-                    alert(rs.responseMessage);
+
+                    if (rs.returnCode > 0) {
+                        window.location.href = "/";
+                    }
+                    alert(rs.returnMsg);
                 },
                 error(rs) {
                     console.log(JSON.stringify(rs));
                 }
             });
-        }
+       }
     </script>
 }

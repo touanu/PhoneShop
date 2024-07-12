@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI.Filter;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace PhoneShopAPI.Controllers
@@ -20,6 +21,7 @@ namespace PhoneShopAPI.Controllers
         }
 
         [HttpPost("AddAttribute")]
+        [PhoneShopAuthorize("Add_Attributes","INSERT")]
         public async Task<ActionResult> AddAttribute(AttributesRequestData requestData)
         {
             ReturnDataReturnAttributes returnData =new ReturnDataReturnAttributes();
