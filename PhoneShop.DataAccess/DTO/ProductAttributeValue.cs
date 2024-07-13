@@ -9,9 +9,9 @@ namespace PhoneShop.DataAccess.DTO
 {
     public class ProductAttributeValue
     {
-        [Key] public int ProductAttreID { get; set; }
+        [Key] public int AttributeValueID { get; set; }
         public int ProductAttributeID { get; set; }
-        public string AttributeValluesName { get; set; }
+        public string AttributeValuesName { get; set; }
         public decimal Price { get; set; }
         public decimal PriceSale {  get; set; }
         public int Quantity { get; set; }

@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
 }
 
 <!DOCTYPE html>
@@ -9,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE | @ViewData["Title"]</title>
+    <title>PhoneShop | @ViewData["Title"]</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
@@ -19,13 +16,14 @@
     <link rel="stylesheet" href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <link href="" rel="stylesheet" />
 </head>
 <body class="login-page" style="min-height: 466px;">
-    <div class="login-box">
+    <div class="login-box" style="width: 500px;">
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a class="h1" asp-area="" asp-controller="Admin" asp-action="Index"><b>Admin</b>LTE</a>
+                <a class="h1" asp-area="" asp-controller="Admin" asp-action="Index"><b>PhoneShop</b></a>
             </div>
             <div class="card-body">
                 @RenderBody()

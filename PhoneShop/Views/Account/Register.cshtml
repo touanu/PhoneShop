@@ -1,25 +1,36 @@
-﻿<form id="registerForm">
-    <label for="firstName">First Name:</label><br>
-    <input type="text" id="firstName" name="FirstName" required><br>
-    <label for="lastName">Last Name:</label><br>
-    <input type="text" id="lastName" name="LastName" required><br>
-    <label for="userName">User Name:</label><br>
-    <input type="text" id="userName" name="UserName" required><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="Password" required><br>
-    <label for="phoneNumber">Phone Number:</label><br>
-    <input type="tel" id="phoneNumber" name="PhoneNumber" required><br>
-    <label for="birthday">Birthday:</label><br>
-    <input type="date" id="birthday" name="Birthday" required><br>
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="Email" required><br>
-    <label for="provinceID">Province ID:</label><br>
-    <input type="number" id="provinceID" name="ProvinceID" required><br>
-    <label for="districtID">District ID:</label><br>
-    <input type="number" id="districtID" name="DistrictID" required><br>
-    <label for="wardID">Ward ID:</label><br>
-    <input type="number" id="wardID" name="WardID" required><br>
-    <div class="col-4">
+﻿﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AdminLoginLayout.cshtml";
+}
+
+<form id="registerForm" class="container">
+    <div class="row align-items-start">
+        <div class="col">
+            <label for="firstName">First Name:</label><br>
+            <input type="text" id="firstName" name="FirstName" required><br>
+            <label for="lastName">Last Name:</label><br>
+            <input type="text" id="lastName" name="LastName" required><br>
+            <label for="provinceID">Province ID:</label><br>
+            <input type="number" id="provinceID" name="ProvinceID" required><br>
+            <label for="districtID">District ID:</label><br>
+            <input type="number" id="districtID" name="DistrictID" required><br>
+            <label for="wardID">Ward ID:</label><br>
+            <input type="number" id="wardID" name="WardID" required><br>
+        </div>
+        <div class="col">
+            <label for="userName">User Name:</label><br>
+            <input type="text" id="userName" name="UserName" required><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="Password" required><br>
+            <label for="phoneNumber">Phone Number:</label><br>
+            <input type="tel" id="phoneNumber" name="PhoneNumber" required><br>
+            <label for="birthday">Birthday:</label><br>
+            <input type="date" id="birthday" name="Birthday" required><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="Email" required><br>
+        </div>
+    </div>
+    <div class="row mt-4">
         <button type="button" id="btnRegister" class="btn btn-primary btn-block">Đăng ký</button>
     </div>
 </form>

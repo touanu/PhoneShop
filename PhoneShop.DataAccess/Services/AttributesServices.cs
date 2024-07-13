@@ -98,7 +98,7 @@ namespace PhoneShop.DataAccess.Services
                         var attr_Req = new ProductAttributeValue()
                         {
                             ProductAttributeID = GrattID,
-                            AttributeValluesName = attr_name,
+                            AttributeValuesName = attr_name,
                             Quantity = Convert.ToInt32(attr_Quantity),
                             Price = Convert.ToInt32(attr_Price),
                             PriceSale = Convert.ToInt32(attr_priceSale),
@@ -140,7 +140,7 @@ namespace PhoneShop.DataAccess.Services
                 var AttributesValue = new ProductAttributeValue();
                 foreach (var attr in dbcontext.ProductAttributeValue)
                 {
-                    if (attr.AttributeValluesName == requestData.AttributeValluesName)
+                    if (attr.AttributeValuesName == requestData.AttributeValluesName)
                     {
                         AttributesValue= attr;
                     }
