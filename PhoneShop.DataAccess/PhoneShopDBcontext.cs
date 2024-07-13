@@ -21,11 +21,11 @@ namespace PhoneShop.DataAccess
         public DbSet<Brands> brands{ get; set; }
 
         public DbSet<ProductAttribute> ProductAttribute { get; set; }
-        public DbSet<ProductAttributesVallue> ProductAttributesVallue { get; set; }
-        public DbSet<Oders> Orders { get; set; }
+        public DbSet<ProductAttributeValue> ProductAttributeValue { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<Promotion> Promotion { get; set; }
-        public DbSet<Products> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Functions>? functions { get; set; }
         public DbSet<User_Permission>? user_Permissions { get; set; }
     }

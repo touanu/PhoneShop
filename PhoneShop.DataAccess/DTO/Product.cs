@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class Products
+    public class Product
     {
-        [Key]public int ProductID { get; set; }
+        [Key]
+        public int ProductID { get; set; }
         public int BrandID { get; set; }
         public int CategoryID { get; set; }
         public required string ProductName { get; set; }

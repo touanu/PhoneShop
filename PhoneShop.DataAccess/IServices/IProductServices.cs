@@ -9,7 +9,7 @@ namespace PhoneShop.DataAccess.IServices
 {
     public interface IProductServices
     {
-        Task<List<Products>> GetProducts();
+        Task<List<Product>> GetProducts();
         Task<GetProductReturnData> GetProductById(int id);
     }
 }

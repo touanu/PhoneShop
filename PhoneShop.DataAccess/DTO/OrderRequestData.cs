@@ -8,7 +8,7 @@ namespace PhoneShop.DataAccess.DTO
 {
     public class OrderRequestData
     {
-        public required Orders Order { get; set; }
+        public required Order Order { get; set; }
         public required List<OrderDetails> Details { get; set; }
     }
 }

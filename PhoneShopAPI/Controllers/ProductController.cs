@@ -6,12 +6,12 @@ namespace PhoneShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : Controller
+    public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-         public ProductsController(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public ProductController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
@@ -20,7 +20,7 @@ namespace PhoneShopAPI.Controllers
         [HttpPost("GetAll")]
         public async Task<ActionResult> GetAll()
         {
-            var listProducts = new List<Products>();
+            var listProducts = new List<Product>();
             try
             {
                 listProducts = await _unitOfWork._productServices.GetProducts();
