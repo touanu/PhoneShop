@@ -107,16 +107,20 @@ namespace PhoneShop.Controllers
                 throw ex;
             }
         }
-        public IActionResult GetAttribute()
-        {
-            return PartialView();
-        }
         public async Task<IActionResult> GetAttributes(AttributesResponseData requestData)
         {
+            var messageFromServer = string.Empty;
             var list = new List<ProductAttribute>();
+            var returnData =new ReturnData();
             try
-
+           
             {
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return PartialView(list);
+                }
                 // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
@@ -126,20 +130,22 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    var response = JsonConvert.DeserializeObject<AttributesResponseData>(result);
+                    var response = JsonConvert.DeserializeObject<List<AttributesResponse>>(result);
                     if (response!= null)
                     {
-                        foreach (var item in response.AttributesName)
-                        {
+                        foreach (var item in response)
+                       {
                             list.Add(new ProductAttribute
                             {
-                                AttributesName = item.ToString(),
-                            }) ;
+                                ProductAttributeID = item.productAttributeID,
+                                ProductID = item.productID,
+                                AttributesName = item.attributesName,
+                            });
 
                         }
                     }
@@ -152,7 +158,6 @@ namespace PhoneShop.Controllers
             {
                 return PartialView(list);
             }
-            return PartialView(list);
         }
     }
 }

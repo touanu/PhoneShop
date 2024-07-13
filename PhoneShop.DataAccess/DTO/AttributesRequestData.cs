@@ -22,8 +22,14 @@ namespace PhoneShop.DataAccess.DTO
     public class AttributesResponseData
     {
         public int ProductID { get; set; }
-        public string ProductName { get; set; }
-        public string AttributesName { get; set; }
-        public string AttributeValuestring { get; set; }
+        public string ?ProductName { get; set; }
+        public string ?AttributesName { get; set; }
+        public string ?AttributeValuestring { get; set; }
+    }
+    public class AttributesResponse
+    {
+        public int productAttributeID { get; set; }
+        public int productID { get; set; }
+        public string attributesName { get; set; }
     }
 }
