@@ -1,0 +1,54 @@
+﻿@model List<PhoneShop.DataAccess.DTO.ProductAttribute>
+@{
+    var code = ViewBag.ErrorCode;
+    var message = ViewBag.ErrorMessage;
+}
+
+<h1>Các biến thể: </h1>
+
+<h2>Product Attributes</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Attribute ID</th>
+            <th>Product ID</th>
+            <th>Attribute Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <tr class="">
+                <td colspan="4">
+                    <input type="hidden" value="@code" id="txtErrorCodeResponseFromServer" />
+                    <input type="hidden" value="@message" id="txtErrorResponseFromServer" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="product_index_@item.ProductAttributeID">
+
+                        <td>@item.ProductAttributeID</td>
+                        <td>@item.ProductID</td>
+                        <td>@item.AttributesName</td>
+                        <td>
+                            <a data-productid="@item.ProductID" onclick="Product_Delete(@item.ProductID)">
+                                <i class="fa fa-trash">Xóa</i>
+                            </a>
+                            |
+
+                        </td>
+
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+

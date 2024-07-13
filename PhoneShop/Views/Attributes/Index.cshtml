@@ -29,7 +29,7 @@
                 <input type="text" id="txtAttributeName" value="" class="form-control" placeholder="Tên phân loại" />
             </div>
             <div class="col-md-3 row_marging">
-                <select id=txtlCategory" class="form-control">
+                <select id="txtlCategory" class="form-control">
                     <option value="0">Tất cả</option>
                 </select>
             </div>
@@ -51,6 +51,7 @@
 
 @section Scripts {
     <script>
+        debugger;
         $(document).ready(function () {
 
             LoadData();
@@ -69,14 +70,13 @@
 
             var param = {
 
-                BookName: $("txtAttributeName").val(),
-                CategoryID: $("#ddlCategory").val()
+                AttributesName:$("#txtAttributeName").val(),
 
             };
 
             $.ajax({
                 type: 'POST',
-                url: "GetAttribute",
+                url: "GetAttributes",
                 data: param,
                 async: true,
                 dataType: "html",
@@ -89,16 +89,6 @@
                     debugger;
                     if (code == -401) {
                         window.location.href = "/Account/Login";
-                    } else {
-                        setTimeout(function () {
-
-
-                            Swal.fire({
-                                title: "Good job!",
-                                text: mes,
-                                icon: "success"
-                            });
-                        }, 500);
                     }
                 },
                 error(rs) {

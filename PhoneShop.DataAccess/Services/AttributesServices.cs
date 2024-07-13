@@ -131,7 +131,7 @@ namespace PhoneShop.DataAccess.Services
             try
             {
                 ReturnData returnData = new ReturnData();
-                if(requestData.AttributeValluesName!=null)
+                if (requestData.AttributeValluesName != null)
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "dữ liệu vào không hợp lệ!";
@@ -142,13 +142,13 @@ namespace PhoneShop.DataAccess.Services
                 {
                     if (attr.AttributeValuesName == requestData.AttributeValluesName)
                     {
-                        AttributesValue= attr;
+                        AttributesValue = attr;
                     }
                 }
                 dbcontext.ProductAttributeValue.Remove(AttributesValue);
                 dbcontext.SaveChanges();
                 returnData.ReturnCode = -1;
-                returnData.ReturnMsg = "xóa thành công biến thể có tên"+requestData.AttributeValluesName;
+                returnData.ReturnMsg = "xóa thành công biến thể có tên" + requestData.AttributeValluesName;
                 return returnData;
             }
             catch (Exception ex)

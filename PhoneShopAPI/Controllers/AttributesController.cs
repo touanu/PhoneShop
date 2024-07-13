@@ -1,10 +1,13 @@
-﻿using Azure;
+﻿using Abp.Runtime.Caching;
+using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
 using PhoneShopAPI.Filter;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -50,9 +53,10 @@ namespace PhoneShopAPI.Controllers
             }
         }
         [HttpPost("GetAttribute")]
+        [PhoneShopAuthorize("Get_Attributes", "VIEW")]
         public async Task<ActionResult> GetAttribute(AttributesResponseData requuestData)
         {
-            var list = _unitOfWork._Attributesservices.GetAttributes(requuestData);
+            var list = await _unitOfWork._Attributesservices.GetAttributes(requuestData);
 
             return Ok(list);
         }
