@@ -39,7 +39,7 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public async Task<List<Products>> GetProducts()
+        public async Task<List<Product>> GetProducts()
         {
             return _phoneShopDBContext.Products.ToList();
         }

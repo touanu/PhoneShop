@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class ProductAttributesVallue
+    public class ProductAttributeValue
     {
         [Key] public int ProductAttreID { get; set; }
         public int ProductAttributeID { get; set; }

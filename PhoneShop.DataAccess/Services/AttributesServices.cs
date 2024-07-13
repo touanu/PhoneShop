@@ -95,7 +95,7 @@ namespace PhoneShop.DataAccess.Services
                             continue;
                         }
 
-                        var attr_Req = new ProductAttributesVallue()
+                        var attr_Req = new ProductAttributeValue()
                         {
                             ProductAttributeID = GrattID,
                             AttributeValluesName = attr_name,
@@ -104,7 +104,7 @@ namespace PhoneShop.DataAccess.Services
                             PriceSale = Convert.ToInt32(attr_priceSale),
                         };
 
-                        dbcontext.ProductAttributesVallue.Add(attr_Req);
+                        dbcontext.ProductAttributeValue.Add(attr_Req);
                     }
                    
 
@@ -137,15 +137,15 @@ namespace PhoneShop.DataAccess.Services
                     returnData.ReturnMsg = "dữ liệu vào không hợp lệ!";
                     return returnData;
                 }
-                var AttributesValue = new ProductAttributesVallue();
-                foreach (var attr in dbcontext.ProductAttributesVallue)
+                var AttributesValue = new ProductAttributeValue();
+                foreach (var attr in dbcontext.ProductAttributeValue)
                 {
                     if (attr.AttributeValluesName == requestData.AttributeValluesName)
                     {
                         AttributesValue= attr;
                     }
                 }
-                dbcontext.ProductAttributesVallue.Remove(AttributesValue);
+                dbcontext.ProductAttributeValue.Remove(AttributesValue);
                 dbcontext.SaveChanges();
                 returnData.ReturnCode = -1;
                 returnData.ReturnMsg = "xóa thành công biến thể có tên"+requestData.AttributeValluesName;
