@@ -32,4 +32,5 @@ namespace PhoneShop.DataAccess.DTO
         public int productID { get; set; }
         public string attributesName { get; set; }
     }
+   
 }
