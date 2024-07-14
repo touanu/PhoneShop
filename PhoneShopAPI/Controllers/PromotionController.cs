@@ -7,11 +7,11 @@ namespace PhoneShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PromotionsController : ControllerBase
+    public class PromotionController : ControllerBase
     {
         private IUnitOfWork _unitOfWork;
         private IConfiguration _configuration;
-        public PromotionsController(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public PromotionController(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;

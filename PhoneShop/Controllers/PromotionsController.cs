@@ -9,8 +9,8 @@ namespace PhoneShop.Controllers
     public class PromotionsController : Controller
     {
         readonly IConfiguration _configuration;
-        readonly IPromotionsServices _promotionsServices;
-        public PromotionsController(IConfiguration config, IPromotionsServices promotionsServices)
+        readonly IPromotionServices _promotionsServices;
+        public PromotionsController(IConfiguration config, IPromotionServices promotionsServices)
         {
             _configuration = config;
             _promotionsServices = promotionsServices;

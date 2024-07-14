@@ -15,7 +15,7 @@ namespace PhoneShop.DataAccess.IServices
         Task<ReturnData> RemoveCustomerByID(AccountRequestData requestData);
         Task<List<Customer>> GetCustomerByUserNameorLastName(AccountRequestData requestData);
         Task<ReturnData> UpdateCustomer(AccountRequestData requestData);
-        Task<Functions> GetFunction(string functionCode);
-        Task<User_Permission> User_PermissionById(int functionId, int UserID);
+        Task<DTO.Function> GetFunction(string functionCode);
+        Task<UserPermission> User_PermissionById(int functionId, int UserID);
     }
 }

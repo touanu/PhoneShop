@@ -38,7 +38,7 @@ namespace PhoneShop.DataAccess.DTO
 
     public class BrandInsertReturnData : ReturnData
     {
-        public Brands brands { get; set; }
+        public Brand brands { get; set; }
     }
 
     public class Brand_DeleteReturnData : ReturnData

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.IServices
 {
-    public interface IPromotionsServices
+    public interface IPromotionServices
     {
         Task<List<Promotion>> GetPromotions(PromotionsRequestData requestData);
         Task<GetPromotionsReturnData> AddPromotions(PromotionsRequestData requestData);

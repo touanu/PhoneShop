@@ -25,7 +25,7 @@ namespace PhoneShopAPI.Controllers
         [HttpPost("BrandGetList")]
         public async Task<ActionResult> BrandsGetList()
         {
-            var lstBrand = new List<Brands>();
+            var lstBrand = new List<Brand>();
             try
             {
                lstBrand = await _unitOfWork._BrandServices.BrandsGetList();

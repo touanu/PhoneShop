@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.IServices
 {
-    public interface IAttributesservices
+    public interface IAttributeServices
     {
         Task<List<ProductAttribute>> GetAttributes(AttributesResponseData responseData);
         Task<ReturnData> AddAttributes(AttributesRequestData requestData);

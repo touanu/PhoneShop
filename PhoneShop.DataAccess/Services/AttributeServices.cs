@@ -11,10 +11,10 @@ using System.Xml.Linq;
 
 namespace PhoneShop.DataAccess.Services
 {
-    public class AttributesServices : IAttributesservices
+    public class AttributeServices : IAttributeServices
     {
         private PhoneShopDBcontext dbcontext;
-        public AttributesServices(PhoneShopDBcontext _dbcontext)
+        public AttributeServices(PhoneShopDBcontext _dbcontext)
         {
             dbcontext = _dbcontext;
         }
@@ -175,7 +175,7 @@ namespace PhoneShop.DataAccess.Services
                 }
                 if (!string.IsNullOrEmpty(responseData.ProductName))
                 {
-                    var Products = dbcontext.Products.Find(responseData.ProductName);
+                    var Products = dbcontext.Product.Find(responseData.ProductName);
                     if(Products != null)
                     {
                         returnData = returnData.FindAll(s => s.ProductID == Products.ProductID);

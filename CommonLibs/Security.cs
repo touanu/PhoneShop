@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.Commonlibs
 {
-    public class Sercuritys
+    public class Security
     {
         public static string EncryptPassword(string password, string salt)
         {

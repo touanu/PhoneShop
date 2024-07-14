@@ -18,18 +18,18 @@ namespace PhoneShop.DataAccess.Services
             dbcontext = _dbcontext;
         }
 
-        public async Task<List<Brands>> BrandsGetList()
+        public async Task<List<Brand>> BrandsGetList()
         {
-            var list = new List<Brands>();
+            var list = new List<Brand>();
             try
             {
-                var listBrand = dbcontext.brands.ToList();
+                var listBrand = dbcontext.Brand.ToList();
                 foreach (var item in listBrand)
                 {
                     
-                    var brand_attb = dbcontext.brands.ToList().FindAll(x => x.BrandID == item.BrandID);
+                    var brand_attb = dbcontext.Brand.ToList().FindAll(x => x.BrandID == item.BrandID);
 
-                    var brand = new Brands();
+                    var brand = new Brand();
 
                     brand.BrandID = item.BrandID;
                     brand.BrandName = item.BrandName;
@@ -67,14 +67,14 @@ namespace PhoneShop.DataAccess.Services
 
                 // thêm sản phẩm vào database 
 
-                var BrandReq = new Brands
+                var BrandReq = new Brand
                 {
                     BrandName = requestData.BrandName,
                     IconImages = requestData.IconImages,
 
                 };
 
-                dbcontext.brands.Add(BrandReq);
+                dbcontext.Brand.Add(BrandReq);
 
                 dbcontext.SaveChangesAsync();
 
@@ -102,7 +102,7 @@ namespace PhoneShop.DataAccess.Services
             try
             {
                 // cần kiểm tra xem id muốn xóa có tồn tại không
-                var Brand = dbcontext.brands.Where(s => s.BrandID == requestData.BrandID).FirstOrDefault();
+                var Brand = dbcontext.Brand.Where(s => s.BrandID == requestData.BrandID).FirstOrDefault();
 
                 if (Brand == null || Brand?.BrandID <= 0)
                 {
@@ -112,7 +112,7 @@ namespace PhoneShop.DataAccess.Services
                 }
 
 
-                dbcontext.brands.Remove(Brand);
+                dbcontext.Brand.Remove(Brand);
                 dbcontext.SaveChangesAsync();
 
                 returnData.ReturnCode = 1;

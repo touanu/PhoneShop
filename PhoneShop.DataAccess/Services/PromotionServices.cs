@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.Services
 {
-    public class PromotinosServices : IPromotionsServices
+    public class PromotionServices : IPromotionServices
     {
         PhoneShopDBcontext _dbcontext;
-        public PromotinosServices(PhoneShopDBcontext dbcontext)
+        public PromotionServices(PhoneShopDBcontext dbcontext)
         {
             _dbcontext = dbcontext;
         }
@@ -95,7 +95,7 @@ namespace PhoneShop.DataAccess.Services
                 }
                 if (requestData.ProductID > 0)
                 {
-                    var Products = _dbcontext.Products.Find(requestData.ProductID);
+                    var Products = _dbcontext.Product.Find(requestData.ProductID);
                     if (Products != null)
                     {
                         list = list.FindAll(s => s.ProductID == Products.ProductID);

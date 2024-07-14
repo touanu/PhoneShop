@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class Functions
+    public class Brand
     {
-        [Key]
-        public int FunctionID { get; set; }
-        public string FunctionCode { get; set; }
-        public string FunctionName { get; set; }
+       [Key] public int BrandID { get; set; }
+
+        public string BrandName { get; set; }
+        public string IconImages { get; set; }
     }
 }

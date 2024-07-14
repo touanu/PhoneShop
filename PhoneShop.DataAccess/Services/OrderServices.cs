@@ -42,7 +42,7 @@ namespace PhoneShop.DataAccess.Services
                         return returnData;
                     }
 
-                    if (!_phoneShopDBContext.Products.Any(a => a.ProductID == item.ProductID))
+                    if (!_phoneShopDBContext.Product.Any(a => a.ProductID == item.ProductID))
                     {
                         _phoneShopDBContext.ChangeTracker.Clear();
                         returnData.ReturnCode = (int)ReturnCode.NotExist;

@@ -9,7 +9,7 @@ namespace PhoneShop.DataAccess.IServices
 {
     public interface IBrandServices
     {
-        Task<List<Brands>> BrandsGetList();
+        Task<List<Brand>> BrandsGetList();
         Task<BrandInsertReturnData> BrandInsertUpdate(BrandInsertRequestData requestData);
 
         Task<Brand_DeleteReturnData> Brand_Delete(Brand_DeleteRequestData requestData);

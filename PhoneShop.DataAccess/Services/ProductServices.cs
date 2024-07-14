@@ -17,7 +17,7 @@ namespace PhoneShop.DataAccess.Services
 
             try
             {
-                var product = _phoneShopDBContext.Products.Find(id);
+                var product = _phoneShopDBContext.Product.Find(id);
 
                 if (product == null)
                 {
@@ -41,7 +41,7 @@ namespace PhoneShop.DataAccess.Services
 
         public async Task<List<Product>> GetProducts()
         {
-            return _phoneShopDBContext.Products.ToList();
+            return _phoneShopDBContext.Product.ToList();
         }
     }
 }

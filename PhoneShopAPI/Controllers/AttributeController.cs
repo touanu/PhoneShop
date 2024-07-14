@@ -13,11 +13,11 @@ namespace PhoneShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AttributesController : ControllerBase
+    public class AttributeController : ControllerBase
     {
         private IConfiguration _configuration;
         private IUnitOfWork _unitOfWork;
-        public AttributesController(IConfiguration configuration, IUnitOfWork unitOfWork)
+        public AttributeController(IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _configuration = configuration;
             _unitOfWork = unitOfWork;
