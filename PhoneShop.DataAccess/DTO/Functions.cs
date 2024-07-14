@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class Function
+    public class Functions
     {
         [Key]
         public int FunctionID { get; set; }

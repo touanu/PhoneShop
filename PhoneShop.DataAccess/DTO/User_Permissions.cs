@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneShop.DataAccess.DTO
 {
-    public class UserPermission
+    public class User_Permissions
     {
         [Key]
         public int UserFunctionID { get; set; }

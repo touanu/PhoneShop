@@ -96,7 +96,7 @@ namespace PhoneShopAPI.Filter
                                 context.Result = new JsonResult(new
                                 {
                                     ReturnCode = -404,
-                                    ReturnMsg = "Bạn không có quyền"
+                                    ReturnMsg = "Bạn không có quyền thực hiện chức năng này"
                                 });
 
                                 return;
@@ -111,7 +111,7 @@ namespace PhoneShopAPI.Filter
                                 context.Result = new JsonResult(new
                                 {
                                     ReturnCode = -404,
-                                    ReturnMsg = "Bạn không có quyền"
+                                    ReturnMsg = "Bạn không có quyền thực hiện chức năng này"
                                 });
 
                                 return;
@@ -125,7 +125,7 @@ namespace PhoneShopAPI.Filter
                                 context.Result = new JsonResult(new
                                 {
                                     ReturnCode = -404,
-                                    ReturnMsg = "Bạn không có quyền"
+                                    ReturnMsg = "Bạn không có quyền thực hiện chức năng này"
                                 });
 
                                 return;
@@ -139,7 +139,7 @@ namespace PhoneShopAPI.Filter
                                 context.Result = new JsonResult(new
                                 {
                                     ReturnCode = -404,
-                                    ReturnMsg = "Bạn không có quyền"
+                                    ReturnMsg = "Bạn không có quyền thực hiện chức năng này"
                                 });
 
                                 return;

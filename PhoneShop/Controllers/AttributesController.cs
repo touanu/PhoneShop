@@ -52,7 +52,7 @@ namespace PhoneShop.Controllers
                 // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Attributes/AddAttribute";
+                var url = "api/Attribute/AddAttribute";
 
                 // bƯỚC 2: tạo json data ( object sang JSON)
                 var jsonData = JsonConvert.SerializeObject(attributesRequestData);
@@ -111,7 +111,6 @@ namespace PhoneShop.Controllers
         {
             var messageFromServer = string.Empty;
             var list = new List<ProductAttribute>();
-            var returnData =new ReturnData();
             try
            
             {
@@ -124,7 +123,7 @@ namespace PhoneShop.Controllers
                 // Bước 1 : khai báo API URL
 
                 var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Attributes/GetAttribute";
+                var url = "api/Attribute/GetAttribute";
 
                 // bƯỚC 2: tạo json data ( object sang JSON)
                 var jsonData = JsonConvert.SerializeObject(requestData);

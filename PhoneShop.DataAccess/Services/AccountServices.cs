@@ -24,9 +24,8 @@ namespace PhoneShop.DataAccess.Services
            {
                 var account = _dbcontext.Account.Where(s => s.UserName == requestData.UserName
                 && s.PassWord == requestData.PassWord).FirstOrDefault();
-                var customer = _dbcontext.Customer.Where(c=>c.UserName == requestData.UserName
-                &&c.PassWord == requestData.PassWord).FirstOrDefault();
-                if(account==null && customer == null)
+                
+                if(account==null)
                 {
                     returnData.ReturnCode = -1;
                     returnData.ReturnMsg = "đăng nhập thất bại";
@@ -143,9 +142,9 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public async  Task<DTO.Function> GetFunction(string functionCode)
+        public async  Task<DTO.Functions> GetFunction(string functionCode)
         {
-            var model = new DTO.Function();
+            var model = new DTO.Functions();
             try
             {
             
@@ -332,9 +331,9 @@ namespace PhoneShop.DataAccess.Services
 
         }
 
-        public async Task<UserPermission> User_PermissionById(int functionId, int AccountID)
+        public async Task<User_Permissions> User_PermissionById(int functionId, int AccountID)
         {
-            var model = new UserPermission();
+            var model = new User_Permissions();
 
             try
             {
