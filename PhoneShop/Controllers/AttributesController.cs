@@ -135,22 +135,36 @@ namespace PhoneShop.Controllers
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    var response = JsonConvert.DeserializeObject<List<AttributesResponse>>(result);
+                    var response = JsonConvert.DeserializeObject<ReturnDataReturnAttributes>(result);
                     if (response!= null)
                     {
-                        foreach (var item in response)
-                       {
+                        if(response.ReturnCode<0)
+                        {
+                            messageFromServer = response.ReturnMsg;
+                            ViewBag.ErrorCode = response.ReturnCode;
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return PartialView(list);
+                        }
+                        if (response?.list == null || response?.list.Count <= 0)
+                        {
+                            messageFromServer = "Không có dữ liệu.Vui lòng kiểm tra lại";
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return PartialView(list);
+                        }
+
+                        foreach (var item in response?.list)
+                        {
                             list.Add(new ProductAttribute
                             {
-                                ProductAttributeID = item.productAttributeID,
-                                ProductID = item.productID,
-                                AttributesName = item.attributesName,
+                                ProductAttributeID = item.ProductAttributeID,
+                                ProductID = item.ProductID,
+                                AttributesName = item.AttributesName
                             });
 
                         }
                     }
                 }
-
+                ViewBag.ErrorMessage = messageFromServer;
                 return PartialView(list);
 
             }

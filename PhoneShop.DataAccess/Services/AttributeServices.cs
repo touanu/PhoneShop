@@ -162,26 +162,29 @@ namespace PhoneShop.DataAccess.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<ProductAttribute>> GetAttributes(AttributesResponseData responseData)
+        public async Task<GetAttributeReturndata> GetAttributes(AttributesResponseData responseData)
         {
-            var returnData= new List<ProductAttribute>();
+            var list= new List<ProductAttribute>();
+            var returnData = new GetAttributeReturndata();
             try
             {
-                returnData = dbcontext.ProductAttribute.ToList();
+                list = dbcontext.ProductAttribute.ToList();
 
                 if (!string.IsNullOrEmpty(responseData.AttributesName))
                 {
-                    returnData = returnData.FindAll(s => s.AttributesName.ToLower().Contains(responseData.AttributesName.ToLower())).ToList();
+                    list = list.FindAll(s => s.AttributesName.ToLower().Contains(responseData.AttributesName.ToLower())).ToList();
                 }
                 if (!string.IsNullOrEmpty(responseData.ProductName))
                 {
                     var Products = dbcontext.Product.Find(responseData.ProductName);
                     if(Products != null)
                     {
-                        returnData = returnData.FindAll(s => s.ProductID == Products.ProductID);
+                        list = list.FindAll(s => s.ProductID == Products.ProductID);
                     }
                 }
-
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "lấy dữ liệu thành công!";
+                returnData.list = list; 
                 return returnData;
             }
             catch (Exception ex)

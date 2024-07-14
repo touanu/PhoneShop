@@ -29,13 +29,25 @@ namespace PhoneShop.DataAccess.DTO
         public Account Account { get; set; }
         public Customer customer{ get; set; }
     }
-
-    public class ReturnDataReturnAttributes: ReturnData
+    public class Result
     {
-        public ProductAttribute attribute { get; set; }
-        public ProductAttributeValue ProductAttributesVallues { get; set; }
+        public int ReturnCode { get; set; }
+        public string? ReturnMsg { get; set; }
+    } 
+    public class GetAttributeReturndata:ReturnData
+    {
+        public List< ProductAttribute> list { get; set; }
     }
-
+    public class ReturnDataReturnAttributes:ReturnData
+    {
+        public List<list> ?list { get; set; }        
+    }
+    public class list
+    {
+        public int ProductAttributeID { get; set; }
+        public int ProductID { get; set; }
+        public string ?AttributesName { get; set; }
+    }
     public class BrandInsertReturnData : ReturnData
     {
         public Brand brands { get; set; }

@@ -29,20 +29,18 @@
                 <input type="text" id="txtAttributeName" value="" class="form-control" placeholder="Tên phân loại" />
             </div>
             <div class="col-md-3 row_marging">
-                <select id="txtlCategory" class="form-control">
                     <option value="0">Tất cả</option>
                 </select>
             </div>
         </div>
         <div class="row row_marging">
             <div class="col-md-12 row_marging">
-                <button type="button" id="btnSearch" class="btn btn-default"> <i class="fa fa-search"></i>Tìm kiếm </button>
+                <button type="button" id="btnSave" class="btn btn-success"> <i class="fa fa-search"></i>Tìm kiếm </button>
             </div>
         </div>
         <div class="row row_marging">
             <div class="col-md-12">
                 <h2 class="card-title">Danh sách ProductAttributes</h2>
-
                 <div id="GetAttribute"></div>
             </div>
         </div>
@@ -64,14 +62,11 @@
             });
         });
 
-        function LoadData() {
-
-           
+        function LoadData() {          
 
             var param = {
 
                 AttributesName:$("#txtAttributeName").val(),
-
             };
 
             $.ajax({
@@ -88,6 +83,7 @@
                     var mes = $("#txtErrorResponseFromServer").val();
                     debugger;
                     if (code == -401) {
+                        alert(mes);
                         window.location.href = "/Account/Login";
                     }
                 },

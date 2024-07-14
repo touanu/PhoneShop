@@ -5,9 +5,6 @@
 }
 
 <h1>Các biến thể: </h1>
-
-<h2>Product Attributes</h2>
-
 <table class="table">
     <thead>
         <tr>
@@ -38,11 +35,9 @@
                         <td>@item.ProductID</td>
                         <td>@item.AttributesName</td>
                         <td>
-                            <a data-productid="@item.ProductID" onclick="Product_Delete(@item.ProductID)">
+                            <a data-productid="@item.ProductAttributeID" onclick="Product_Delete(@item.ProductAttributeID)">
                                 <i class="fa fa-trash">Xóa</i>
                             </a>
-                            |
-
                         </td>
 
                     </tr>
