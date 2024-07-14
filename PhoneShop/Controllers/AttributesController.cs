@@ -145,19 +145,26 @@ namespace PhoneShop.Controllers
                             ViewBag.ErrorMessage = messageFromServer;
                             return PartialView(list);
                         }
-                        foreach (var item in response.AttributeList)
+                        if (response?.list == null || response?.list.Count <= 0)
+                        {
+                            messageFromServer = "Không có dữ liệu.Vui lòng kiểm tra lại";
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return PartialView(list);
+                        }
+
+                        foreach (var item in response?.list)
                         {
                             list.Add(new ProductAttribute
                             {
                                 ProductAttributeID = item.ProductAttributeID,
                                 ProductID = item.ProductID,
-                                AttributesName = item.AttributesName,
+                                AttributesName = item.AttributesName
                             });
 
                         }
                     }
                 }
-
+                ViewBag.ErrorMessage = messageFromServer;
                 return PartialView(list);
 
             }
