@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhoneShop.Commonlibs
+namespace CommonLibs
 {
     public static class HttpHelper
     {
@@ -45,7 +45,7 @@ namespace PhoneShop.Commonlibs
                 //client.DefaultRequestHeaders.Accept.Clear();
                 //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var queryString = jsonData != null ? new StringContent(jsonData, UnicodeEncoding.UTF8, "application/json") : null;
+                var queryString = jsonData != null ? new StringContent(jsonData, Encoding.UTF8, "application/json") : null;
                 response = await client.PostAsync(new Uri(url), queryString);
 
                 if (response.IsSuccessStatusCode)
@@ -69,7 +69,7 @@ namespace PhoneShop.Commonlibs
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                var queryString = new StringContent(jsonData, UnicodeEncoding.UTF8, "application/json");
+                var queryString = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 var url = baseUrl + api;
                 HttpResponseMessage response = await client.PostAsync(new Uri(url), queryString);
 

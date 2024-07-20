@@ -1,4 +1,5 @@
 ﻿
+using CommonLibs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -48,7 +49,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requetsData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSendPost(baseurl, url, jsonData);
+                var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))

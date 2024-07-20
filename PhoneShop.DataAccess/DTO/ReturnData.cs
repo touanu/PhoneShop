@@ -1,5 +1,3 @@
-using PhoneShop.Models;
-
 namespace PhoneShop.DataAccess.DTO
 {
     public class ReturnData

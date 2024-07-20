@@ -2,6 +2,7 @@
 using PhoneShopAPI.Models;
 using PhoneShop.DataAccess.DTO;
 using System.Drawing;
+using CommonLibs;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace PhoneShopAPI.Controllers
                 // kiểm tra xem chữ ký có hợp lệ không ?
                 var secretKey = _configuration["Security:SecretKey"] ?? "";
                 var plaintext = requestData.Base64Image + secretKey;
-                var signature = PhoneShop.Commonlibs.Security.MD5(plaintext);
+                var signature = Security.MD5(plaintext);
 
                 if (signature != requestData.Sign)
                 {

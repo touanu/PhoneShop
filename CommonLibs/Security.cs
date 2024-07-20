@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhoneShop.Commonlibs
+namespace CommonLibs
 {
     public static class Security
     {

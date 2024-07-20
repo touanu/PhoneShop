@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommonLibs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PhoneShop.DataAccess.DTO;
 
@@ -19,7 +20,7 @@ namespace PhoneShop.Controllers
                     PageSize = 5
                 });
 
-            var result = await Commonlibs.HttpHelper.HttpSendPost(baseurl, url, requestData);
+            var result = await HttpHelper.HttpSendPost(baseurl, url, requestData);
             var products = JsonConvert.DeserializeObject<ProductGetReturnData>(result);
             // products.Products = [];
             return View(products);

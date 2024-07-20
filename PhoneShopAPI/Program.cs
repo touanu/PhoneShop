@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using PhoneShop;
 using PhoneShop.DataAccess;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

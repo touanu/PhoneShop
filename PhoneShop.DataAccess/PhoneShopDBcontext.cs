@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PhoneShop.DataAccess.DTO;
-using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess
 {
