@@ -60,7 +60,7 @@ namespace PhoneShopAPI.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 1.3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 // Bước 1.4: nhận dữ liệu về 
                 var imageName = "";

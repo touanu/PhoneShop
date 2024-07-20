@@ -68,7 +68,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 2.3 dùng httpClient để đưa json lên URL của API
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 if (string.IsNullOrEmpty(result))
                 {
@@ -133,7 +133,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(user);
 
                 // Bước 2.3 dùng httpClient để đưa json lên URL của API
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 if (string.IsNullOrEmpty(result))
                 {
