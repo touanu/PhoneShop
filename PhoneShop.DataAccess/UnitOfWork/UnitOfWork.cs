@@ -1,4 +1,5 @@
 ﻿using PhoneShop.DataAccess.IServices;
+using PhoneShop.DataAccess.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +20,14 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IPromotionServices _promotionsServices { set; get; }
 
         public IProductServices _productServices { set; get; }
-        public UnitOfWork(IAttributeServices attributesservices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices)
+        public UnitOfWork(IAttributeServices attributesservices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices, IProductServices productServices)
         {
             _accountServices = accountServices;
             _dbcontext = dBcontext;
             _BrandServices = brandServices;
             _Attributesservices = attributesservices;
             _promotionsServices = promotionsServices;
+            _productServices = productServices;
         }
 
         public int SaveChange()

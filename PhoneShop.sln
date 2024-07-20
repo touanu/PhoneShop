@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneShop.DataAccess", "Pho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneShop", "PhoneShop\PhoneShop.csproj", "{601AC231-F99B-480D-BB3C-4D757FFFB99D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneShopAPI", "PhoneShopAPI\PhoneShopAPI.csproj", "{1B280B84-9633-478C-8204-8F6FA29549CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneShopAPI", "PhoneShopAPI\PhoneShopAPI.csproj", "{1B280B84-9633-478C-8204-8F6FA29549CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess.DTO
@@ -23,6 +19,7 @@ namespace PhoneShop.DataAccess.DTO
         AlreadyExist = -5,
         NotAvailable = -6,
         MinimumRequired = -7,
+        SignatureInvalid = -8,
     }
     public class ReturnDataReturnAccount : ReturnData
     {
@@ -69,5 +66,11 @@ namespace PhoneShop.DataAccess.DTO
     public class GetPromotionsReturnData : ReturnData
     {
         public Promotion? promotion { get; set; }
+    }
+    public class ProductGetReturnData : ReturnData
+    {
+        public required List<Product> Products { get; set; }
+        public int CurrentPage { get; set; }
+        public int MaxPageCount { get; set; }
     }
 }
