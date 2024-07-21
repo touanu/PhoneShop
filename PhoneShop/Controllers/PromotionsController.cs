@@ -45,7 +45,11 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await 55HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
+<<<<<<<<< Temporary merge branch 1
+                var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
+=========
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
+>>>>>>>>> Temporary merge branch 2
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
