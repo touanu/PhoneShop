@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CommonLibs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PhoneShop.DataAccess.DTO;
@@ -44,7 +45,7 @@ namespace PhoneShopAPI.Controllers
                 // Bước 1.2 : text 123456 -> n2zmy77Xfb4cnD7ca8VYip/kGpT4q+1gcONNT5 dùng
                 //  Thuật toán mã hóa : RSA265
                 var salt = _configuration["Sercurity:Salt"] ?? "";
-                var passwordHash = PhoneShop.Commonlibs.Security.EncryptPassword(requestData.PassWord, salt);
+                var passwordHash = Security.EncryptPassword(requestData.PassWord, salt);
 
 
                 // Bước 1.2 : gọi UnitOfWork lấy thông tin tài khoản
@@ -120,7 +121,7 @@ namespace PhoneShopAPI.Controllers
                 }
                 //ma hoa password
                 var salt = _configuration["Sercurity:Salt"] ?? "";
-                var passwordHash = PhoneShop.Commonlibs.Security.EncryptPassword(requestData.PassWord, salt);
+                var passwordHash = Security.EncryptPassword(requestData.PassWord, salt);
 
                 requestData.PassWord = passwordHash;
                 var response = await _unitOfWork._accountServices.AddCustomer(requestData);

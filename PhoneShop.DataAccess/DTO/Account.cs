@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PhoneShop.Models
+namespace PhoneShop.DataAccess.DTO
 {
     public class Account
     {
-        [Key]public int AccountID { get; set; }
+        [Key] public int AccountID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string UserName {get;set;}
+        public string UserName { get; set; }
         public string PassWord { get; set; }
         public DateTime Birthday { get; set; }
         public string PhoneNumber { get; set; }

@@ -2,6 +2,9 @@
     ViewData["Title"] = "All Products";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model PhoneShop.DataAccess.DTO.ProductGetReturnData
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -20,6 +23,9 @@
     </div><!-- /.container-fluid -->
 </section>
 
+
+@if (Model != null && Model.Products.Count > 0)
+{
 <!-- Main content -->
 <section class="content">
 
@@ -53,57 +59,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            #
-                        </td>
-                        <td>
-                            <a>
-                                AdminLTE v3
-                            </a>
-                            <br>
-                            <small>
-                                Created 01.01.2019
-                            </small>
-                        </td>
-                        <td>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar.png">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar2.png">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar3.png">
-                                </li>
-                                <li class="list-inline-item">
-                                    <img alt="Avatar" class="table-avatar" src="../../dist/img/avatar4.png">
-                                </li>
-                            </ul>
-                        </td>
-                        <td class="project_progress">
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-green" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: 57%">
-                                </div>
-                            </div>
-                            <small>
-                                57% Complete
-                            </small>
-                        </td>
-                        <td class="project-actions text-right">
-                            <a class="btn btn-info btn-sm" href="#">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Sửa
-                            </a>
-                            <a class="btn btn-danger btn-sm" href="#">
-                                <i class="fas fa-trash">
-                                </i>
-                                Xoá
-                            </a>
-                        </td>
-                    </tr>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
+                                <td>@item.ProductID</td>
+                                <td>
+                                    <a>
+                                        @item.ProductName
+                                    </a>
+                                    <br />
+                                    <small>
+
+                                    </small>
+                                </td>
+                                <td>
+                                    <a href="#">
+                                        @item.BrandID
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="#">
+                                        @item.CategoryID
+                                    </a>
+                                </td>
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-info btn-sm" href="#">
+                                        <i class="fas fa-pencil-alt">
+                                        </i>
+                                        Sửa
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" href="#">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Xoá
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
                 </tbody>
             </table>
         </div>
@@ -114,17 +107,30 @@
 </section>
 <!-- /.content -->
 
+
 <div class="card-footer">
     <nav aria-label="Contacts Page Navigation">
         <ul class="pagination justify-content-center m-0">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#">5</a></li>
-            <li class="page-item"><a class="page-link" href="#">6</a></li>
-            <li class="page-item"><a class="page-link" href="#">7</a></li>
-            <li class="page-item"><a class="page-link" href="#">8</a></li>
+            @for (int i = 1; i < Model.MaxPageCount; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item active"><a class="page-link" href="#">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="#">@i</a></li>
+                }
+            }
         </ul>
     </nav>
 </div>
+}
+else
+{
+    <div class="d-flex justify-content-center p-3">
+        <img src="@Configuration["API_URL:URL"]Upload/empty-product.png" height="200">
+        
+    </div>
+    <p class="text-center text-green">Không có sản phẩm nào</p>
+}

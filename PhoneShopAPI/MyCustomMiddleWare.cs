@@ -1,4 +1,4 @@
-﻿namespace PhoneShop
+﻿namespace PhoneShopAPI
 {
     public class MyCustomMiddleWare
     {

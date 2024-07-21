@@ -12,4 +12,9 @@ namespace PhoneShop.DataAccess.DTO
         public string? ProductDescription { get; set; }
         public string? Images { get; set; }
     }
+    public class ResponseProduct : Product
+    {
+        public string? BrandName { get; set; }
+        public string? CategoryName { get; set; }
+    }
 }

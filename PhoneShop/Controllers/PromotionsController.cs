@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommonLibs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
@@ -43,7 +45,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
+                var result = await 55HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
@@ -80,7 +82,7 @@ namespace PhoneShop.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
