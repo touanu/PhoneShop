@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CommonLibs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
 using PhoneShop.DataAccess.UnitOfWork;
-using PhoneShop.Models;
 namespace PhoneShopAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -60,7 +60,7 @@ namespace PhoneShopAPI.Controllers
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 1.3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
 
                 // Bước 1.4: nhận dữ liệu về 
                 var imageName = "";

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
-using PhoneShop.Models;
 
 namespace PhoneShop.DataAccess.Services
 {

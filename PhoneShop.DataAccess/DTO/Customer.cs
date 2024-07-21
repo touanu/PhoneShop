@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PhoneShop.Models
+namespace PhoneShop.DataAccess.DTO
 {
     public class Customer
     {

@@ -15,7 +15,7 @@ namespace PhoneShop.Commonlibs
             return true;
         }
 
-        public static bool IsName(string input)
+        public static bool IsName(string? input)
         {
             if (string.IsNullOrEmpty(input))
                 return false;
@@ -43,8 +43,10 @@ namespace PhoneShop.Commonlibs
             return indexOf != -1;
         }
 
-        public static bool IsContainHTMLTags(string input)
+        public static bool IsContainHTMLTags(string? input)
         {
+            if (string.IsNullOrEmpty(input))
+                return false;
             return HTMLTags().IsMatch(input);
         }
 

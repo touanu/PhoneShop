@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
-using PhoneShop.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PhoneShop.DataAccess.Services
