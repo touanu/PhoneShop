@@ -14,6 +14,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IAccountServices _accountServices { get; set; }
         public IProductServices _productServices { set; get; }
         public IPromotionServices _promotionsServices { set; get; }
+        public ICategoryServices _categoryServices { set; get; }
         int SaveChange();
     }
 }

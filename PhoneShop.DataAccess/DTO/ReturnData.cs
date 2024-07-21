@@ -70,4 +70,8 @@ namespace PhoneShop.DataAccess.DTO
     {
         public Promotion? promotion { get; set; }
     }
+    public class CategoryReturnData : ReturnData
+    {
+        public Category? category { get; set; }
+    }
 }

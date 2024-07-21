@@ -19,13 +19,16 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IPromotionServices _promotionsServices { set; get; }
 
         public IProductServices _productServices { set; get; }
-        public UnitOfWork(IAttributeServices attributesservices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices)
+
+        public ICategoryServices _categoryServices { set; get; }
+        public UnitOfWork(IAttributeServices attributesservices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices,ICategoryServices categoryServices)
         {
             _accountServices = accountServices;
             _dbcontext = dBcontext;
             _BrandServices = brandServices;
             _Attributesservices = attributesservices;
             _promotionsServices = promotionsServices;
+            _categoryServices = categoryServices;
         }
 
         public int SaveChange()

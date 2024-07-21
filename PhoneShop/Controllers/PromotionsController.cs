@@ -9,39 +9,52 @@ namespace PhoneShop.Controllers
     public class PromotionsController : Controller
     {
         readonly IConfiguration _configuration;
-        readonly IPromotionServices _promotionsServices;
-        public PromotionsController(IConfiguration config, IPromotionServices promotionsServices)
+        public PromotionsController(IConfiguration config)
         {
             _configuration = config;
-            _promotionsServices = promotionsServices;
         }
 
         public IActionResult AddPromotion()
         {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
             return View();
         }
         public async Task<JsonResult> AddPromotions(PromotionsRequestData requestData)
         {
             var returnData = new GetPromotionsReturnData();
+            var messageFromServer = string.Empty;
             try
             {
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return Json(messageFromServer);
+                }
                 var baseurl = _configuration["API_URL:URL"] ?? "";
                 var url = "api/Promotions/AddPromotion";
+                
 
                 // bƯỚC 2: tạo json data ( object sang JSON)
                 var jsonData = JsonConvert.SerializeObject(requestData);
 
                 // Bước 3 : gọi httpclient bên common để post lên api
-                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPost(baseurl, url, jsonData);
+                var result = await PhoneShop.Commonlibs.HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 4: nhận dữ liệu về 
                 if (!string.IsNullOrEmpty(result))
                 {
-                    var AttReq = new PromotionsRequestData();
-                    var response = JsonConvert.DeserializeObject<PromotionsRequestData>(result);
-                    AttReq = response;
-                    returnData = await _promotionsServices.AddPromotions(AttReq);
+                    var response =  JsonConvert.DeserializeObject<GetPromotionsReturnData>(result);
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    returnData.ReturnCode = response.ReturnCode;
+                    return Json(returnData);
                 }
+                returnData.ReturnCode = -2;
+                returnData.ReturnMsg = "Lỗi";
                 return Json(returnData);
             }
             catch (Exception ex)
@@ -73,7 +86,6 @@ namespace PhoneShop.Controllers
                 if (!string.IsNullOrEmpty(result))
                 {
                     var response = JsonConvert.DeserializeObject<PromotionsRequestData>(result);
-                    list= await _promotionsServices.GetPromotions(response);
                 }
                 return Json(list);
             }

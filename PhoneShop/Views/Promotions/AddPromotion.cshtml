@@ -1,27 +1,37 @@
-﻿
+﻿﻿@{
+    ViewData["Title"] = "AddPromotions";
+    Layout = "~/Views/Shared/_AdminLoginLayout.cshtml";
+}
 <form id="AddPromotionsForm">
-    <label for="PromotionName">Promotions Name:</label><br>
-    <input type="text" id="PromotionName" name="PromotionName" required><br>
-    <label for="StartDate">StartDate:</label><br>
-    <input type="date" id="StartDate" name="StartDate" required><br>
-    <label for="EndDate">EndDate:</label><br>
-    <input type="date" id="EndDate" name="EndDate" required><br>
-    <label for="Quantity">So luong:</label><br>
-    <input type="number" id="Quantity" name="Quantity" required><br>
-    <label for="ProductID">ProductID:</label><br>
-    <input type="number" id="ProductID" name="ProductID" required><br>
-    <label for="CustomerID">CustomerID:</label><br>
-    <input type="number" id="CustomerID" name="CustomerID" required><br>
-    <label for="PercentageDiscount">PercentageDiscount:</label><br>
-    <input type="number" id="PercentageDiscount" name="PercentageDiscount" required><br>
-    <label for="TotalDiscount">TotalDiscount:</label><br>
-    <input type="number" id="TotalDiscount" name="TotalDiscount" required><br>
-    <label for="QuantityOneDay">Quantity OneDay:</label><br>
-    <input type="number" id="QuantityOneDay" name="QuantityOneDay" required><br>
-    <label for="MinimumAmount">Minimum Amount:</label><br>
-    <input type="number" id="MinimumAmount" name="MinimumAmount" required><br>
+    <h1>Thêm khuyến mãi cho cửa hàng</h1>
+    <div class="row align-items-start">
+    <div class="col">
+        <label for="PromotionName">Promotions Name:</label><br>
+        <input type="text" id="PromotionName" name="PromotionName" required><br>
+        <label for="StartDate">StartDate:</label><br>
+        <input type="date" id="StartDate" name="StartDate" required><br>
+        <label for="EndDate">EndDate:</label><br>
+        <input type="date" id="EndDate" name="EndDate" required><br>
+        <label for="Quantity">So luong:</label><br>
+        <input type="number" id="Quantity" name="Quantity" required><br>
+        <label for="ProductID">ProductID:</label><br>
+        <input type="number" id="ProductID" name="ProductID" required><br>
+    </div>
+    <div class="col">
+        <label for="CustomerID">CustomerID:</label><br>
+        <input type="number" id="CustomerID" name="CustomerID" required><br>
+        <label for="PercentageDiscount">PercentageDiscount:</label><br>
+        <input type="number" id="PercentageDiscount" name="PercentageDiscount" required><br>
+        <label for="TotalDiscount">TotalDiscount:</label><br>
+        <input type="number" id="TotalDiscount" name="TotalDiscount" required><br>
+        <label for="QuantityOneDay">Quantity OneDay:</label><br>
+        <input type="number" id="QuantityOneDay" name="QuantityOneDay" required><br>
+        <label for="MinimumAmount">Minimum Amount:</label><br>
+        <input type="number" id="MinimumAmount" name="MinimumAmount" required><br>
+    </div>
     <div class="col-4">
         <button type="button" id="btnAddPromotions" class="btn btn-primary btn-block">Thêm </button>
+    </div>
     </div>
 </form>
 @section Scripts{
@@ -32,8 +42,54 @@
                 AddPromotions();
             });
         });
-        function AddPromotions() {
 
+        var PromoName = $("#PromotionName").val();
+        var SDate = $("#StartDate").val();
+        var EDate= $("#EndDate").val();
+        var Quantiti = $("#Quantity").val();
+        var PID = $("#ProductID").val();
+        var CID = $("#CustomerID").val();
+        var PercentageDiscounts = $("#PercentageDiscount").val();
+        var TotalDiscounts = $("#TotalDiscount").val();
+        var QuantityDay = $("#QuantityOneDay").val();
+        var MAmount = $("#MinimumAmount").val();
+        function AddPromotions() {
+            var param = {
+                PromotionName: PromoName,
+                StartDate: SDate,
+                EndDate: EDate,
+                Quantity: Quantiti,
+                ProductID: PID,
+                CustomerID: CID,
+                PercentageDiscount: PercentageDiscounts,
+                TotalDiscount: TotalDiscounts,
+                QuantityOneDay: QuantityDay,
+                MinimumAmount: MAmount
+            };
+            $.ajax({
+                url: "/Promotions/AddPromotions",
+                type: "POST",
+                data: param,
+                async: true,
+                // dataType: "html",
+                dataType: "json",
+                success: function (rs) {
+                    if (rs.returnCode == -401) {
+                        window.location.href = "/Account/Login";
+                    } else {
+                        setTimeout(function () {
+                        }, 500);
+                    }
+
+                    if (rs.returnCode > 0) {
+                        window.location.href = "/";
+                    }
+                    alert(rs.returnMsg);
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
+                }
+            });
         }
     </script>
 }
