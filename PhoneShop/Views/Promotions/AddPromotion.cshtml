@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_AdminLoginLayout.cshtml";
 }
 <form id="AddPromotionsForm">
-    <h1>Thêm khuyến mãi cho cửa hàng</h1>
+    <h1>Add Promotions for shop</h1>
     <div class="row align-items-start">
     <div class="col">
         <label for="PromotionName">Promotions Name:</label><br>
@@ -30,7 +30,7 @@
         <input type="number" id="MinimumAmount" name="MinimumAmount" required><br>
     </div>
     <div class="col-4">
-        <button type="button" id="btnAddPromotions" class="btn btn-primary btn-block">Thêm </button>
+        <button type="button" id="btnAddPromotions" class="btn btn-primary btn-block">Add</button>
     </div>
     </div>
 </form>
@@ -42,18 +42,18 @@
                 AddPromotions();
             });
         });
-
-        var PromoName = $("#PromotionName").val();
-        var SDate = $("#StartDate").val();
-        var EDate= $("#EndDate").val();
-        var Quantiti = $("#Quantity").val();
-        var PID = $("#ProductID").val();
-        var CID = $("#CustomerID").val();
-        var PercentageDiscounts = $("#PercentageDiscount").val();
-        var TotalDiscounts = $("#TotalDiscount").val();
-        var QuantityDay = $("#QuantityOneDay").val();
-        var MAmount = $("#MinimumAmount").val();
+        debugger;
         function AddPromotions() {
+            var PromoName = $("#PromotionName").val();
+            var SDate = $("#StartDate").val();
+            var EDate= $("#EndDate").val();
+            var Quantiti = $("#Quantity").val();
+            var PID = $("#ProductID").val();
+            var CID = $("#CustomerID").val();
+            var PercentageDiscounts = $("#PercentageDiscount").val();
+            var TotalDiscounts = $("#TotalDiscount").val();
+            var QuantityDay = $("#QuantityOneDay").val();
+            var MAmount = $("#MinimumAmount").val();
             var param = {
                 PromotionName: PromoName,
                 StartDate: SDate,

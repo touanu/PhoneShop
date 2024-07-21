@@ -1,0 +1,96 @@
+﻿<style>
+    .row_marging {
+        margin-top: 5px;
+    }
+</style>
+
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý Khuyến mãi</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Khuyến mãi</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row row_marging">
+            <div class="col-md-3 row_marging">
+                <input type="text" id="txtAttributeName" value="" class="form-control" placeholder="Tên khuyến mãi" />
+            </div>
+            <div class="col-md-3 row_marging">
+                <option value="0">Tất cả</option>
+                </select>
+            </div>
+        </div>
+        <div class="row row_marging">
+            <div class="col-md-12 row_marging">
+                <button type="button" id="btnSave" class="btn btn-success"> <i class="fa fa-search"></i>Tìm kiếm </button>
+            </div>
+        </div>
+        <div class="row row_marging">
+            <div class="col-md-12">
+                <h2 class="card-title">Danh sách khuyến mãi</h2>
+                <div id="GetPromotion"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+@section Scripts {
+    <script>
+        debugger;
+        $(document).ready(function () {
+
+            LoadData();
+
+            $("#btnSave").click(function () {
+
+            });
+            $("#btnSearch").click(function () {
+                LoadData();
+            });
+        });
+
+        function LoadData() {
+
+            var param = {
+
+                PromotionName: $("#txtAttributeName").val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: "GetPromotions",
+                data: param,
+                async: true,
+                dataType: "html",
+                // dataType:"json",
+                success: function (rs) {
+                    $("#GetPromotion").html("");
+                    $("#GetPromotion").html(rs);
+                    var code = $("#txtErrorCodeResponseFromServer").val();
+                    var mes = $("#txtErrorResponseFromServer").val();
+                    debugger;
+                    if (code == -401) {
+                        alert(mes);
+                        window.location.href = "/Account/Login";
+                    }
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
+                }
+            });
+        }
+    </script>
+}

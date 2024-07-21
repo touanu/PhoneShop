@@ -16,7 +16,7 @@ namespace PhoneShop.DataAccess.DTO
         public int Quantity { get; set; }
         public int ProductID { get; set; }
         public int CustomerID { get; set; }
-        public float PercentageDiscount { get; set; }
+        public int  PercentageDiscount { get; set; }
         public decimal TotalDiscount { get; set; }
         public int QuantityOneDay { get; set; }
         public decimal MinimumAmount { get; set; }
