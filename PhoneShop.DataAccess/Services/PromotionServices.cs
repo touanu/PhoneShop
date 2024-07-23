@@ -83,9 +83,10 @@ namespace PhoneShop.DataAccess.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<Promotion>> GetPromotions(PromotionsRequestData requestData)
+        public async Task<ReturnDataReturnpromotion> GetPromotions(PromotionsRequestData requestData)
         {
             var list = new List<Promotion>();
+            var returnData =new ReturnDataReturnpromotion();
             try
             {
                 list = _dbcontext.Promotion.ToList();
@@ -101,7 +102,10 @@ namespace PhoneShop.DataAccess.Services
                         list = list.FindAll(s => s.ProductID == Products.ProductID);
                     }
                 }
-                return list;
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "lấy dữ liệu thành công!";
+                returnData.listpromotion = list;
+                return returnData;
             }
             catch (Exception ex)
             {

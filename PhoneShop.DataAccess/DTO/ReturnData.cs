@@ -39,8 +39,9 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class ReturnDataReturnpromotion:ReturnData
     {
-        public List<Promotion> listpromotion { get; set; }
+        public List<Promotion> ?listpromotion { get; set; }
     }
+   
     public class list
     {
         public int ProductAttributeID { get; set; }

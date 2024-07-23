@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI.Filter;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -17,6 +18,7 @@ namespace PhoneShopAPI.Controllers
             _configuration = configuration;
         }
         [HttpPost("AddPromotion")]
+        [PhoneShopAuthorize("Add_Promotions","INSERT")]
         public async Task<ActionResult> AddPromotion (PromotionsRequestData requestData)
         {
             GetPromotionsReturnData returnData= new GetPromotionsReturnData();
@@ -47,10 +49,12 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+       
         [HttpPost("GetPromotion")]
+        [PhoneShopAuthorize("Get_Promotions", "VIEW")]
         public async Task<ActionResult> GetPromotion(PromotionsRequestData requestData )
         {
-            var list = _unitOfWork._promotionsServices.GetPromotions(requestData);
+            var list = await _unitOfWork._promotionsServices.GetPromotions(requestData);
             return Ok(list);
         }
     }

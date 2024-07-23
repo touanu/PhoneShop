@@ -35,7 +35,7 @@
         </div>
         <div class="row row_marging">
             <div class="col-md-12 row_marging">
-                <button type="button" id="btnSave" class="btn btn-success"> <i class="fa fa-search"></i>Tìm kiếm </button>
+                <button type="button" id="btnSearch" class="btn btn-success"> <i class="fa fa-search"></i>Tìm kiếm </button>
             </div>
         </div>
         <div class="row row_marging">
@@ -85,6 +85,9 @@
                     if (code == -401) {
                         alert(mes);
                         window.location.href = "/Account/Login";
+                    }
+                    if (code == -404){
+                        alert(mes);
                     }
                 },
                 error(rs) {

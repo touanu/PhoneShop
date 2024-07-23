@@ -85,9 +85,20 @@ namespace PhoneShopAPI.Filter
 
                     // bước 2: lấy quyền của userid 
                     var permission = await _unitOfWork._accountServices.User_PermissionById(function.FunctionID, Convert.ToInt32(userId));
-
+                    if(permission==null)
+                    {
+                        context.HttpContext.Response.ContentType = "application/json";
+                        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        context.Result = new JsonResult(new
+                        {
+                            ReturnCode = -404,
+                            ReturnMsg = "Bạn không có quyền thực hiện chức năng này"
+                        });
+                        return;
+                    }
                     switch (_permission)
                     {
+                        
                         case "VIEW":
                             if (permission.IViews == 0)
                             {
