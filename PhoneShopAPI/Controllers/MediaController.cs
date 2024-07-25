@@ -29,7 +29,7 @@ namespace PhoneShopAPI.Controllers
                 }
 
                 // kiểm tra xem chữ ký có hợp lệ không ?
-                var secretKey = _configuration["Security:SecretKey"] ?? "";
+                var secretKey = _configuration["Sercurity:SecretKey"] ?? "";
                 var plaintext = requestData.Base64Image + secretKey;
                 var signature = Security.MD5(plaintext);
 

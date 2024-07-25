@@ -1,4 +1,5 @@
-﻿using PhoneShop.DataAccess.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,27 @@ namespace PhoneShop.DataAccess.Services
         {
             _dbcontext = dbcontext;
         }
-        public async Task<List<Category>> GetCategories()
+        public async Task<GetCategoryReturnData> GetCategories(CategoryRequestData requestData)
         {
             var list = new List<Category>();
+            var returnData = new GetCategoryReturnData();
             try
             {
-                list =_dbcontext.Category.ToList();
-                return list;
+                list = _dbcontext.Category.ToList();
+
+                if (!string.IsNullOrEmpty(requestData.CategoryName))
+                {
+                    list = list.FindAll(s => s.CategoryName.ToLower().Contains(requestData.CategoryName.ToLower())).ToList();
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "lấy dữ liệu thành công!";
+                returnData.list = list;
+                return returnData;
             }
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
         public async Task<ReturnData> AddCategory(CategoryRequestData RequestData)

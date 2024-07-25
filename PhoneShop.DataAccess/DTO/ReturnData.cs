@@ -41,7 +41,10 @@ namespace PhoneShop.DataAccess.DTO
     {
         public List<Promotion> ?listpromotion { get; set; }
     }
-   
+    public class GetCategoryReturnData: ReturnData
+    {
+        public List<Category> ?list { get; set; }
+    }
     public class list
     {
         public int ProductAttributeID { get; set; }
@@ -70,6 +73,7 @@ namespace PhoneShop.DataAccess.DTO
     {
         public Promotion? promotion { get; set; }
     }
+
     public class CategoryReturnData : ReturnData
     {
         public Category? category { get; set; }
