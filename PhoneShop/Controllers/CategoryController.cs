@@ -15,6 +15,11 @@ namespace PhoneShop.Controllers
         }
         public IActionResult Index()
         {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
             return View();
         }
         public IActionResult AddCategory()
@@ -78,6 +83,71 @@ namespace PhoneShop.Controllers
             }
 
             return Json(model);
+        }
+        public async Task<ActionResult> GetCategorys(CategoryRequestData requestData)
+        {
+            var messageFromServer = string.Empty;
+            var list = new List<Category>();
+            try
+            {
+                requestData.DisplayStatus = 0;
+                requestData.IconImages = "";
+                
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return PartialView(list);
+                }
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Category/GetCategory";
+
+                // bƯỚC 2: tạo json data ( object sang JSON)
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 3 : gọi httpclient bên common để post lên api
+                var result = await HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData, token);
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var response = JsonConvert.DeserializeObject<GetCategoryReturnData>(result);
+                    if (response != null)
+                    {
+                        if (response.ReturnCode < 0)
+                        {
+                            messageFromServer = response.ReturnMsg;
+                            ViewBag.ErrorCode = response.ReturnCode;
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return PartialView(list);
+                        }
+                        if (response?.list == null || response?.list.Count <= 0)
+                        {
+                            messageFromServer = "Không có dữ liệu.Vui lòng kiểm tra lại";
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return PartialView(list);
+                        }
+
+                        foreach (var item in response?.list)
+                        {
+                            list.Add(new Category
+                            {
+                                CategoryID = item.CategoryID,
+                                CategoryName = item.CategoryName,
+                                IconImages = item.IconImages,
+                                DisplayStatus = item.DisplayStatus,
+                            });
+
+                        }
+                    }
+
+                }
+                return PartialView(list);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

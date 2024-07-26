@@ -43,7 +43,7 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class GetCategoryReturnData: ReturnData
     {
-        public List<Category> ?list { get; set; }
+        public List<Category> list { get; set; }
     }
     public class list
     {

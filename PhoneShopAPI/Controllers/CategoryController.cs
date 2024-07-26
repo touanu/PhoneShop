@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI.Filter;
 using PhoneShopAPI.Models;
 
 namespace PhoneShopAPI.Controllers
@@ -20,6 +21,7 @@ namespace PhoneShopAPI.Controllers
             _unitOfWork = unitOfWork;
         }
         [HttpPost("AddCategory")]
+        [PhoneShopAuthorize("Add_Category", "INSERT")]
         public async Task<ActionResult> AddCategory(CategoryRequestData requestData)
         {
             CategoryReturnData returnData = new CategoryReturnData();
@@ -69,7 +71,7 @@ namespace PhoneShopAPI.Controllers
                 {
                     imageName = rs.ReturnMsg;
                 }
-            }
+            } 
 
 
             // bước 2: có ảnh từ bước 1 rồi thì thực hiện lưu xuống db
@@ -81,11 +83,29 @@ namespace PhoneShopAPI.Controllers
             return Ok(returnData);
         }
         [HttpPost("GetCategory")]
-        public async Task<ActionResult> GetCategory(CategoryRequestData requuestData)
+        [PhoneShopAuthorize("Get_Category", "VIEW")]
+        public async Task<ActionResult> GetCategory (CategoryRequestData requuestData)
         {
-            var list = await _unitOfWork._categoryServices.GetCategories(requuestData);
+            var lstCategory = new GetCategoryReturnData();
+            try
+            {
+                var media_url = "http://localhost:5124/Upload/";
+                lstCategory = await _unitOfWork._categoryServices.GetCategories(requuestData);
+                if (lstCategory.list.Count > 0)
+                {
+                    foreach (var item in lstCategory.list)
+                    {
+                        item.IconImages = media_url + item.IconImages;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
 
-            return Ok(list);
+                throw;
+            }
+
+            return Ok(lstCategory);
         }
     }
 }

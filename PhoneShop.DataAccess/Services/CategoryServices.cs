@@ -32,6 +32,7 @@ namespace PhoneShop.DataAccess.Services
                 {
                     list = list.FindAll(s => s.CategoryName.ToLower().Contains(requestData.CategoryName.ToLower())).ToList();
                 }
+                list = list.FindAll(s=>s.DisplayStatus==1).ToList();
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "lấy dữ liệu thành công!";
                 returnData.list = list;
@@ -39,8 +40,9 @@ namespace PhoneShop.DataAccess.Services
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!"+ex;
+                return returnData;
             }
         }
         public async Task<ReturnData> AddCategory(CategoryRequestData RequestData)
