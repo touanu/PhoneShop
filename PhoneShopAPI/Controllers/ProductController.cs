@@ -2,6 +2,7 @@
 using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.UnitOfWork;
+using CommonLibs;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -30,8 +31,62 @@ namespace PhoneShopAPI.Controllers
         [HttpPost("Get")]
         public async Task<ActionResult> PagedGet(ProductRequestGetData requestData)
         {
-            var returnData = await _unitOfWork._productServices.GetProducts(requestData);
-            return Ok(returnData);
+            var returnData = new ProductGetReturnData();
+            var pageSize = 5;
+
+            try
+            {
+                var products = await _unitOfWork._productServices.GetProducts();
+                if (requestData == null || requestData.PageNumber <= 0)
+                {
+                    requestData = new ProductRequestGetData
+                    {
+                        PageNumber = 1
+                    };
+                }
+
+                if (!string.IsNullOrEmpty(requestData.CreatedDate))
+                {
+                    products = products.FindAll(x =>
+                        x.CreatedDate.GetValueOrDefault().ToShortDateString() ==
+                        requestData.CreatedDate
+                    );
+                }
+
+                if (requestData.BrandId != null)
+                {
+                    products = products.FindAll(x =>
+                        x.BrandID == requestData.BrandId
+                    );
+                }
+
+                if (requestData.CategoryId != null)
+                {
+                    products = products.FindAll(x =>
+                        x.CategoryID == requestData.CategoryId
+                    );
+                }
+
+                returnData.Products = products.ToPagedList((int)requestData.PageNumber, pageSize);
+
+                returnData.Brands = await _unitOfWork._BrandServices.BrandsGetList();
+                returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
+
+                returnData.CurrentBrand = requestData.BrandId;
+                returnData.CurrentCategory = requestData.CategoryId;
+                returnData.CurrentPage = (int)requestData.PageNumber;
+                returnData.MaxPageCount = products.Count / pageSize;
+
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Lấy dữ liệu thành công.";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
         }
 
         [HttpPost("Add")]
@@ -42,8 +97,8 @@ namespace PhoneShopAPI.Controllers
             try
             {
                 if (requestData == null
-                    || Validation.IsName(requestData.Product.ProductName)
-                    || !Validation.IsContainHTMLTags(requestData.Product.ProductDescription)
+                    || !requestData.Product.ProductName.IsName()
+                    || !requestData.Product.ProductDescription.IsContainHTMLTags()
                     )
                 {
                     returnData.ReturnCode = (int)ReturnCode.Invalid;
@@ -51,38 +106,7 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
 
-                if (requestData.Attributes.Exists(
-                    x => !Validation.IsName(x.AttributesName))
-                    )
-                {
-                    returnData.ReturnCode = (int)ReturnCode.Invalid;
-                    returnData.ReturnMsg = "Dữ liệu về thuộc tính không hợp lệ";
-                    return Ok(returnData);
-                }
 
-                if (requestData.AttributeValues.Exists(x =>
-                        !Validation.IsName(x.AttributeValuesName)
-                        || x.Quantity < 0
-                        || x.Price < 0
-                        || x.PriceSale < 0)
-                    )
-                {
-                    returnData.ReturnCode = (int)ReturnCode.Invalid;
-                    returnData.ReturnMsg = "Dữ liệu về giá trị của thuộc tính không hợp lệ";
-                    return Ok(returnData);
-                }
-
-                var brandList = await _unitOfWork._BrandServices.BrandsGetList();
-                if (!brandList.Exists(x => x.BrandID == requestData.Product.BrandID))
-                {
-                    returnData.ReturnCode = (int)ReturnCode.NotExist;
-                    returnData.ReturnMsg = "Nhãn hàng này không tồn tại!";
-                    return Ok(returnData);
-                }
-
-                // Todo: Thêm phần kiểm tra categoryId
-
-                
             }
             catch (Exception ex)
             {

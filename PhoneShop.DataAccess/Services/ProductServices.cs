@@ -1,4 +1,6 @@
-﻿using PhoneShop.DataAccess.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneShop.Commonlibs;
+using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 
 namespace PhoneShop.DataAccess.Services
@@ -12,7 +14,7 @@ namespace PhoneShop.DataAccess.Services
 
             try
             {
-                var product = _phoneShopDBContext.Product.Find(id);
+                var product = await _phoneShopDBContext.Product.FindAsync(id);
 
                 if (product == null)
                 {
@@ -35,34 +37,49 @@ namespace PhoneShop.DataAccess.Services
         }
         public async Task<List<Product>> GetProducts()
         {
-            // Tương đương với .ToList()
-            return [.. _phoneShopDBContext.Product];
-        }
-        public async Task<ProductGetReturnData> GetProducts(ProductRequestGetData requestData)
-        {
-            var itemsToSkip = (requestData.PageNumber - 1) * requestData.PageSize;
-            var items = _phoneShopDBContext.Product
-                .Skip(itemsToSkip)
-                .Take(requestData.PageSize);
-            var maxPageCount = _phoneShopDBContext.Product.Count() / requestData.PageSize;
-
-            var returnData = new ProductGetReturnData
-            {
-                Products = [.. items],
-                CurrentPage = requestData.PageNumber,
-                MaxPageCount = maxPageCount
-            };
-
-            return returnData;
+            return await _phoneShopDBContext.Product.ToListAsync();
         }
         public async Task<ReturnData> InsertProduct(ProductRequestData requestData)
         {
             var returnData = new ReturnData();
             try
             {
-                _phoneShopDBContext.Product.Add(requestData.Product);
-                _phoneShopDBContext.ProductAttribute.AddRange(requestData.Attributes);
-                _phoneShopDBContext.ProductAttributeValue.AddRange(requestData.AttributeValues);
+                if (requestData == null
+                    || !requestData.Product.ProductName.IsName()
+                    || !requestData.Product.ProductDescription.IsContainHTMLTags()
+                    )
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu về sản phẩm không hợp lệ.";
+                    return returnData;
+                }
+
+                if (requestData.Attributes.Exists(x => x.AttributesName.IsName()))
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu về thuộc tính không hợp lệ";
+                    return returnData;
+                }
+
+                if (!await _phoneShopDBContext.Brand.AnyAsync(x => x.BrandID == requestData.Product.BrandID))
+                {
+                    returnData.ReturnCode = (int)ReturnCode.NotExist;
+                    returnData.ReturnMsg = "Nhãn hàng này không tồn tại!";
+                    return returnData;
+                }
+
+                if (!await _phoneShopDBContext.Category.AnyAsync(x => x.CategoryID == requestData.Product.CategoryID))
+                {
+                    returnData.ReturnCode = (int)ReturnCode.NotExist;
+                    returnData.ReturnMsg = "Danh mục này không tồn tại!";
+                    return returnData;
+                }
+
+                await _phoneShopDBContext.Product.AddAsync(requestData.Product);
+                await _phoneShopDBContext.ProductAttribute.AddRangeAsync(requestData.Attributes);
+                await _phoneShopDBContext.ProductAttributeValue.AddRangeAsync(requestData.AttributeValues);
+
+                var result = await _phoneShopDBContext.SaveChangesAsync();
 
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Thêm dữ liệu thành công.";

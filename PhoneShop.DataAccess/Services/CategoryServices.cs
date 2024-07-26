@@ -16,6 +16,10 @@ namespace PhoneShop.DataAccess.Services
         {
             _dbcontext = dbcontext;
         }
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await _dbcontext.Category.ToListAsync();
+        }
         public async Task<GetCategoryReturnData> GetCategories(CategoryRequestData requestData)
         {
             var list = new List<Category>();

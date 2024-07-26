@@ -2,9 +2,6 @@
     ViewData["Title"] = "All Products";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@using Microsoft.Extensions.Configuration
-@inject IConfiguration Configuration
-@model PhoneShop.DataAccess.DTO.ProductGetReturnData
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -23,114 +20,71 @@
     </div><!-- /.container-fluid -->
 </section>
 
-
-@if (Model != null && Model.Products.Count > 0)
-{
-<!-- Main content -->
 <section class="content">
 
     <!-- Default box -->
-    <div class="card">
+    <div class="card" id="render-content">
         <div class="card-header">
             <a class="btn btn-primary btn-sm" href="#">
                 <i class="fas fa-plus">
                 </i>
                 Thêm mới
             </a>
+            <div class="card-tools">
+                <input type="date" id="datefilter" name="datefilter">
+            </div>
         </div>
-        <div class="card-body p-0">
-            <table class="table table-striped projects">
-                <thead>
-                    <tr>
-                        <th style="width: 1%">
-                            #
-                        </th>
-                        <th style="width: 20%">
-                            Tên sản phẩm
-                        </th>
-                        <th style="width: 30%">
-                            Nhãn hàng
-                        </th>
-                        <th>
-                            Danh mục
-                        </th>
-                        <th style="width: 20%">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                        @foreach (var item in Model.Products)
-                        {
-                            <tr>
-                                <td>@item.ProductID</td>
-                                <td>
-                                    <a>
-                                        @item.ProductName
-                                    </a>
-                                    <br />
-                                    <small>
-
-                                    </small>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        @item.BrandID
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        @item.CategoryID
-                                    </a>
-                                </td>
-                                <td class="project-actions text-right">
-                                    <a class="btn btn-info btn-sm" href="#">
-                                        <i class="fas fa-pencil-alt">
-                                        </i>
-                                        Sửa
-                                    </a>
-                                    <a class="btn btn-danger btn-sm" href="#">
-                                        <i class="fas fa-trash">
-                                        </i>
-                                        Xoá
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-
-                </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
+        <!-- /.card -->
     </div>
-    <!-- /.card -->
-
 </section>
 <!-- /.content -->
 
+@section Scripts {
+<script>
 
-<div class="card-footer">
-    <nav aria-label="Contacts Page Navigation">
-        <ul class="pagination justify-content-center m-0">
-            @for (int i = 1; i < Model.MaxPageCount; i++)
-            {
-                if (i == Model.CurrentPage)
-                {
-                    <li class="page-item active"><a class="page-link" href="#">@i</a></li>
-                }
-                else
-                {
-                    <li class="page-item"><a class="page-link" href="#">@i</a></li>
-                }
+    $(document).ready(function() {
+        var param = {
+            PageNumber: 1
+        };
+        LoadData(param);
+    })
+
+    $("#datefilter").change(function () {
+        var dateElement = $(this).val().split('-');
+        dateElement.reverse();
+        var stringDate = dateElement.join('/');
+
+        var param = {
+            PageNumber: 1,
+            CreatedDate: stringDate
+        };
+
+        console.log(param);
+        LoadData(param);
+    });
+
+    function ProductFilter(brandId, categoryId) {
+        var param = {
+            BrandId: brandId,
+            CategoryId: categoryId,
+            PageNumber: 1
+        }
+    }
+
+    function LoadData(param) {
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "/Product/GetProducts",
+            data: param,
+            async: true,
+            success: function (response) {
+                $("#products-body").remove();
+                $("#products-paging").remove();
+                $("#render-content").append(response);
             }
-        </ul>
-    </nav>
-</div>
+        });
+    }
+</script>
 }
-else
-{
-    <div class="d-flex justify-content-center p-3">
-        <img src="@Configuration["API_URL:URL"]Upload/empty-product.png" height="200">
-        
-    </div>
-    <p class="text-center text-green">Không có sản phẩm nào</p>
-}
+

@@ -80,7 +80,11 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class ProductGetReturnData : ReturnData
     {
-        public required List<Product> Products { get; set; }
+        public List<Product>? Products { get; set; }
+        public List<Brand>? Brands { get; set; }
+        public List<Category>? Categories { get; set; }
+        public int? CurrentBrand { get; set; }
+        public int? CurrentCategory { get; set; }
         public int CurrentPage { get; set; }
         public int MaxPageCount { get; set; }
     }
