@@ -66,7 +66,7 @@ namespace PhoneShop.DataAccess.Services
 
                 _dbcontext.Category.Add(Category_Req);
                 returnData.ReturnCode = 1;
-                returnData.ReturnMsg = "Thêm sản phẩm thành công";
+                returnData.ReturnMsg = "Thêm danh mục sản phẩm thành công";
                 return returnData;
             }
             catch (Exception ex)

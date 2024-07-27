@@ -39,7 +39,7 @@ namespace PhoneShopAPI.Controllers
 
             // Bước 1.1 : khai báo API URL
 
-            var baseurl = "http://localhost:5124/";
+            var baseurl = _configuration["URL:MEDIA_URL"] ?? "";
             var url = "api/Media/Upload";
 
             // bƯỚC 1.2: tạo json data ( object sang JSON)
@@ -89,7 +89,8 @@ namespace PhoneShopAPI.Controllers
             var lstCategory = new GetCategoryReturnData();
             try
             {
-                var media_url = "http://localhost:5124/Upload/";
+                var media_url  = _configuration["URL:MEDIA_URL"] ?? "";
+                media_url = media_url + "Upload/";
                 lstCategory = await _unitOfWork._categoryServices.GetCategories(requuestData);
                 if (lstCategory.list.Count > 0)
                 {
