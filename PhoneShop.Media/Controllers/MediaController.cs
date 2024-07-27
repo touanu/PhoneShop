@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PhoneShopAPI.Models;
+using PhoneShop.Media.Models;
 using PhoneShop.DataAccess.DTO;
 using System.Drawing;
 using CommonLibs;
 
-namespace PhoneShopAPI.Controllers
+namespace PhoneShop.Media.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +29,7 @@ namespace PhoneShopAPI.Controllers
                 }
 
                 // kiểm tra xem chữ ký có hợp lệ không ?
-                var secretKey = _configuration["Sercurity:SecretKey"] ?? "";
+                var secretKey = _configuration["Security:SecretKey"] ?? "";
                 var plaintext = requestData.Base64Image + secretKey;
                 var signature = Security.MD5(plaintext);
 
@@ -46,7 +46,7 @@ namespace PhoneShopAPI.Controllers
                 {
                     Directory.CreateDirectory(path);
                 }
-                string imageName = Guid.NewGuid().ToString() + ".png";
+                string imageName = $"{Guid.NewGuid()}.png";
                 var imgPath = Path.Combine(path, imageName);
 
                 if (requestData.Base64Image.Contains("data:image"))

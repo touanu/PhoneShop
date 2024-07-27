@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using PhoneShop.DataAccess;
 using PhoneShop.DataAccess.IServices;
@@ -61,17 +60,5 @@ app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    OnPrepareResponse = ctx => {
-        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "*");
-        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers",
-          "Origin, X-Requested-With, Content-Type, Accept");
-    },
-    FileProvider = new PhysicalFileProvider(
-           Path.Combine(builder.Environment.ContentRootPath, "Upload")),
-    RequestPath = "/Upload"
-});
 
 app.Run();
