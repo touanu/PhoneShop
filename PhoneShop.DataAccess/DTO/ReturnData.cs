@@ -88,4 +88,13 @@ namespace PhoneShop.DataAccess.DTO
         public int CurrentPage { get; set; }
         public int MaxPageCount { get; set; }
     }
+    public class ProductAddViewReturnData : ReturnData
+    {
+        public List<Brand>? Brands { get; set; }
+        public List<Category>? Categories { get; set; }
+    }
+    public class ProductAddReturnData : ReturnData
+    {
+
+    }
 }

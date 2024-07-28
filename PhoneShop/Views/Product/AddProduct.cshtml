@@ -1,0 +1,455 @@
+﻿@{
+    ViewData["Title"] = "Add Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model PhoneShop.DataAccess.DTO.ProductAddViewReturnData
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thêm sản phẩm</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/Product">Danh sách sản phẩm</a></li>
+                    <li class="breadcrumb-item active">Thêm sản phẩm</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row" id="product">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Thông tin sản phẩm</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="productName">Tên sản phẩm</label>
+                        <input type="text" id="productName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Mô tả (không chứa HTML tags)</label>
+                        <textarea id="productDescription" class="form-control" rows="4"></textarea>
+                    </div>
+                    @if (Model != null && Model.Brands != null && Model.Brands.Count > 0)
+                    {
+                        <div class="form-group">
+                            <label for="productBrand">Nhãn hàng</label>
+                            <select id="productBrand" class="form-control custom-select">
+                                <option selected="" disabled="">Chọn một</option>
+                                @foreach (var item in Model.Brands)
+                                {
+                                    <option value="@item.BrandID">@item.BrandName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    @if (Model != null && Model.Categories != null && Model.Categories.Count > 0)
+                    {
+                        <div class="form-group">
+                            <label for="productCategory">Phân loại</label>
+                            <select id="productCategory" class="form-control custom-select">
+                                <option selected="" disabled="">Chọn một</option>
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <option value="@item.CategoryID">@item.CategoryName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <label for="Title" class="control-label">
+                            Ảnh sản phẩm: <span class="required">*</span>
+                        </label>
+                        <p id="imageHint" style="color:red">Chọn từ 1 - 5 ảnh sản phẩm</p>
+                        <div class="">
+                            <div class="input-icon right">
+                                <div id="dvPreview">
+                                </div>
+                                <div id="divAddMoreImage">
+                                    <input type="file" id="productImages" style="display:none" multiple>
+                                    <a style="cursor:pointer;" onclick="openFileOption();"><i class="fa fa-plus-circle"></i>Thêm ảnh</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-md-6">
+            <div id="productAttributeContainer">
+                <div class="card card-info card-outline productAttribute" id="attribute_0">
+                    <div class="card-header">
+                        <h3 class="card-title" id="attribute_title_0">Thuộc tính</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Thu gọn">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body productAttributeBody">
+                        <div class="form-group">
+                            <label for="attributeName_0">Tên thuộc tính</label>
+                            <input type="text" id="attributeName_0" class="form-control" onchange="ChangeAttributeTitle(0);">
+                        </div>
+                        <div class="form-group" id="productAttributeValues_0">
+                            <div class="container p-1 productAttributeValue" id="productAttributeValue_0_0">
+                                <div class="row p-1">
+                                    <div class="col">
+                                        <label for="attributeValueName_0_0">Tên giá trị</label>
+                                        <input type="text" id="attributeValueName_0_0" class="form-control">
+                                    </div>
+                                    <div class="col align-content-end">
+                                        <a style="cursor:pointer; display: none;" onclick="RemoveAttributeValue(0,0);">
+                                            <i class="fa fa-plus-circle"></i>
+                                            Xoá
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row p-1">
+                                    <div class="col">
+                                        <label for="quantity_0_0">Số lượng</label>
+                                        <input type="number" id="quantity_0_0" class="form-control" placeholder="1">
+                                    </div>
+                                    <div class="col">
+                                        <label for="price_0_0">Giá</label>
+                                        <input type="number" id="price_0_0" class="form-control" placeholder="00.00">
+                                    </div>
+                                    <div class="col">
+                                        <label for="priceSale_0_0">Giá sale</label>
+                                        <input type="number" id="priceSale_0_0" class="form-control" placeholder="00.00">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a style="cursor:pointer;" onclick="AddNewAttributeValue(0)">
+                                <i class="fa fa-plus-circle"></i>
+                                Thêm giá trị mới
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div>
+                <a style="cursor:pointer;" onclick="AddNewAttribute()">
+                    <i class="fa fa-plus-circle"></i>
+                    Thêm phân loại
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <a href="/Product" class="btn btn-secondary">Huỷ bỏ</a>
+            <input type="submit" value="Thêm sản phẩm" class="btn btn-success float-right" onclick="SaveData();">
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+@section Scripts {
+    <script>
+        // Thực hiện khi hoàn tất tải trang web
+        $(document).ready(function () {
+            $("#btnSave").click(function () {
+                SaveData();
+            });
+        });
+
+        // Xử lý ảnh sản phẩm
+        $('#productImages').on('change', function () {
+            var dvPreview = $("#dvPreview");
+
+            if (typeof (FileReader) == "undefined") {
+                var unsupportedBrowser = $(
+                    "<p style='color:red'>Trình duyệt này không hỗ trợ HTML5 FileReader,</p>" +
+                    "<p style='color:red'>không thể hiển thị ảnh xem trước.</p>"
+                );
+
+                $("#imageHint").remove();
+                dvPreview.append(unsupportedBrowser);
+            }
+
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+            var files = $(this)[0].files
+
+            // Lấy ảnh được upload vào #productImages, đọc chúng và
+            // hiện thị ảnh với src là base64
+            $(files).each(function () {
+                var file = $(this);
+
+                // Kiểm tra xem tên file có phải là file ảnh hợp lệ không
+                if (!regex.test(file[0].name.toLowerCase())) {
+                    alert(file[0].name + " không phải là file ảnh.");
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var index = $("#dvPreview img").length + 1;
+                    var img = $(
+                        "<img class='img_" + index + "'/>"
+                    );
+                    var deleteButton = $(
+                        "<span id='delete_img_" + index + "'>" +
+                        "<a onclick='RemoveProductImage(" + index + ")'>Xóa</a>" +
+                        "</span> <br class='img_" + index + "' />"
+                    );
+
+                    img.attr("style", "height:250px;width: 250px");
+                    img.attr("src", e.target.result);
+
+                    dvPreview.append(img);
+                    dvPreview.append(deleteButton);
+                };
+                reader.readAsDataURL(file[0]);
+            });
+        });
+        function openFileOption() {
+            $("#productImages").click();
+        }
+        function RemoveProductImage(index) {
+            $("#dvPreview .img_" + index).remove();
+            $("#dvPreview #delete_img_" + index).remove();
+        }
+
+        // Xử lý thuộc tính của sản phẩm
+        function ChangeAttributeTitle(index) {
+            var attributeName = $(`#attributeName_${index}`)[0].value;
+            $(`#attribute_title_${index}`)[0].textContent = "Thuộc tính: " + attributeName;
+        }
+        function AddNewAttribute() {
+            var index = $(".productAttribute").length;
+            var html = `
+                    <div class="card card-info card-outline productAttribute" id="attribute_${index}">
+                        <div class="card-header">
+                            <h3 class="card-title" id="attribute_title_${index}">Thuộc tính</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" title="Xoá" onclick="RemoveAttribute(${index});">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="attributeName_${index}">Tên thuộc tính</label>
+                                <input type="text" id="attributeName_${index}" class="form-control" onchange="ChangeAttributeTitle(${index});">
+                            </div>
+                            <div class="form-group" id="productAttributeValues_${index}">
+                                <div class="container p-1 productAttributeValue" id="productAttributeValue_${index}_0">
+                                    <div class="row p-1">
+                                        <div class="col">
+                                            <label for="attributeValueName_${index}_0">Tên giá trị</label>
+                                            <input type="text" id="attributeValueName_${index}_0" class="form-control">
+                                        </div>
+                                        <div class="col align-content-end">
+                                            <a style="cursor:pointer; display: none;" onclick="RemoveAttributeValue(${index},0)">
+                                                <i class="fa fa-plus-circle"></i>
+                                                Xoá
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row p-1">
+                                        <div class="col">
+                                            <label for="quantity_${index}_0">Số lượng</label>
+                                            <input type="number" id="quantity_${index}_0" class="form-control" placeholder="1">
+                                        </div>
+                                        <div class="col">
+                                            <label for="price_${index}_0">Giá</label>
+                                            <input type="number" id="price_${index}_0" class="form-control" placeholder="${index}${index}.${index}${index}">
+                                        </div>
+                                        <div class="col">
+                                            <label for="priceSale_${index}_0">Giá sale</label>
+                                            <input type="number" id="priceSale_${index}_0" class="form-control" placeholder="${index}${index}.${index}${index}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <a style="cursor:pointer;" onclick="AddNewAttributeValue(${index})">
+                                    <i class="fa fa-plus-circle"></i>
+                                    Thêm giá trị mới
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            `
+
+            $("#productAttributeContainer").append(
+                $(html)
+            );
+        }
+        function AddNewAttributeValue(attributeIndex) {
+            var index = $(`#productAttributeValues_${attributeIndex} .productAttributeValue`).length;
+            var container = $("#productAttributeValues_" + attributeIndex);
+
+            var html = `
+            <div class="container p-1 productAttributeValue" id="productAttributeValue_${attributeIndex}_${index}">
+                <div class="row p-1">
+                    <div class="col">
+                        <label for="attributeValueName_${attributeIndex}_${index}">Tên giá trị</label>
+                        <input type="text" id="attributeValueName_${attributeIndex}_${index}" class="form-control">
+                    </div>
+                    <div class="col align-content-end">
+                        <a style="cursor:pointer;" onclick="RemoveAttributeValue(${attributeIndex}, ${index})">
+                            <i class="fas fa-times-circle"></i>
+                            Xoá
+                        </a>
+                    </div>
+                </div>
+                <div class="row p-1">
+                    <div class="col">
+                        <label for="quantity_${attributeIndex}_${index}">Số lượng</label>
+                        <input type="number" id="quantity_${attributeIndex}_${index}" class="form-control" placeholder="1">
+                    </div>
+                    <div class="col">
+                        <label for="price_${attributeIndex}_${index}">Giá</label>
+                        <input type="number" id="price_${attributeIndex}_${index}" class="form-control" placeholder="00.00">
+                    </div>
+                    <div class="col">
+                        <label for="priceSale_${attributeIndex}_${index}">Giá sale</label>
+                        <input type="number" id="priceSale_${attributeIndex}_${index}" class="form-control" placeholder="00.00">
+                    </div>
+                </div>
+            </div>
+            `;
+
+            container.append(
+                $(html)
+            );
+        }
+        function RemoveAttribute(index) {
+            $("#attribute_" + index).remove();
+        }
+        function RemoveAttributeValue(attributeIndex, valueIndex) {
+            $("#productAttributeValue_" + attributeIndex + "_" + valueIndex).remove();
+        }
+
+        // Gửi dữ liệu về server
+        function SaveData() {
+            var isValidated = true;
+            $("#product input ").each(function (index, value) {
+                if (!$(this).val()) {
+                    
+                    isValidated = false;
+                    return false;
+                }
+            });
+
+            if (!isValidated) {
+                alert("Vui lòng điền đầy đủ thông tin trước khi thêm vào cơ sở dữ liệu!");
+                return;
+            }
+
+            var name = $("#productName").val();
+            var categoryId = $("#productCategory").val();
+            var brandId = $("#productBrand").val();
+            var description = $("#productDescription").val();
+
+            var lstImageSrc = "";
+            // Lấy tất cả cả thẻ img trong dvPreview
+            $("#dvPreview img").each(function (index, item) {
+                var imageBase64 = item.src;
+                if (imageBase64 != null || imageBase64 != "") {
+                    // Cắt bỏ đi data:image/jpeg;base64,
+                    imageBase64 = imageBase64.split(',')[1];
+                    lstImageSrc += imageBase64 + "_";
+                }
+            });
+            if (lstImageSrc == null || lstImageSrc.length <= 0) {
+                alert("Vui lòng thêm ít nhất một ảnh mô tả sản phẩm.");
+                return;
+            }
+            // Cắt bỏ ký tự "_" ở cuối cùng
+            lstImageSrc = lstImageSrc.substring(0, lstImageSrc.length - 1);
+
+            var attributes = GetAllAttributes();
+
+            var param = {
+                ProductName: name,
+                CategoryID: categoryId,
+                BrandID: brandId,
+                Attributes: attributes,
+                Images: lstImageSrc,
+                ProductDescription: description,
+            };
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "/Product/AddProducts",
+                data: param,
+                async: true,
+                dataType: "json",
+                success: function (rs) {
+                    alert(rs.returnMsg);
+                    if (rs.returnCode > 0) {
+                        window.location.replace("/Product?success=true");
+                    }
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
+                }
+            });
+        }
+        function GetAllAttributes() {
+            var attributes = "";
+
+            $("#productAttributeContainer .productAttribute").each(function (index, value) {
+                var AttributeName = $("#attributeName_" + index).val();
+                var AttributeValues = GetAllAttributeValues(index);
+                attributes += AttributeName + '_' + AttributeValues + '|';
+            });
+
+            attributes = attributes != "" ? attributes.substr(0, attributes.length - 1) : attributes;
+
+            // Kiểm tra console để có cấu trúc dữ liệu trả về
+            console.log("attributes:" + attributes);
+            return attributes;
+        }
+        function GetAllAttributeValues(attributeIndex) {
+            var attributeValues = "";
+
+            $(`#productAttributeValues_${attributeIndex} .container`).each(function (index, value) {
+                var ValueName = $("#attributeValueName_" + attributeIndex + "_" + index).val();
+                var ValueQuantity = $("#quantity_" + attributeIndex + "_" + index).val();
+                var ValuePrice = $("#price_" + attributeIndex + "_" + index).val();
+                var ValueSalePrice = $("#priceSale_" + attributeIndex + "_" + index).val();
+                attributeValues += ValueName + ","
+                                + ValueQuantity + ","
+                                + ValuePrice + ","
+                                + ValueSalePrice + "_";
+            });
+
+            attributeValues = attributeValues != "" ? attributeValues.substr(0, attributeValues.length - 1) : attributeValues;
+            
+            // Kiểm tra console để có cấu trúc dữ liệu trả về
+            console.log("attributeValues:" + attributeValues, "index:", attributeIndex);
+            return attributeValues;
+        }
+    </script>
+}

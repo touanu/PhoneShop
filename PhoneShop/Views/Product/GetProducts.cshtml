@@ -4,84 +4,140 @@
 @inject IConfiguration Configuration
 @model PhoneShop.DataAccess.DTO.ProductGetReturnData
 
-@if (Model != null && Model.Products != null && Model.Products.Count > 0)
+@if (Model != null
+  && Model.Products != null && Model.Products.Count > 0
+  && Model.Categories != null && Model.Categories.Count > 0
+  && Model.Brands != null && Model.Brands.Count > 0
+)
 {
     <div class="card-body p-0" id="products-body">
         <table class="table table-striped projects">
             <thead>
                 <tr>
-                    <th style="width: 1%">
+                    <th style="width: 15%">
                         Mã
                     </th>
-                    <th style="width: 20%">
+                    <th style="width: 30%">
                         Tên sản phẩm
                     </th>
-                    <th style="width: 30%">
+                    <th style="width: 20%">
                         Nhãn hàng
                     </th>
-                    <th>
+                    <th style="width: 20%">
                         Danh mục
                     </th>
-                    <th style="width: 20%">
+                    <th>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Products)
+                <tr id="filterContainer" style="display: none;">
+                    <td>
+                        <input id="idFilter" class="form-control product-filter" type="number" placeholder="Mã" style="width: 80%" onchange="Filter();" />
+                    </td>
+                    <td>
+                        <input id="nameFilter" class="form-control product-filter" type="text" placeholder="Tên" style="width: 80%" onchange="Filter();" />
+                    </td>
+                    <td>
+                        <select id="brandFilter" class="form-control custom-select product-filter" style="width: 80%" onchange="Filter();">
+                            <option selected value="-1">Không lọc</option>
+                            @foreach (var item in Model.Brands)
+                            {
+                                @if (Model.CurrentBrand == item.BrandID)
+                                {
+                                    <option value="@item.BrandID" selected>@item.BrandName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.BrandID">@item.BrandName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select id="categoryFilter" class="form-control custom-select product-filter" style="width: 80%" onchange="Filter();">
+                            <option selected value="-1">Không lọc</option>
+                            @foreach (var item in Model.Categories)
+                            {
+                                @if (Model.CurrentCategory == item.CategoryID)
+                                {
+                                    <option value="@item.CategoryID" selected>@item.CategoryName</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.CategoryID">@item.CategoryName</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                @if (Model != null
+               && Model.Products != null && Model.Products.Count > 0
+               && Model.Categories != null && Model.Categories.Count > 0
+               && Model.Brands != null && Model.Brands.Count > 0)
                 {
-                    <tr>
-                        <td>@item.ProductID</td>
-                        <td>
-                            <a>
-                                @item.ProductName
-                            </a>
-                            <br />
-                            <small>
-                                @item.CreatedDate.GetValueOrDefault().ToShortDateString()
-                            </small>
-                        </td>
-                        <td>
-                            @if (Model.Brands != null)
-                            {
-                                var brand = Model.Brands.Find(x => x.BrandID == item.BrandID);
-                                <a href="#" onclick="ProductFilter(@item.BrandID, @Model.CurrentCategory)">
-                                    @brand?.BrandName
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>@item.ProductID</td>
+                            <td>
+                                <a>
+                                    @item.ProductName
                                 </a>
-                            }
-                        </td>
-                        <td>
-                            @if (Model.Categories != null)
-                            {
-                                var category = Model.Categories.Find(x => x.CategoryID == item.CategoryID);
-                                <a href="#" onclick="ProductFilter(@Model.CurrentBrand, @item.CategoryID)">
-                                    @category?.CategoryName
+                                <br />
+                                <small>
+                                    @item.CreatedDate.GetValueOrDefault().ToShortDateString()
+                                </small>
+                            </td>
+                            <td>
+                                @{
+                                    var brand = Model.Brands.Find(x => x.BrandID == item.BrandID);
+                                    <a href="#" onclick="ProductFilter(@item.BrandID, @Model.CurrentCategory)">
+                                        @brand?.BrandName
+                                    </a>
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    var category = Model.Categories.Find(x => x.CategoryID == item.CategoryID);
+                                    <a href="#" onclick="ProductFilter(@Model.CurrentBrand, @item.CategoryID)">
+                                        @category?.CategoryName
+                                    </a>
+                                }
+                            </td>
+                            <td class="project-actions text-right">
+                                <a class="btn btn-info btn-sm" href="#">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                    Sửa
                                 </a>
-                            }
-                        </td>
-                        <td class="project-actions text-right">
-                            <a class="btn btn-info btn-sm" href="#">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Sửa
-                            </a>
-                            <a class="btn btn-danger btn-sm" href="#">
-                                <i class="fas fa-trash">
-                                </i>
-                                Xoá
-                            </a>
-                        </td>
-                    </tr>
+                                <a class="btn btn-danger btn-sm" href="#">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Xoá
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center p-3" id="products-body">
+                        <img src="@Configuration["URL:MEDIA_URL"]Upload/empty-product.png" height="200">
+                    </div>
+                    <p id="products-paging" class="text-center text-green">Không có sản phẩm nào</p>
                 }
             </tbody>
         </table>
     </div>
     <!-- /.card-body -->
-    @if (Model.MaxPageCount > 1)
+    @if (Model != null && Model.MaxPageCount > 1)
     {
         <div class="card-footer" id="products-paging">
             <nav aria-label="Contacts Page Navigation">
                 <ul class="pagination justify-content-center m-0">
-                    @for (int i = 1; i < Model.MaxPageCount; i++)
+                    @for (int i = 1; i < Model.MaxPageCount + 1; i++)
                     {
                         if (i == Model.CurrentPage)
                         {
@@ -89,7 +145,7 @@
                         }
                         else
                         {
-                            <li class="page-item inactive" data-productpage="@i"><a class="page-link" href="#">@i</a></li>
+                            <li class="page-item inactive" onclick="LoadPage(@i);"><a class="page-link" href="#">@i</a></li>
                         }
                     }
                 </ul>
@@ -100,7 +156,12 @@
 else
 {
     <div class="d-flex justify-content-center p-3" id="products-body">
-        <img src="@Configuration["API_URL:URL"]Upload/empty-product.png" height="200">
+        <img src="@Configuration["URL:MEDIA_URL"]Upload/empty-product.png" height="200">
     </div>
     <p id="products-paging" class="text-center text-green">Không có sản phẩm nào</p>
+    <div class="d-flex justify-content-center p-3" id="loading">
+        <button type="button" class="btn btn-outline-success btn-sm" onclick="LoadData();" style="width: 100px;">
+            <i class="fas fa-redo"></i> Tải lại
+        </button>
+    </div>
 }

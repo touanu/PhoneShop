@@ -75,7 +75,13 @@ namespace PhoneShop.Commonlibs
                 return false;
             }
         }
+        public static bool IsValidated(this string? input)
+        {
+            if (string.IsNullOrEmpty(input) || input.IsContainHTMLTags())
+                return false;
 
+            return true;
+        }
         [GeneratedRegex(@"<[^>]+>")]
         private static partial Regex HTMLTags();
 

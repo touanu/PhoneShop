@@ -12,7 +12,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
                     <li class="breadcrumb-item active">Danh sách sản phẩm</li>
                 </ol>
             </div>
@@ -25,66 +25,106 @@
     <!-- Default box -->
     <div class="card" id="render-content">
         <div class="card-header">
-            <a class="btn btn-primary btn-sm" href="#">
+            <a class="btn btn-primary btn-sm" asp-controller="Product" asp-action="AddProduct">
                 <i class="fas fa-plus">
                 </i>
                 Thêm mới
             </a>
             <div class="card-tools">
+                <a href="#" id="filterButton"><i class="fas fa-filter"></i></a>
                 <input type="date" id="datefilter" name="datefilter">
             </div>
+        </div>
+        <div class="d-flex flex-column align-items-center" id="products-body">
+            <div class="spinner-border text-success m-3" role="status"></div>
+            <span class="visually-hidden">Loading...</span>
         </div>
         <!-- /.card -->
     </div>
 </section>
 <!-- /.content -->
-
 @section Scripts {
-<script>
-
-    $(document).ready(function() {
-        var param = {
-            PageNumber: 1
-        };
-        LoadData(param);
-    })
-
-    $("#datefilter").change(function () {
-        var dateElement = $(this).val().split('-');
-        dateElement.reverse();
-        var stringDate = dateElement.join('/');
-
-        var param = {
-            PageNumber: 1,
-            CreatedDate: stringDate
-        };
-
-        console.log(param);
-        LoadData(param);
-    });
-
-    function ProductFilter(brandId, categoryId) {
-        var param = {
-            BrandId: brandId,
-            CategoryId: categoryId,
-            PageNumber: 1
-        }
-    }
-
-    function LoadData(param) {
-        $.ajax({
-            type: "POST",
-            dataType: "html",
-            url: "/Product/GetProducts",
-            data: param,
-            async: true,
-            success: function (response) {
-                $("#products-body").remove();
-                $("#products-paging").remove();
-                $("#render-content").append(response);
-            }
+    <script>
+        // Init
+        $(document).ready(function () {
+            LoadData({ PageNumber: 1 });
         });
-    }
-</script>
-}
 
+        // Function chính dùng để tải dữ liệu
+        function LoadData(param) {
+            if (param == null) {
+                $("#datefilter").val("");
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: "html",
+                url: "/Product/GetProducts",
+                data: param,
+                async: true,
+                success: function (response) {
+                    $("#loading").remove();
+                    $("#products-body").remove();
+                    $("#products-paging").remove();
+                    $("#render-content").append(response);
+                }
+            });
+        }
+
+        // Xử lý các filter
+        $("#datefilter").change(function () {
+            var dateElement = $(this).val().split('-');
+            dateElement.reverse();
+            var stringDate = dateElement.join('/');
+
+            var param = {
+                PageNumber: 1,
+                CreatedDate: stringDate
+            };
+
+            console.log(param);
+            LoadData(param);
+        });
+
+        function GetFilter() {
+            var dateElement = $("#datefilter").val().split('-');
+            dateElement.reverse();
+            var stringDate = dateElement.join('/');
+            var filter = $(".product-filter");
+
+            var param = {
+                ProductId: filter[0].value,
+                ProductName: filter[1].value,
+                BrandId: filter[2].value,
+                CategoryId: filter[3].value,
+                CreatedDate: stringDate
+            };
+
+            return param;
+        }
+
+        function Filter() {
+            var param = GetFilter();
+            param.PageNumber = 1;
+            LoadData(param);
+        }
+
+        function ProductFilter(brandId, categoryId) {
+            var param = GetFilter();
+            param.BrandId = brandId;
+            param.CategoryId = categoryId;
+            param.PageNumber = 1;
+            LoadData(param);
+        }
+
+        function LoadPage(page) {
+            var param = GetFilter();
+            param.PageNumber = page;
+            LoadData(param);
+        }
+
+        $("#filterButton").click(function () {
+            $("#filterContainer").toggle();
+        });
+    </script>
+}

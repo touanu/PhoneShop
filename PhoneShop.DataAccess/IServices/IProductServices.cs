@@ -11,5 +11,6 @@ namespace PhoneShop.DataAccess.IServices
     {
         Task<List<Product>> GetProducts();
         Task<GetProductReturnData> GetProductById(int id);
+        Task<ReturnData> InsertProduct(ProductRequestAddUpdateData requestData);
     }
 }
