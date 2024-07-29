@@ -23,5 +23,6 @@ namespace PhoneShop.DataAccess
         public DbSet<Functions>? Functions { get; set; }
         public DbSet<User_Permissions>? User_Permissions { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<News> News { get; set; }
     }
 }
