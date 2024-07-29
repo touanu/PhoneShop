@@ -36,7 +36,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBrandServices , BrandServices>();
 builder.Services.AddScoped<IProductServices , ProductServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
-builder.Services.AddScoped<IAttributeServices, AttributeServices>();
 builder.Services.AddScoped<IPromotionServices, PromotionServices>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

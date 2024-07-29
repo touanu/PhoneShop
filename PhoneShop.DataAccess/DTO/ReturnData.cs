@@ -68,6 +68,8 @@ namespace PhoneShop.DataAccess.DTO
     public class GetProductReturnData : ReturnData
     {
         public Product? Product { get; set; }
+        public List<ProductAttribute>? Attributes { get; set; }
+        public List<ProductAttributeValue>? AttributeValues { get; set; }
     }
     public class GetPromotionsReturnData : ReturnData
     {
@@ -96,5 +98,13 @@ namespace PhoneShop.DataAccess.DTO
     public class ProductAddReturnData : ReturnData
     {
 
+    }
+    public class ProductUpdateViewReturnData : ReturnData
+    {
+        public Product? Product { get; set; }
+        public List<ProductAttribute>? Attributes { get; set; }
+        public List<ProductAttributeValue>? AttributeValues { get; set; }
+        public List<Brand>? Brands { get; set; }
+        public List<Category>? Categories { get; set; }
     }
 }

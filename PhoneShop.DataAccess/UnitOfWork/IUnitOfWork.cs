@@ -9,12 +9,12 @@ namespace PhoneShop.DataAccess.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        public IAttributeServices _Attributesservices { get; }
         public IBrandServices _BrandServices { get; }
         public IAccountServices _accountServices { get; set; }
         public IProductServices _productServices { set; get; }
         public IPromotionServices _promotionsServices { set; get; }
         public ICategoryServices _categoryServices { set; get; }
         int SaveChange();
+        void Dispose();
     }
 }

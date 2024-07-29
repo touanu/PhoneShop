@@ -43,11 +43,15 @@
     </div>
 </section>
 <!-- /.content -->
+
 @section Scripts {
     <script>
         // Init
         $(document).ready(function () {
             LoadData({ PageNumber: 1 });
+        });
+        $("#filterButton").click(function () {
+            $("#filterContainer").toggle();
         });
 
         // Function chính dùng để tải dữ liệu
@@ -123,8 +127,29 @@
             LoadData(param);
         }
 
-        $("#filterButton").click(function () {
-            $("#filterContainer").toggle();
-        });
+        // card-tools
+        function DeleteProduct(id) {
+            var param = GetFilter();
+            var data = {
+                ProductID: id
+            }
+            if (!confirm("Bạn có muốn xoá sản phẩm số " + id + " không?")) {
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/Product/DeleteProduct",
+                async: true,
+                data: data,
+                success: function (response) {
+                    alert(response.returnMsg);
+                    if (response.returnCode > 0) {
+                        LoadData(param);
+                    }
+                }
+            });
+        }
     </script>
 }

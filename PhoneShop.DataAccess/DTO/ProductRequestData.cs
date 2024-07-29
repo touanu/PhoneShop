@@ -22,6 +22,10 @@ namespace PhoneShop.DataAccess.DTO
         public int? BrandId { get; set; }
         public int? CategoryId { get; set; }
     }
+    public class ProductRequestUpdateView
+    {
+        public int ProductId { get; set; }
+    }
     public class ProductRequestAddUpdateData
     {
         public int ProductID { get; set; }
@@ -31,5 +35,9 @@ namespace PhoneShop.DataAccess.DTO
         public string? ProductDescription { get; set; }
         public string? Images { get; set; }
         public string? Attributes { get; set; }
+    }
+    public class ProductRequestDeleteData
+    {
+        public int? ProductID { get; set; }
     }
 }

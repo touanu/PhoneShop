@@ -111,6 +111,37 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("UpdateViewData")]
+        public async Task<IActionResult> ProductUpdateViewData(ProductRequestUpdateView requestData)
+        {
+            var returnData = new ProductUpdateViewReturnData();
+
+            try
+            {
+                var productGetReturnData = await _unitOfWork._productServices.GetProductById(requestData.ProductId);
+
+                if (productGetReturnData.ReturnCode < 0)
+                {
+                    returnData.ReturnCode = productGetReturnData.ReturnCode;
+                    returnData.ReturnMsg = productGetReturnData.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.Product = productGetReturnData.Product;
+                
+                returnData.Brands = await _unitOfWork._BrandServices.BrandsGetList();
+                returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Lấy dữ liệu thành công.";
+
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
 
         [HttpPost("Add")]
         public async Task<IActionResult> ProductAdd(ProductRequestAddUpdateData requestData)
@@ -137,6 +168,7 @@ namespace PhoneShopAPI.Controllers
 
                 if (response.ReturnCode < 0)
                 {
+                    _unitOfWork.Dispose();
                     returnData.ReturnCode = response.ReturnCode;
                     returnData.ReturnMsg = response.ReturnMsg;
                     return Ok(returnData);
@@ -147,6 +179,7 @@ namespace PhoneShopAPI.Controllers
 
                 if (insertResponse.ReturnCode < 0)
                 {
+                    _unitOfWork.Dispose();
                     returnData.ReturnCode = insertResponse.ReturnCode;
                     returnData.ReturnMsg = insertResponse.ReturnMsg;
                     return Ok(returnData);
@@ -158,12 +191,41 @@ namespace PhoneShopAPI.Controllers
             }
             catch (Exception ex)
             {
+                _unitOfWork.Dispose();
                 returnData.ReturnCode = (int)ReturnCode.Exception;
                 returnData.ReturnMsg = ex.Message;
                 return Ok(returnData);
             }
         }
+        [HttpPost("Delete")]
+        public async Task<IActionResult> ProductDelete(ProductRequestDeleteData requestData)
+        {
+            var returnData = new ReturnData();
 
+            try
+            {
+                if (requestData == null)
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ.";
+                    return Ok(returnData);
+                }
+
+                await _unitOfWork._productServices.DeleteProduct(requestData);
+                _unitOfWork.SaveChange();
+
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Xoá dữ liệu thành công.";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.Dispose();
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
         private async Task<ReturnData> UploadProductImages(string Base64Images)
         {
             var returnData = new ReturnData();

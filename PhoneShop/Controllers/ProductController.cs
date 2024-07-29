@@ -92,5 +92,43 @@ namespace PhoneShop.Controllers
             returnData.ReturnMsg = rs.ReturnMsg;
             return Json(returnData);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct (ProductRequestDeleteData requestData)
+        {
+            var returnData = new ReturnData();
+            if (requestData == null
+                || requestData.ProductID == null
+                || requestData.ProductID < 0
+                )
+            {
+                returnData.ReturnCode = (int)ReturnCode.Invalid;
+                returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                return Json(returnData);
+            }
+
+            var baseurl = _configuration["API_URL:URL"] ?? "";
+            var url = "api/Product/Delete";
+
+            var result = await HttpHelper.HttpSendPost(baseurl, url,
+                JsonConvert.SerializeObject(requestData));
+            if (result == null)
+            {
+                returnData.ReturnCode = (int)ReturnCode.Failure;
+                returnData.ReturnMsg = "Thất bại khi gửi dữ liệu về máy chủ.";
+                return Json(returnData);
+            }
+            var rs = JsonConvert.DeserializeObject<ReturnData>(result);
+            if (rs == null)
+            {
+                returnData.ReturnCode = (int)ReturnCode.EqualNull;
+                returnData.ReturnMsg = "Không thể phân tích dữ liệu từ máy chủ.";
+                return Json(returnData);
+            }
+
+            returnData.ReturnCode = rs.ReturnCode;
+            returnData.ReturnMsg = rs.ReturnMsg;
+            return Json(returnData);
+        }
     }
 }
