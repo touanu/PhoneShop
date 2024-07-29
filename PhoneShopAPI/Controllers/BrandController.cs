@@ -6,6 +6,8 @@ using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using PhoneShop.DataAccess.Services;
 using PhoneShop.DataAccess.UnitOfWork;
+using PhoneShopAPI.Filter;
+using PhoneShopAPI.Models;
 namespace PhoneShopAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -15,31 +17,41 @@ namespace PhoneShopAPI.Controllers
         public IUnitOfWork _unitOfWork;
         private IConfiguration _configuration;
 
-        public BrandController(IUnitOfWork unitOfWork, IConfiguration configuration , IBrandServices _BrandServices, IBrandServices brandServices)
+        public BrandController(IUnitOfWork unitOfWork, IConfiguration configuration )
         {
             _unitOfWork = unitOfWork;
             _configuration = configuration;
-            _BrandServices = brandServices;
         }
 
         [HttpPost("BrandGetList")]
-        public async Task<ActionResult> BrandsGetList()
+        [PhoneShopAuthorize("Get_Brand", "VIEW")]
+        public async Task<ActionResult> BrandsGetList(BrandRequetsData requetsData)
         {
-            var lstBrand = new List<Brand>();
+            var lstBrand = new BrandListReturnData();
             try
             {
-               lstBrand = await _unitOfWork._BrandServices.BrandsGetList();
+                var media_url = _configuration["URL:MEDIA_URL"] ?? "";
+                media_url = media_url + "Upload/";
+                lstBrand = await _unitOfWork._BrandServices.BrandsGetList(requetsData);
+                if (lstBrand.list.Count > 0)
+                {
+                    foreach (var item in lstBrand.list)
+                    {
+                        item.IconImages = media_url + item.IconImages;
+                    }
+                }
             }
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
 
             return Ok(lstBrand);
         }
 
         [HttpPost("BrandInsert")]
+        [PhoneShopAuthorize("Add_Brands", "INSERT")]
         public async Task<ActionResult> BrandInsert(BrandInsertRequestData requestData)
         {
             var returnData = new ReturnData();
@@ -49,15 +61,26 @@ namespace PhoneShopAPI.Controllers
 
                 // Bước 1.1 : khai báo API URL
 
-                var baseurl = _configuration["URL:API_URL"] ?? "";
+                var baseurl = _configuration["URL:MEDIA_URL"] ?? "";
                 var url = "api/Media/Upload";
 
                 // bƯỚC 1.2: tạo json data ( object sang JSON)
 
-                // kiểm tra xem chữ ký có hợp lệ không ?
-               
 
-                var jsonData = JsonConvert.SerializeObject(requestData);
+                // kiểm tra xem chữ ký có hợp lệ không ?
+                var SecretKey = _configuration["Sercurity:SecretKey"] ?? "";
+
+                var plantext = requestData.IconImages + SecretKey;
+
+                var Sign = Security.MD5(plantext);
+
+                var requestUpload = new UploadRequestData
+                {
+                    Base64Image = requestData.IconImages,
+                    Sign = Sign
+                };
+
+                var jsonData = JsonConvert.SerializeObject(requestUpload);
 
                 // Bước 1.3 : gọi httpclient bên common để post lên api
                 var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
@@ -73,15 +96,10 @@ namespace PhoneShopAPI.Controllers
                     }
                 }
 
-
                 // bước 2: có ảnh từ bước 1 rồi thì thực hiện lưu xuống db
-
-                var BrandinsertRq = new BrandInsertRequestData
-                {
-                   IconImages  = imageName,
-                    BrandName= "",
-                };
-                var insert = _unitOfWork._BrandServices.BrandInsertUpdate(BrandinsertRq);
+                requestData.IconImages = imageName;
+                var insert = _unitOfWork._BrandServices.BrandInsertUpdate(requestData);
+                _unitOfWork.SaveChange();
                 returnData.ReturnCode= 1;
                 returnData.ReturnMsg = "ok";
                 return Ok(returnData);

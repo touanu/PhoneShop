@@ -5,6 +5,7 @@ using PhoneShop.DataAccess.UnitOfWork;
 using CommonLibs;
 using Newtonsoft.Json;
 using PhoneShopAPI.Models;
+using PhoneShopAPI.Filter;
 
 namespace PhoneShopAPI.Controllers
 {
@@ -71,7 +72,7 @@ namespace PhoneShopAPI.Controllers
 
                 returnData.Products = products.ToPagedList(requestData.PageNumber, pageSize);
 
-                returnData.Brands = await _unitOfWork._BrandServices.BrandsGetList();
+                returnData.Brands = await _unitOfWork._BrandServices.BrandGetAll();
                 returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
 
                 returnData.CurrentBrand = requestData.BrandId ?? -1;
@@ -97,7 +98,7 @@ namespace PhoneShopAPI.Controllers
 
             try
             {
-                returnData.Brands = await _unitOfWork._BrandServices.BrandsGetList();
+                returnData.Brands = await _unitOfWork._BrandServices.BrandGetAll();
                 returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Lấy dữ liệu thành công.";
@@ -128,7 +129,7 @@ namespace PhoneShopAPI.Controllers
                 }
                 returnData.Product = productGetReturnData.Product;
                 
-                returnData.Brands = await _unitOfWork._BrandServices.BrandsGetList();
+                returnData.Brands = await _unitOfWork._BrandServices.BrandGetAll();
                 returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Lấy dữ liệu thành công.";

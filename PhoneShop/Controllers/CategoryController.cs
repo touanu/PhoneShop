@@ -64,7 +64,6 @@ namespace PhoneShop.Controllers
                 var result = await HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData,token);
 
                 // Bước 1.4: nhận dữ liệu về 
-                var imageName = "";
                 if (string.IsNullOrEmpty(result))
                 {
                     model.ReturnCode = -2;

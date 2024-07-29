@@ -1,0 +1,48 @@
+﻿@model List<PhoneShop.DataAccess.DTO.Brand>
+@{
+    var code = ViewBag.ErrorCode;
+    var message = ViewBag.ErrorMessage;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>BrandID </th>
+            <th>BrandName </th>
+            <th>IconImages </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <tr class="">
+                <td colspan="4">
+                    <input type="hidden" value="@code" id="txtErrorCodeResponseFromServer" />
+                    <input type="hidden" value="@message" id="txtErrorResponseFromServer" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="product_index_@item.BrandID">
+
+                        <td>@item.BrandID</td>
+                        <td>@item.BrandName</td>
+                        <td><img src="@item.IconImages" style="width:100px;height:100px;" /></td>
+                        
+                        <td>
+                            <a data-productid="@item.BrandID" onclick="Product_Delete(@item.BrandID)">
+                                <i class="fa fa-trash">Xóa</i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

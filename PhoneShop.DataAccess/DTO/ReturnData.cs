@@ -55,7 +55,10 @@ namespace PhoneShop.DataAccess.DTO
     {
         public Brand brands { get; set; }
     }
-
+    public class BrandListReturnData : ReturnData
+    {
+        public List<Brand> list { get; set; }
+    }
     public class Brand_DeleteReturnData : ReturnData
     {
     }

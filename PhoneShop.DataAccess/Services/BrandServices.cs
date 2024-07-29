@@ -17,32 +17,28 @@ namespace PhoneShop.DataAccess.Services
             dbcontext = _dbcontext;
         }
 
-        public async Task<List<Brand>> BrandsGetList()
+        public async Task<BrandListReturnData> BrandsGetList(BrandRequetsData requestData)
         {
             var list = new List<Brand>();
+            var returnData = new BrandListReturnData();
             try
             {
-                var listBrand = dbcontext.Brand.ToList();
-                foreach (var item in listBrand)
+                list = dbcontext.Brand.ToList();
+
+                if (!string.IsNullOrEmpty(requestData.BrandName))
                 {
-                    
-                    var brand_attb = dbcontext.Brand.ToList().FindAll(x => x.BrandID == item.BrandID);
-
-                    var brand = new Brand();
-
-                    brand.BrandID = item.BrandID;
-                    brand.BrandName = item.BrandName;
-
-                    list.Add(brand);
-
+                    list = list.FindAll(s => s.BrandName.ToLower().Contains(requestData.BrandName.ToLower())).ToList();
                 }
-
-                return list;
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "lấy dữ liệu thành công!";
+                returnData.list = list;
+                return returnData;
             }
             catch (Exception ex)
             {
-
-                throw;
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!" + ex;
+                return returnData;
             }
         }
 
@@ -53,7 +49,6 @@ namespace PhoneShop.DataAccess.Services
             try
             {
                 if (requestData == null
-                    || requestData.BrandID == 0
                     || string.IsNullOrEmpty(requestData.BrandName)
                     )
 
@@ -74,10 +69,6 @@ namespace PhoneShop.DataAccess.Services
                 };
 
                 dbcontext.Brand.Add(BrandReq);
-
-                dbcontext.SaveChangesAsync();
-
-
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm thương hiệu thành công";
                 return returnData;
@@ -91,8 +82,22 @@ namespace PhoneShop.DataAccess.Services
                 return returnData;
             }
    
-          }
+        }
+        public async Task<List<Brand>> BrandGetAll()
+        {
+            var returnData = new List<Brand>();
+            try
+            {
+                returnData = dbcontext.Brand.ToList();
+                return( returnData );
+            }
 
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     
 
         public async Task<Brand_DeleteReturnData> Brand_Delete(Brand_DeleteRequestData requestData)
@@ -112,7 +117,6 @@ namespace PhoneShop.DataAccess.Services
 
 
                 dbcontext.Brand.Remove(Brand);
-                dbcontext.SaveChangesAsync();
 
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Xóa thương hiệu thành công";

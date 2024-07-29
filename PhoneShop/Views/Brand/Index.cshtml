@@ -1,1 +1,104 @@
-﻿
+﻿@{
+    ViewData["Title"] = "All Brands";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .row_marging {
+        margin-top: 5px;
+    }
+</style>
+
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản lý Thương Hiệu sản phẩm</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Danh mục sản phẩm</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row row_marging">
+            <div class="col-md-3 row_marging">
+                <input type="text" id="txtCategoryName" value="" class="form-control" placeholder="Tên Thương Hiệu" />
+            </div>
+            <div class="col-md-3 row_marging">
+                <option value="0">Tất cả</option>
+                </select>
+            </div>
+        </div>
+        <div class="row row_marging">
+            <div class="col-md-12 row_marging">
+                <button type="button" id="btnSearch" class="btn btn-success"> <i class="fa fa-search"></i>Tìm kiếm </button>
+            </div>
+        </div>
+        <div class="row row_marging">
+            <div class="col-md-12">
+                <h2 class="card-title">Danh sách Thương Hiệu</h2>
+                <div id="GetBrand"></div>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+@section Scripts {
+    <script>
+        debugger;
+        $(document).ready(function () {
+
+            LoadData();
+
+            $("#btnSave").click(function () {
+
+            });
+            $("#btnSearch").click(function () {
+                LoadData();
+            });
+        });
+
+        function LoadData() {
+
+            var param = {
+
+                BrandName: $("#txtCategoryName").val(),
+            };
+
+            $.ajax({
+
+                type: 'POST',
+                url: "GetBrands",
+                data: param,
+                async: true,
+                dataType: "html",
+                // dataType:"json",
+                success: function (rs) {
+                    $("#GetBrand").html("");
+                    $("#GetBrand").html(rs);
+                    var code = $("#txtErrorCodeResponseFromServer").val();
+                    var mes = $("#txtErrorResponseFromServer").val();
+                    debugger;
+                    if (code == -401) {
+                        alert(mes);
+                        window.location.href = "/Account/Login";
+                    }
+                    if (code == -404) {
+                        alert(mes);
+                    }
+                },
+                error(rs) {
+                    console.log(JSON.stringify(rs));
+                }
+            });
+        }
+    </script>
+}
