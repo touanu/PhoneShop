@@ -13,6 +13,6 @@ namespace PhoneShop.DataAccess.IServices
         Task<GetCategoryReturnData> GetCategories(CategoryRequestData requestData);
         Task<ReturnData> AddCategory(CategoryRequestData RequestData);
         Task<ReturnData> UpdateCategory(CategoryRequestData RequestDataData);
-        Task<ReturnData> DeleteCategory(string CategoryId);
+        Task<ReturnData> DeleteCategory(CategoryRequestData requestData);
     }
 }

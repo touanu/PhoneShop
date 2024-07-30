@@ -108,5 +108,39 @@ namespace PhoneShopAPI.Controllers
 
             return Ok(lstCategory);
         }
+        [HttpPost("RemoveCategory")]
+        public async Task<ActionResult> RemoveCategory(CategoryRequestData requestData)
+        {
+            ReturnData returnData = new ReturnData();
+            try
+            {
+                //validate du lieu
+                if (requestData == null
+                    || requestData.CategoryID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                    return Ok(returnData);
+                }
+
+                var response = await _unitOfWork._categoryServices.DeleteCategory(requestData);
+                _unitOfWork.SaveChange();
+                if (response.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = response.ReturnCode;
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "xóa danh muc thành công!";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
     }
 }

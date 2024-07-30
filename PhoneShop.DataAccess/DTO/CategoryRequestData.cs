@@ -10,7 +10,7 @@ namespace PhoneShop.DataAccess.DTO
     {
         public int CategoryID { get; set; }
         public string? CategoryName { get; set; }
-        public string IconImages { get; set; }
+        public string? IconImages { get; set; }
         public int DisplayStatus { get; set; }
     }
 }

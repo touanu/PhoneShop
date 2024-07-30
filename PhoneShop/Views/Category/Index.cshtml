@@ -101,5 +101,32 @@
                 }
             });
         }
+        function DeleteCategory(CategoryId) {
+            debugger; 
+            var result = confirm("Bạn có chắc chắn muốn xóa không ?");
+            if (result) {
+                // gọi ajax xuống controller để xử lý xóa
+                var param = {
+                    CategoryID: CategoryId
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: "/Category/DeleteCategory",
+                    data: param,
+                    async: true,
+                    // dataType: "html",
+                    dataType: "json",
+                    success: function (rs) {
+                        if (rs.ReturnCode > 0) {
+                            window.location.href = "/Category/Index"
+                        }
+                        alert(rs.ReturnMsg);
+                    },
+                    error(rs) {
+                        console.log(JSON.stringify(rs));
+                    }
+                });
+            }
+        }
     </script>
 }
