@@ -1,0 +1,234 @@
+﻿@{
+    ViewData["Title"] = "Update Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model PhoneShop.DataAccess.DTO.ProductUpdateViewReturnData
+
+@if (Model != null
+&& Model.Product != null
+&& Model.Attributes != null && Model.Attributes.Count > 0
+&& Model.AttributeValues != null && Model.AttributeValues.Count > 0
+&& Model.Categories != null && Model.Categories.Count > 0
+&& Model.Brands != null && Model.Brands.Count > 0
+)
+{
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Cập nhật sản phẩm</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/Product">Danh sách sản phẩm</a></li>
+                        <li class="breadcrumb-item active">Chỉnh sửa thông tin</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row" id="product">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin sản phẩm</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="productName">Tên sản phẩm</label>
+                            <input type="text" id="productName" value="@Model.Product.ProductName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Mô tả (không chứa HTML tags)</label>
+                            <textarea id="productDescription" class="form-control" rows="4">@Model.Product.ProductDescription</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productBrand">Nhãn hàng</label>
+                            <select id="productBrand" class="form-control custom-select">
+                                <option disabled="">Chọn một</option>
+                                @foreach (var item in Model.Brands)
+                                {
+                                    if (item.BrandID == Model.Product.BrandID)
+                                    {
+                                        <option selected value="@item.BrandID">@item.BrandName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.BrandID">@item.BrandName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Phân loại</label>
+                            <select id="productCategory" class="form-control custom-select">
+                                <option disabled="">Chọn một</option>
+                                @foreach (var item in Model.Categories)
+                                {
+                                    if (item.CategoryID == Model.Product.CategoryID)
+                                    {
+                                        <option selected value="@item.CategoryID">@item.CategoryName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.CategoryID">@item.CategoryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Title" class="control-label">
+                                Ảnh sản phẩm: <span class="required">*</span>
+                            </label>
+                            <p id="imageHint" style="color:red">Chọn từ 1 - 5 ảnh sản phẩm</p>
+                            <div class="">
+                                <div class="input-icon right">
+                                    <div id="dvPreview">
+                                        @if (Model.Product.Images != null)
+                                        {
+                                            var images = Model.Product.Images.Split(",");
+                                            @for (var i = 0; i < images.Length; i++)
+                                            {
+                                                <img style="height:250px;width: 250px" class="img_@i" src="@Configuration["URL:MEDIA_URL"]Upload/@images[i]" />
+                                                <span id='delete_img_@i'>
+                                                    <a onclick="RemoveProductImage(@i)">Xóa</a>
+                                                </span>
+                                                <br class="img_@i" />
+                                            }
+                                        }
+                                    </div>
+                                    <div id="divAddMoreImage">
+                                        <input type="file" accept="*.jpg,*.jpeg,*.gif,*.png,*.bmp" id="productImages" style="display:none" multiple>
+                                        <a style="cursor:pointer;" onclick="openFileOption();"><i class="fa fa-plus-circle"></i>Thêm ảnh</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-6">
+                <div id="productAttributeContainer">
+                    @for (int i = 0; i < Model.Attributes.Count; i++)
+                    {
+                        <div class="card card-info card-outline productAttribute" id="attribute_@i">
+                            <div class="card-header">
+                                <h3 class="card-title" id="attribute_title_@i">Thuộc tính: @Model.Attributes[i].AttributesName</h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" title="Xoá" onclick="RemoveAttribute(@i);">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Thu gọn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body productAttributeBody">
+                                <div class="form-group">
+                                    <label for="attributeName_0">Tên thuộc tính</label>
+                                    <input type="text" id="attributeName_@i" value="@Model.Attributes[i].AttributesName" class="form-control" onchange="ChangeAttributeTitle(@i);" required>
+                                </div>
+                                <div class="form-group" id="productAttributeValues_@i">
+                                    @{
+                                        // Lấy ra AttributeValues tương ứng với Attributes[i]
+                                        var attributeValues = Model.AttributeValues
+                                        .Where(x => x.ProductAttributeID == Model.Attributes[i].ProductAttributeID)
+                                        .ToList();
+                                    }
+                                    @for (int j = 0; j < attributeValues.Count; j++)
+                                    {
+
+                                        <div class="container p-1 productAttributeValue" id="productAttributeValue_@(i)_@(j)">
+                                            <div class="row p-1">
+                                                <div class="col">
+                                                    <label for="attributeValueName_@(i)_@(j)">Tên giá trị</label>
+                                                    <input type="text" value="@attributeValues[j].AttributeValuesName" id="attributeValueName_@(i)_@(j)" class="form-control" required>
+                                                </div>
+                                                <div class="col align-content-end">
+                                                    <a style="cursor:pointer;" onclick="RemoveAttributeValue(@(i),@(j));">
+                                                        <i class="fa fa-plus-circle"></i>
+                                                        Xoá
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="row p-1">
+                                                <div class="col">
+                                                    <label for="quantity_@(i)_@(j)">Số lượng</label>
+                                                    <input type="number" id="quantity_@(i)_@(j)" value="@attributeValues[j].Quantity" class="form-control" placeholder="1" required>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="price_@(i)_@(j)">Giá</label>
+                                                    <input type="number" id="price_@(i)_@(j)" value="@attributeValues[j].Price" class="form-control" placeholder="00.00" required>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="priceSale_@(i)_@(j)">Giá sale</label>
+                                                    <input type="number" id="priceSale_@(i)_@(j)" value="@attributeValues[j].Price" class="form-control" placeholder="00.00" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <a style="cursor:pointer;" onclick="AddNewAttributeValue(@i)">
+                                        <i class="fa fa-plus-circle"></i>
+                                        Thêm giá trị mới
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    }
+                </div>
+                <div>
+                    <a style="cursor:pointer;" onclick="AddNewAttribute()">
+                        <i class="fa fa-plus-circle"></i>
+                        Thêm phân loại
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a href="/Product" class="btn btn-secondary">Huỷ bỏ</a>
+                <input type="submit" value="Cập nhật" class="btn btn-success float-right" onclick="SaveData('UpdateProduct');">
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+}
+else
+{
+    <div class="d-flex justify-content-center p-3" id="products-body">
+        <img src="@Configuration["URL:MEDIA_URL"]Upload/empty-product.png" height="200">
+    </div>
+    <p id="products-paging" class="text-center text-green">Đã có lỗi xảy ra!</p>
+    <a class="d-flex justify-content-center p-3" href="/Product">
+        <button type="button" class="btn btn-outline-success btn-sm" style="width: 100px;">
+            <i class="fas fa-caret-left"></i> Quay lại
+        </button>
+    </a>
+}
+
+@section Scripts {
+    <script src="/js/product/FormHandler.js"></script>
+}

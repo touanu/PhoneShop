@@ -20,6 +20,7 @@ namespace PhoneShop.DataAccess.DTO
         NotAvailable = -6,
         MinimumRequired = -7,
         SignatureInvalid = -8,
+        NotFound = -9,
     }
     public class ReturnDataReturnAccount : ReturnData
     {
@@ -30,14 +31,6 @@ namespace PhoneShop.DataAccess.DTO
     {
         public int ReturnCode { get; set; }
         public string? ReturnMsg { get; set; }
-    } 
-    public class GetAttributeReturndata:ReturnData
-    {
-        public List< ProductAttribute> list { get; set; }
-    }
-    public class ReturnDataReturnAttributes:ReturnData
-    {
-        public List<list> ?list { get; set; }        
     }
     public class ReturnDataReturnpromotion:ReturnData
     {
@@ -46,12 +39,6 @@ namespace PhoneShop.DataAccess.DTO
     public class GetCategoryReturnData: ReturnData
     {
         public List<Category> list { get; set; }
-    }
-    public class list
-    {
-        public int ProductAttributeID { get; set; }
-        public int ProductID { get; set; }
-        public string ?AttributesName { get; set; }
     }
     public class BrandInsertReturnData : ReturnData
     {
@@ -63,12 +50,6 @@ namespace PhoneShop.DataAccess.DTO
     }
     public class Brand_DeleteReturnData : ReturnData
     {
-    }
-    public class AttributesReturnData : ReturnData 
-    {
-        public ProductAttributeValue Values { get; set; }
-        public ProductAttribute Attributes {  get; set; } 
-          
     }
     public class GetProductReturnData : ReturnData
     {

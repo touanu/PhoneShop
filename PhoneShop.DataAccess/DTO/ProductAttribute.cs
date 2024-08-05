@@ -13,9 +13,4 @@ namespace PhoneShop.DataAccess.DTO
         public int ProductID { get; set; }
         public string? AttributesName { get; set; }
     }
-    public class ProductAttribteReq
-    {
-        public int ProductID { get; set; }
-        public string? AttributesName { get; set; }
-    }
 }

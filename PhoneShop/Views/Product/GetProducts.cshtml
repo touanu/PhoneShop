@@ -107,12 +107,12 @@
                                 }
                             </td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="#">
+                                <a asp-controller="Product" asp-action="UpdateProduct" asp-route-id="@item.ProductID" class="btn btn-info btn-sm">
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                     Sửa
                                 </a>
-                                <a class="btn btn-danger btn-sm"onclick="DeleteProduct(@item.ProductID);" href="#">
+                                <a class="btn btn-danger btn-sm" onclick="DeleteProduct(@item.ProductID);" href="#">
                                     <i class="fas fa-trash">
                                     </i>
                                     Xoá
