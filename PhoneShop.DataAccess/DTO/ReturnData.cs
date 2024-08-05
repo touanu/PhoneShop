@@ -1,3 +1,5 @@
+
+
 namespace PhoneShop.DataAccess.DTO
 {
     public class ReturnData
@@ -113,5 +115,19 @@ namespace PhoneShop.DataAccess.DTO
     public class NewsListReturnData : ReturnData
     {
         public List<News>?list { get; set; }
+
+        public static implicit operator NewsListReturnData(List<News> v)
+        {
+            throw new NotImplementedException();
+        }
     }
+    public class NewInsertUpdateReturnData : ReturnData
+    {
+
+    }
+    public class NewDeleteReturnData : ReturnData
+    {
+
+    }
+    
 }

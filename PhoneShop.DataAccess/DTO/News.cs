@@ -9,8 +9,8 @@ namespace PhoneShop.DataAccess.DTO
 {
     public class News
     {
-        [Key] public int newsID {set;get;}
-        public string NewsName {set;get;}
-        public string NewsMain {set;get;}
+        [Key] public int newsID { set;get;}
+        public string? NewsName { set; get;}
+        public string? NewsMain { set; get; }
     }
 }

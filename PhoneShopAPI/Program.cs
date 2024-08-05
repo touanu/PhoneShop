@@ -38,6 +38,7 @@ builder.Services.AddScoped<IProductServices , ProductServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IPromotionServices, PromotionServices>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
+builder.Services.AddScoped<INewServices, NewServices>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 

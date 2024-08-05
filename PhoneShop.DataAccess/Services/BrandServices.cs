@@ -64,11 +64,13 @@ namespace PhoneShop.DataAccess.Services
                 var BrandReq = new Brand
                 {
                     BrandName = requestData.BrandName,
+              
                     IconImages = requestData.IconImages,
 
                 };
 
                 dbcontext.Brand.Add(BrandReq);
+                dbcontext.SaveChanges();
                 returnData.ReturnCode = 1;
                 returnData.ReturnMsg = "Thêm thương hiệu thành công";
                 return returnData;

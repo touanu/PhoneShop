@@ -10,7 +10,11 @@ namespace PhoneShop.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
+        
+
         private PhoneShopDBcontext _dbcontext { set; get; }
+
+        public INewServices _NewServices { get; set; }
 
         public IBrandServices _BrandServices {  set; get; }
 
@@ -21,7 +25,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
         public IProductServices _productServices { set; get; }
 
         public ICategoryServices _categoryServices { set; get; }
-        public UnitOfWork(IProductServices productServices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices,ICategoryServices categoryServices)
+        public UnitOfWork(IProductServices productServices,IBrandServices brandServices,PhoneShopDBcontext dBcontext, IAccountServices accountServices,IPromotionServices promotionsServices,ICategoryServices categoryServices ,INewServices newServices)
         {
             _accountServices = accountServices;
             _dbcontext = dBcontext;
@@ -29,6 +33,7 @@ namespace PhoneShop.DataAccess.UnitOfWork
             _promotionsServices = promotionsServices;
             _categoryServices = categoryServices;
             _productServices = productServices;
+            _NewServices = newServices;
         }
 
         public int SaveChange()
