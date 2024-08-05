@@ -100,5 +100,32 @@
                 }
             });
         }
+
+        function DeleteBrand(BrandId) {
+            debugger;
+            var result = confirm("Bạn có chắc chắn muốn xóa không ?");
+            if (result) {
+                // gọi ajax xuống controller để xử lý xóa
+                var param = {
+                    BrandID: BrandId
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: "/Brand/DeleteBrand",
+                    data: param,
+                    async: true,
+                    //dataType: "html",
+                    dataType: "json",
+                    success: function (rs) {
+                        debugger;
+                        alert(rs.returnMsg);
+                        window.location.href = "/Brand/Index"
+                    },
+                    error(rs) {
+                        console.log(JSON.stringify(rs));
+                    }
+                });
+            }
+        }
     </script>
 }

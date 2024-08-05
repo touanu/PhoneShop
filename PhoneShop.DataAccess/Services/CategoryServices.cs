@@ -54,7 +54,7 @@ namespace PhoneShop.DataAccess.Services
                 if (Category != null || Category?.CategoryID > 0)
                 {
                     returnData.ReturnCode = -2;
-                    returnData.ReturnMsg = "Tên sản phẩm đã tồn tại";
+                    returnData.ReturnMsg = "Tên danh mục sản phẩm đã tồn tại";
                     return returnData;
                 }
                 var Category_Req = new Category
@@ -105,7 +105,7 @@ namespace PhoneShop.DataAccess.Services
                 }
                 _dbcontext.Category.Remove(category);
                 returnData.ReturnCode = 1;
-                returnData.ReturnMsg = "xóa khách hàng thành công";
+                returnData.ReturnMsg = "xóa danh mục thành công";
                 return returnData;
             }
             catch (Exception ex)

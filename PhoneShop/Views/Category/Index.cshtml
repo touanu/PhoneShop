@@ -101,6 +101,7 @@
                 }
             });
         }
+
         function DeleteCategory(CategoryId) {
             debugger; 
             var result = confirm("Bạn có chắc chắn muốn xóa không ?");
@@ -114,13 +115,12 @@
                     url: "/Category/DeleteCategory",
                     data: param,
                     async: true,
-                    // dataType: "html",
+                    //dataType: "html",
                     dataType: "json",
                     success: function (rs) {
-                        if (rs.ReturnCode > 0) {
-                            window.location.href = "/Category/Index"
-                        }
-                        alert(rs.ReturnMsg);
+                        debugger;
+                        alert(rs.returnMsg);
+                        window.location.href = "/Category/Index"                        
                     },
                     error(rs) {
                         console.log(JSON.stringify(rs));
@@ -128,5 +128,6 @@
                 });
             }
         }
+
     </script>
 }

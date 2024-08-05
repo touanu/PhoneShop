@@ -113,18 +113,39 @@ namespace PhoneShopAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteBrand")]
-        public async Task<IActionResult> DeleteBrand(Brand_DeleteRequestData requestData)
+        [HttpPost("RemoveBrand")]
+        public async Task<IActionResult> RemoveBrand(Brand_DeleteRequestData requestData)
         {
-            var BrandDeleteRtdata = new Brand_DeleteRequestData(); 
-
-            var result = await _unitOfWork._BrandServices.Brand_Delete(BrandDeleteRtdata);
-            if (result == null)
+            ReturnData returnData = new ReturnData();
+            try
             {
-                return NotFound();
+                //validate du lieu
+                if (requestData == null
+                    || requestData.BrandID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                    return Ok(returnData);
+                }
+
+                var response = await _unitOfWork._BrandServices.Brand_Delete(requestData);
+                _unitOfWork.SaveChange();
+                if (response.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = response.ReturnCode;
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "xóa danh muc thành công!";
+                return Ok(returnData);
             }
-         
-            return NoContent();
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
         }
     }
 }
