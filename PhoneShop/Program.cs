@@ -1,7 +1,4 @@
 
-using PhoneShop.DataAccess.IServices;
-using PhoneShop.DataAccess.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

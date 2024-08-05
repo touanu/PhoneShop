@@ -16,6 +16,7 @@ namespace PhoneShopAPI.Controllers
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IConfiguration _configuration = configuration;
 
+        // Các route chỉ trả về dữ liệu
         [HttpPost("Get")]
         public async Task<ActionResult> PagedGet(ProductRequestGetData requestData)
         {
@@ -77,8 +78,8 @@ namespace PhoneShopAPI.Controllers
 
                 returnData.CurrentBrand = requestData.BrandId ?? -1;
                 returnData.CurrentCategory = requestData.CategoryId ?? -1;
-                returnData.CurrentPage = (int)requestData.PageNumber;
-                returnData.MaxPageCount = products.Count / pageSize + 1;
+                returnData.CurrentPage = requestData.PageNumber;
+                returnData.MaxPageCount = (products.Count + (pageSize - 1)) / pageSize;
 
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Lấy dữ liệu thành công.";
@@ -128,7 +129,9 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
                 returnData.Product = productGetReturnData.Product;
-                
+                returnData.Attributes = productGetReturnData.Attributes;
+                returnData.AttributeValues = productGetReturnData.AttributeValues;
+
                 returnData.Brands = await _unitOfWork._BrandServices.BrandGetAll();
                 returnData.Categories = await _unitOfWork._categoryServices.GetAllCategories();
                 returnData.ReturnCode = (int)ReturnCode.Success;
@@ -144,6 +147,7 @@ namespace PhoneShopAPI.Controllers
             }
         }
 
+        // Các route tương tác với database
         [HttpPost("Add")]
         public async Task<IActionResult> ProductAdd(ProductRequestAddUpdateData requestData)
         {
@@ -186,6 +190,7 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
 
+                _unitOfWork.SaveChange();
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Thêm dữ liệu thành công.";
                 return Ok(returnData);
@@ -227,6 +232,57 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("Update")]
+        public async Task<IActionResult> ProductUpdate(ProductRequestAddUpdateData requestData)
+        {
+            var returnData = new ReturnData();
+
+            try
+            {
+                if (requestData == null
+                    || !requestData.ProductName.IsValidated()
+                    || !requestData.ProductDescription.IsValidated()
+                    || requestData.BrandID == null
+                    || requestData.CategoryID == null
+                    || !requestData.Images.IsValidated()
+                    || !requestData.Attributes.IsValidated()
+                    )
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu về sản phẩm không hợp lệ.";
+                    return Ok(returnData);
+                }
+
+                var uploadImageReponse = await UploadProductImages(requestData.Images);
+                if (uploadImageReponse.ReturnCode < 0)
+                {
+                    returnData.ReturnCode = uploadImageReponse.ReturnCode;
+                    returnData.ReturnMsg = uploadImageReponse.ReturnMsg;
+                    return Ok(returnData);
+                }
+                requestData.Images = uploadImageReponse.ReturnMsg;
+
+                var response = await _unitOfWork._productServices.UpdateProduct(requestData);
+                if (response.ReturnCode < 0)
+                {
+                    return Ok(response);
+                }
+
+                _unitOfWork.SaveChange();
+                returnData.ReturnCode = (int) ReturnCode.Success;
+                returnData.ReturnMsg = "Cập nhật dữ liệu thành công.";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                _unitOfWork.Dispose();
+                returnData.ReturnCode = (int) ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
+
+        // Method chung
         private async Task<ReturnData> UploadProductImages(string Base64Images)
         {
             var returnData = new ReturnData();
@@ -234,34 +290,48 @@ namespace PhoneShopAPI.Controllers
             var baseurl = _configuration["URL:MEDIA_URL"] ?? "";
             var url = "api/Media/Upload";
             var secretKey = _configuration["Sercurity:SecretKey"] ?? "";
-            var plaintext = Base64Images + secretKey;
-            var Sign = Security.MD5(plaintext);
-            var requestUpload = new UploadRequestData
-            {
-                Base64Image = Base64Images,
-                Sign = Sign
-            };
+            var listOfImages = Base64Images.Split('_');
+            var imageNames = "";
 
-            var jsonData = JsonConvert.SerializeObject(requestUpload);
-            var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
-
-            if (string.IsNullOrEmpty(result))
+            foreach (var item in listOfImages)
             {
-                returnData.ReturnCode = (int)ReturnCode.Failure;
-                returnData.ReturnMsg = "Không thể upload ảnh lên máy chủ.";
-                return returnData;
+                if (item.EndsWith(".png"))
+                {
+                    imageNames += item + ",";
+                    continue;
+                }
+
+                var plaintext = item + secretKey;
+                var sign = Security.MD5(plaintext);
+
+                var requestUpload = new UploadRequestData
+                {
+                    Base64Image = item,
+                    Sign = sign
+                };
+
+                var jsonData = JsonConvert.SerializeObject(requestUpload);
+                var result = await HttpHelper.HttpSendPost(baseurl, url, jsonData);
+                if (string.IsNullOrEmpty(result))
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Failure;
+                    returnData.ReturnMsg = "Không thể upload ảnh lên máy chủ.";
+                    return returnData;
+                }
+                var response = JsonConvert.DeserializeObject<ReturnData>(result);
+                if (response == null || response.ReturnCode < 0)
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Failure;
+                    returnData.ReturnMsg = "Không thể upload ảnh lên máy chủ.";
+                    return returnData;
+                }
+                
+                imageNames += response.ReturnMsg + ",";
             }
 
-            var response = JsonConvert.DeserializeObject<ReturnData>(result);
-            if (response == null || response.ReturnCode < 0)
-            {
-                returnData.ReturnCode = (int)ReturnCode.Failure;
-                returnData.ReturnMsg = "Không thể upload ảnh lên máy chủ.";
-                return returnData;
-            }
-        
-            returnData.ReturnCode = response.ReturnCode;
-            returnData.ReturnMsg = response.ReturnMsg;
+            imageNames = imageNames[..^1];
+            returnData.ReturnCode = (int) ReturnCode.Success;
+            returnData.ReturnMsg = imageNames;
             return returnData;
         }
     }

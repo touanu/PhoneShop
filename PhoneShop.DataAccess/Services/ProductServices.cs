@@ -25,9 +25,9 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
 
-                var promotions = await _phoneShopDBContext.Promotion.Where(
-                        x => x.ProductID == requestData.ProductID
-                    ).ToListAsync();
+                //var promotions = await _phoneShopDBContext.Promotion.Where(
+                //        x => x.ProductID == requestData.ProductID
+                //    ).ToListAsync();
                 var product = await _phoneShopDBContext.Product
                     .FindAsync(requestData.ProductID);
 
@@ -38,26 +38,18 @@ namespace PhoneShop.DataAccess.Services
                     return returnData;
                 }
 
-                var productAttributes = await _phoneShopDBContext.ProductAttribute.Where(
-                    x => x.ProductID == requestData.ProductID).ToListAsync();
+                //if (promotions.Count != 0)
+                //{
+                //    // Thực hiện SaveChanges để tránh bị conflict với khoá ngoại
+                //    _phoneShopDBContext.Promotion.RemoveRange(promotions);
+                //    await _phoneShopDBContext.SaveChangesAsync();
+                //}
 
-                List<ProductAttributeValue> attributeValues = [];
-                foreach (var attribute in productAttributes)
-                {
-                    var values = await _phoneShopDBContext.ProductAttributeValue
-                        .Where(x => x.ProductAttributeID == attribute.ProductAttributeID)
-                        .ToListAsync();
-                    attributeValues.AddRange(values);
-                }
-
-                if (promotions.Count != 0)
-                {
-                    // Thực hiện SaveChanges để tránh bị conflict với khoá ngoại
-                    _phoneShopDBContext.Promotion.RemoveRange(promotions);
-                    await _phoneShopDBContext.SaveChangesAsync();
-                }
-                _phoneShopDBContext.ProductAttributeValue.RemoveRange(attributeValues);
-                _phoneShopDBContext.ProductAttribute.RemoveRange(productAttributes);
+                //var deleteAttributeResponse = await DeleteAttributes(product.ProductID);
+                //if (deleteAttributeResponse.ReturnCode < 0)
+                //{
+                //    return deleteAttributeResponse;
+                //}
                 _phoneShopDBContext.Product.Remove(product);
 
                 returnData.ReturnCode = (int)ReturnCode.Success;
@@ -100,13 +92,16 @@ namespace PhoneShop.DataAccess.Services
                 }
                 returnData.Attributes = productAttributes;
 
+                returnData.AttributeValues = [];
                 foreach (var item in productAttributes)
                 {
-                    returnData.AttributeValues = await _phoneShopDBContext.ProductAttributeValue
-                        .Where(x => x.ProductAttributeID == id)
+                    var values = await _phoneShopDBContext.ProductAttributeValue
+                        .Where(x => x.ProductAttributeID == item.ProductAttributeID)
                         .ToListAsync();
+
+                    returnData.AttributeValues.AddRange(values);
                 }
-                
+
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = $"Tìm thấy sản phẩm với id {id}.";
                 return returnData;
@@ -167,56 +162,13 @@ namespace PhoneShop.DataAccess.Services
                 await _phoneShopDBContext.Product.AddAsync(productRequest);
                 await _phoneShopDBContext.SaveChangesAsync();
 
-                // Lưu Attribute
-                // Reference về ví dụ
-                // Dung lượng_128GB,10,1900000,1800000|Màu_Đen,12,10000000,9900000_Trắng,9,10000000,9900000
-                var attributes = requestData.Attributes.Split('|');
-
-                if (attributes.Length <= 0 || attributes == null)
+                var addAttributeResponse = await AddAttributes(productRequest.ProductID, requestData.Attributes);
+                if (addAttributeResponse.ReturnCode < 0)
                 {
-                    returnData.ReturnCode = (int)ReturnCode.Invalid;
-                    returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
+                    _phoneShopDBContext.Product.Remove(productRequest);
+                    returnData.ReturnCode = addAttributeResponse.ReturnCode;
+                    returnData.ReturnMsg = addAttributeResponse.ReturnMsg;
                     return returnData;
-                }
-
-                for (int i = 0; i < attributes.Length; i++)
-                {
-                    var attributeDetails = attributes[i].Split("_");
-                    if (attributeDetails == null || attributeDetails.Length <= 1)
-                    {
-                        returnData.ReturnCode = (int)ReturnCode.Invalid;
-                        returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
-                        return returnData;
-                    }
-
-                    var attributeName = attributeDetails[0];
-                    var attributeValues = attributeDetails.Skip(1).ToList();
-                    if (attributeName.IsValidated()
-                        || attributeValues.Any(x => x.IsValidated())
-                        )
-                    {
-                        returnData.ReturnCode = (int)ReturnCode.Invalid;
-                        returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
-                        return returnData;
-                    }
-
-                    var AttributeRequest = new ProductAttribute
-                    {
-                        AttributesName = attributeName,
-                        ProductID = productRequest.ProductID,
-                    };
-
-                    await _phoneShopDBContext.ProductAttribute.AddAsync(AttributeRequest);
-                    await _phoneShopDBContext.SaveChangesAsync();
-
-                    var response = await AddAttributeValue(AttributeRequest, attributeValues);
-                    if (response.ReturnCode < 0)
-                    {
-                        _phoneShopDBContext.Product.Remove(productRequest);
-                        returnData.ReturnCode = response.ReturnCode;
-                        returnData.ReturnMsg = response.ReturnMsg;
-                        return returnData;
-                    }
                 }
 
                 returnData.ReturnCode = (int)ReturnCode.Success;
@@ -231,21 +183,153 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public Task<ReturnData> UpdateProduct(ProductRequestAddUpdateData requestData)
+        public async Task<ReturnData> UpdateProduct(ProductRequestAddUpdateData requestData)
         {
-            throw new NotImplementedException();
-        }
-
-        private async Task<ReturnData> AddAttributeValue(ProductAttribute attribute, List<string> attributeValues)
-        {
-            var returnData = new ProductAddReturnData();
+            var returnData = new ReturnData();
             try
             {
-                for (int i = 0; i < attributeValues.Count; i++)
+                if (requestData == null
+                    || requestData.ProductID <= 0
+                    || !requestData.ProductName.IsValidated()
+                    || !requestData.ProductDescription.IsValidated()
+                    || requestData.BrandID == null
+                    || requestData.CategoryID == null
+                    || !requestData.Images.IsValidated()
+                    || !requestData.Attributes.IsValidated()
+                    )
                 {
-                    var values = attributeValues[i].Split(",");
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu về sản phẩm không hợp lệ.";
+                    return returnData;
+                }
 
-                    if (values.Length != 0
+                // Kiểm tra trùng
+                var product = _phoneShopDBContext.Product.FirstOrDefault(s =>
+                    s.ProductID == requestData.ProductID);
+                if (product == null)
+                {
+                    returnData.ReturnCode = (int)ReturnCode.NotExist;
+                    returnData.ReturnMsg = "Sản phẩm này không tồn tại.";
+                    return returnData;
+                }
+
+                // Cập nhật sản phẩm
+                product.ProductName = requestData.ProductName;
+                product.BrandID = requestData.BrandID;
+                product.CategoryID = requestData.CategoryID;
+                product.ProductDescription = requestData.ProductDescription;
+                product.Images = requestData.Images;
+                product.CreatedDate = DateTime.Now;
+                // _phoneShopDBContext.Product.Update(productRequest);
+
+                var deleteAttributeReponse = await DeleteAttributes(product.ProductID);
+                if (deleteAttributeReponse.ReturnCode < 0)
+                {
+                    returnData.ReturnCode = deleteAttributeReponse.ReturnCode;
+                    returnData.ReturnMsg = deleteAttributeReponse.ReturnMsg;
+                    return returnData;
+                }
+
+                var addAttributeResponse = await AddAttributes(requestData.ProductID, requestData.Attributes);
+                if (addAttributeResponse.ReturnCode < 0)
+                {
+                    returnData.ReturnCode = addAttributeResponse.ReturnCode;
+                    returnData.ReturnMsg = addAttributeResponse.ReturnMsg;
+                    return returnData;
+                }
+
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Thêm sản phẩm thành công";
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return returnData;
+            }
+        }
+
+        // Method dùng chung
+        private async Task<ReturnData> AddAttributes(int productId, string rawAttributes)
+        {
+            var returnData = new ReturnData();
+
+            try
+            {
+                // Lưu Attribute
+                // Reference về ví dụ
+                // Dung lượng_128GB,10,1900000,1800000|Màu_Đen,12,10000000,9900000_Trắng,9,10000000,9900000
+                var attributes = rawAttributes.Split("|");
+                if (attributes.Length <= 0 || attributes == null)
+                {
+                    returnData.ReturnCode = (int)ReturnCode.Invalid;
+                    returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
+                    return returnData;
+                }
+
+                foreach (string item in attributes)
+                {
+                    var attributeDetails = item.Split("_");
+                    if (attributeDetails == null || attributeDetails.Length <= 1)
+                    {
+                        returnData.ReturnCode = (int)ReturnCode.Invalid;
+                        returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
+                        return returnData;
+                    }
+
+                    var attributeName = attributeDetails[0];
+                    var attributeValues = attributeDetails.Skip(1).ToList();
+                    if (!attributeName.IsValidated()
+                        || attributeValues.Any(x => !x.IsValidated())
+                        )
+                    {
+                        returnData.ReturnCode = (int)ReturnCode.Invalid;
+                        returnData.ReturnMsg = "Dữ liệu thuộc tính của sản phẩm không hợp lệ.";
+                        return returnData;
+                    }
+
+                    var AttributeRequest = new ProductAttribute
+                    {
+                        AttributesName = attributeName,
+                        ProductID = productId,
+                    };
+
+                    await _phoneShopDBContext.ProductAttribute.AddAsync(AttributeRequest);
+                    await _phoneShopDBContext.SaveChangesAsync();
+
+                    var response = await AddAttributeValues(AttributeRequest, attributeValues);
+                    if (response.ReturnCode < 0)
+                    {
+                        returnData.ReturnCode = response.ReturnCode;
+                        returnData.ReturnMsg = response.ReturnMsg;
+                        return returnData;
+                    }
+                }
+
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Thêm dữ liệu thành công";
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return returnData;
+            }
+        }
+        private async Task<ReturnData> AddAttributeValues(ProductAttribute attribute, List<string> attributeValues)
+        {
+            var returnData = new ProductAddReturnData();
+            var numberOfValues = 4;
+
+            try
+            {
+                foreach (string item in attributeValues)
+                {
+                    var values = item.Split(",");
+
+                    if (values.Length < numberOfValues
                         || !values[0].IsValidated()
                         || !values[1].IsNumber()
                         || !values[2].IsNumber()
@@ -282,9 +366,9 @@ namespace PhoneShop.DataAccess.Services
                     {
                         AttributeValuesName = valueName,
                         ProductAttributeID = attribute.ProductAttributeID,
-                        Price = Convert.ToInt32(valuePrice),
-                        PriceSale = Convert.ToInt32(valuePriceSale),
-                        Quantity = Convert.ToInt32(valueQuantity),
+                        Price = valuePrice,
+                        PriceSale = valuePriceSale,
+                        Quantity = valueQuantity,
                     };
 
                     await _phoneShopDBContext.ProductAttributeValue.AddAsync(AttributeValueRequest);
@@ -297,6 +381,48 @@ namespace PhoneShop.DataAccess.Services
             catch (Exception ex)
             {
                 _phoneShopDBContext.ProductAttribute.Remove(attribute);
+                returnData.ReturnCode = (int)ReturnCode.Exception;
+                returnData.ReturnMsg = ex.Message;
+                return returnData;
+            }
+        }
+        private async Task<ReturnData> DeleteAttributes(int productId)
+        {
+            var returnData = new ReturnData();
+            try
+            {
+                var attributes = await _phoneShopDBContext.ProductAttribute.Where(
+                        x => x.ProductID == productId
+                ).ToListAsync();
+
+                if (attributes == null || attributes.Count < 0)
+                {
+                    returnData.ReturnCode = (int)ReturnCode.NotFound;
+                    returnData.ReturnMsg = "Không tồn tại thuộc tính với sản phẩm này.";
+                    return returnData;
+                }
+                //var attributeIds = attributes.Select(x => x.ProductAttributeID).ToList();
+
+                //var attributeValues = await _phoneShopDBContext.ProductAttributeValue.Where(
+                //    x => attributeIds.Contains(x.ProductAttributeID)
+                //).ToListAsync();
+                //if (attributes == null || attributes.Count < 0)
+                //{
+                //    returnData.ReturnCode = (int)ReturnCode.NotFound;
+                //    returnData.ReturnMsg = "Không tồn tại giá trị thuộc tính nào ứng với sản phẩm này.";
+                //    return returnData;
+                //}
+
+                //_phoneShopDBContext.ProductAttributeValue.RemoveRange(attributeValues);
+                //await _phoneShopDBContext.SaveChangesAsync();
+                _phoneShopDBContext.ProductAttribute.RemoveRange(attributes);
+
+                returnData.ReturnCode = (int)ReturnCode.Success;
+                returnData.ReturnMsg = "Xoá thuộc tính thành công.";
+                return returnData;
+            }
+            catch (Exception ex)
+            {
                 returnData.ReturnCode = (int)ReturnCode.Exception;
                 returnData.ReturnMsg = ex.Message;
                 return returnData;
