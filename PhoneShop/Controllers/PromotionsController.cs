@@ -140,5 +140,65 @@ namespace PhoneShop.Controllers
                 return PartialView(list);
             }
         }
+        public async Task<JsonResult> DeletePromotion(PromotionsRequestData requestData)
+        {
+            ReturnData returnData = new ReturnData();
+            var messageFromServer = string.Empty;
+            try
+            {
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return Json(messageFromServer);
+                }
+                // Bước 1: Kiểm tra dữ liệu đầu vào 
+                if (requestData.PromotionID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ!";
+                    return Json(returnData);
+                }
+                requestData.PromotionName = "";
+                // Bước 2 : GỌI API ĐỂ LẤY TOKEN 
+                // bƯỚC 2.1 kHAI BÁO URL CỦA API
+
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Promotion/RemovePromotion";
+
+                //Bước 2.2 convert từ object requestData sang Json để đẩy lên API
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 2.3 dùng httpClient để đưa json lên URL của API
+                var result = await HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData, token);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    returnData.ReturnCode = -2;
+                    returnData.ReturnMsg = "Lỗi";
+                    return Json(returnData);
+                }
+
+                // Bước 2.4 : Convert từ json nhận được thành object 
+
+                var rs = JsonConvert.DeserializeObject<ReturnData>(result);
+                if (rs.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = rs.ReturnCode;
+                    returnData.ReturnMsg = rs.ReturnMsg;
+                    return Json(returnData);
+                }
+                returnData.ReturnMsg = rs.ReturnMsg;
+                returnData.ReturnCode = rs.ReturnCode;
+                return Json(returnData);
+            }
+            catch (Exception ex)
+            {
+
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Json(returnData);
+            }
+        }
     }
 }

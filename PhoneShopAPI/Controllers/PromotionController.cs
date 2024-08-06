@@ -57,5 +57,39 @@ namespace PhoneShopAPI.Controllers
             var list = await _unitOfWork._promotionsServices.GetPromotions(requestData);
             return Ok(list);
         }
+        [HttpPost("RemovePromotion")]
+        public async Task<IActionResult> RemovePromotion(PromotionsRequestData requestData)
+        {
+            ReturnData returnData = new ReturnData();
+            try
+            {
+                //validate du lieu
+                if (requestData == null
+                    || requestData.PromotionID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Dữ liệu đầu vào không hợp lệ";
+                    return Ok(returnData);
+                }
+
+                var response = await _unitOfWork._promotionsServices.DeletePromotions(requestData);
+                _unitOfWork.SaveChange();
+                if (response.ReturnCode <= 0)
+                {
+                    returnData.ReturnCode = response.ReturnCode;
+                    returnData.ReturnMsg = response.ReturnMsg;
+                    return Ok(returnData);
+                }
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "xóa Khuyến mãi thành công!";
+                return Ok(returnData);
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Ok(returnData);
+            }
+        }
     }
 }

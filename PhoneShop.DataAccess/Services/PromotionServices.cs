@@ -1,4 +1,5 @@
-﻿using PhoneShop.DataAccess.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
 using System;
 using System.Collections.Generic;
@@ -78,9 +79,34 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
-        public Task<ReturnData> DeletePromotions(PromotionsRequestData requestData)
+        public async Task<ReturnData> DeletePromotions(PromotionsRequestData requestData)
         {
-            throw new NotImplementedException();
+            var returnData = new ReturnData();
+            try
+            {
+                // cần kiểm tra xem id muốn xóa có tồn tại không
+                var promotion = _dbcontext.Promotion.Where(s => s.PromotionID == requestData.PromotionID).FirstOrDefault();
+
+                if (promotion == null || promotion?.PromotionID <= 0)
+                {
+                    returnData.ReturnCode = -1;
+                    returnData.ReturnMsg = "Khuyến mãi cần xóa không có trên hệ thống";
+                    return returnData;
+                }
+
+
+                _dbcontext.Promotion.Remove(promotion);
+
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "Xóa Khuyến mãi thành công";
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!";
+                return returnData;
+            }
         }
 
         public async Task<ReturnDataReturnpromotion> GetPromotions(PromotionsRequestData requestData)

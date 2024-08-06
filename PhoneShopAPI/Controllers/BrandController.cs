@@ -137,7 +137,7 @@ namespace PhoneShopAPI.Controllers
                     return Ok(returnData);
                 }
                 returnData.ReturnCode = 1;
-                returnData.ReturnMsg = "xóa danh muc thành công!";
+                returnData.ReturnMsg = "xóa thương hiệu thành công!";
                 return Ok(returnData);
             }
             catch (Exception ex)
