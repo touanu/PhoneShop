@@ -101,7 +101,7 @@ namespace PhoneShopAPI.Controllers
                 var insert = _unitOfWork._BrandServices.BrandInsertUpdate(requestData);
                 _unitOfWork.SaveChange();
                 returnData.ReturnCode= 1;
-                returnData.ReturnMsg = "ok";
+                returnData.ReturnMsg = "Thêm thương hiệu thành công!";
                 return Ok(returnData);
             }
             catch (Exception ex)

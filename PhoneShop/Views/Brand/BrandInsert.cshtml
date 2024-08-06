@@ -164,20 +164,10 @@
                 // dataType: "html",
                 dataType: "json",
                 success: function (rs) {
+                    debugger;
                     if (rs.returnCode == -401) {
                         window.location.href = "/Account/Login";
-                    } else {
-                        setTimeout(function () {
-
-
-                            Swal.fire({
-                                title: "Good job!",
-                                text: mes,
-                                icon: "success"
-                            });
-                        }, 500);
                     }
-
                     if (rs.returnCode > 0) {
                         window.location.href = "/";
                     }
