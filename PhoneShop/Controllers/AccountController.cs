@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using NuGet.Protocol;
 using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
 using PhoneShop.DataAccess.IServices;
@@ -33,7 +34,28 @@ namespace PhoneShop.Controllers
             }
             return View();
         }
-      
+        public async Task<ActionResult> Logouts()
+        {
+            var returnData = new ReturnData();
+            try
+            {
+                //lấy token từ server
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    return Redirect("/");
+                }
+                // Xóa token tại local
+                Response.Cookies.Delete("MY_JWT_TOKEN");
+                return Redirect("/");
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = ex.Message;
+                return Json(returnData);
+            }
+        }
         public IActionResult Login()
         {
             return View();
@@ -153,7 +175,6 @@ namespace PhoneShop.Controllers
                     returnData.ReturnMsg = rs.ReturnMsg;
                     return Json(returnData);
                 }
-                //  Session
                 return Json(returnData);
             }
             catch (Exception ex)

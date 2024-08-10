@@ -22,8 +22,6 @@ namespace PhoneShopAPI.Controllers
             _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
-
-
         [HttpPost("Login")]
         public async Task<ActionResult> Login(AccountRequestData requestData)
         {
@@ -67,7 +65,7 @@ namespace PhoneShopAPI.Controllers
                 var authClaims = new List<Claim> {
                     new Claim(ClaimTypes.Name, account.UserName),
                     new Claim(ClaimTypes.Sid,account.AccountID.ToString())
-                    };
+                };
 
                 var newToken = CreateToken(authClaims);
 

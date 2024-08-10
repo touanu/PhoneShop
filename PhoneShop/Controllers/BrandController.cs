@@ -24,6 +24,11 @@ namespace PhoneShop.Controllers
 
         public IActionResult Index()
         {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
+            {
+                return Redirect("/Account/Login");
+            }
             return View();
         }
 

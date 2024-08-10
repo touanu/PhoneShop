@@ -118,18 +118,27 @@
                                         <p>Đăng ký tài khoản cho khách hàng</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="/Account/Login" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Đăng nhập</p>
                                     </a>
                                 </li>
+                                
                                 <li class="nav-item">
                                     <a href="/Account/RemoveCustomer" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Xóa tài khoản khách hàng</p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a asp-controller="Account" asp-action="Logouts" class="nav-link">
+                                        <i class="far fa-circle nav-icon"> </i> Đăng xuất
+                                    </a>
+                                </li>
+                                
                             </ul>
                         </li>
                         <li class="nav-header">Sản phẩm</li>
@@ -143,30 +152,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Quản lý danh mục sản phẩm
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/Attributes/AddAttribute" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm danh mục sản phẩm</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Attributes/Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách danh mục sản phẩm</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-chart-pie"></i>
                                 <p>
                                     Quản lý Khuyến mãi
                                     <i class="right fas fa-angle-left"></i>
@@ -189,7 +175,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Quản lý Danh mục
                                     <i class="right fas fa-angle-left"></i>
@@ -212,7 +198,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-book"></i>
                                 <p>
                                     Quản lý Thương hiệu
                                     <i class="right fas fa-angle-left"></i>
