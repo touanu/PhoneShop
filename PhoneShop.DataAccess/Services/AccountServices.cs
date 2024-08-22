@@ -97,6 +97,11 @@ namespace PhoneShop.DataAccess.Services
             }
         }
 
+        public async Task<Customer?>  GetCustomerbyID(int id)
+        {
+            return _dbcontext.Customer.FirstOrDefault(x => x.CustomerID == id);
+        }
+
         public async Task<List<Customer>> GetCustomerByUserNameorLastName(AccountRequestData requestData)
         {
             try
@@ -144,6 +149,28 @@ namespace PhoneShop.DataAccess.Services
                 throw;
             }
             return model;
+        }
+
+        public async Task<GetCustomerReturnData> GetlistCustomer(AccountRequestData requestData)
+        {
+            var list = new List<Customer>();
+            var returnData = new GetCustomerReturnData();
+            try
+            {
+                list = _dbcontext.Customer.ToList();
+
+               
+                returnData.ReturnCode = 1;
+                returnData.ReturnMsg = "lấy dữ liệu thành công!";
+                returnData.listcustomer = list;
+                return returnData;
+            }
+            catch (Exception ex)
+            {
+                returnData.ReturnCode = -969;
+                returnData.ReturnMsg = "Hệ thống đang bận!" + ex;
+                return returnData;
+            }
         }
 
         public async Task<ReturnData> RemoveCustomerByID(AccountRequestData requestData)

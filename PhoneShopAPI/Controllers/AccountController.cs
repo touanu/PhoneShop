@@ -177,6 +177,21 @@ namespace PhoneShopAPI.Controllers
                 return Ok(returnData);
             }
         }
+        [HttpPost("GetCustomer")]
+        public async Task<ActionResult> GetCustomer(AccountRequestData requuestData)
+        {
+            var lstCustomer = new GetCustomerReturnData();
+            try
+            {
+                lstCustomer = await _unitOfWork._accountServices.GetlistCustomer(requuestData);
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+
+            return Ok(lstCustomer);
+        }
     }
 }

@@ -259,5 +259,74 @@ namespace PhoneShop.Controllers
                 return Json(returnData);
             }
         }
+        public async Task<ActionResult> GetCustomers(AccountRequestData requestData)
+        {
+            var messageFromServer = string.Empty;
+            var list = new List<Customer>();
+            try
+            {                
+                var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+                if (string.IsNullOrEmpty(token))
+                {
+                    messageFromServer = "Vui lòng đăng nhập";
+                    return View(list);
+                }
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Account/GetCustomer";
+
+                // bƯỚC 2: tạo json data ( object sang JSON)
+                var jsonData = JsonConvert.SerializeObject(requestData);
+
+                // Bước 3 : gọi httpclient bên common để post lên api
+                var result = await HttpHelper.HttpSenPostWithToken(baseurl, url, jsonData, token);
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var response = JsonConvert.DeserializeObject<GetCustomerReturnData>(result);
+                    if (response != null)
+                    {
+                        if (response.ReturnCode < 0)
+                        {
+                            messageFromServer = response.ReturnMsg;
+                            ViewBag.ErrorCode = response.ReturnCode;
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return View(list);
+                        }
+                        if (response?.listcustomer == null || response?.listcustomer.Count <= 0)
+                        {
+                            messageFromServer = "Không có dữ liệu.Vui lòng kiểm tra lại";
+                            ViewBag.ErrorMessage = messageFromServer;
+                            return View(list);
+                        }
+
+                        foreach (var item in response?.listcustomer)
+                        {
+                            list.Add(new Customer
+                            {
+                                CustomerID = item.CustomerID,
+                                Birthday = item.Birthday,
+                                FirstName = item.FirstName,
+                                LastName = item.LastName,
+                                UserName = item.UserName,
+                                PassWord = item.PassWord,
+                                PhoneNumber = item.PhoneNumber,
+                                Email = item.Email,
+                                WardID = item.WardID,
+                                ProvinceID = item.ProvinceID,
+                                DistrictID =item.DistrictID,
+                            });
+
+                        }
+                    }
+
+                }
+                return View(list);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

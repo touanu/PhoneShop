@@ -36,6 +36,10 @@ namespace PhoneShop.DataAccess.DTO
     {
         public List<Promotion> ?listpromotion { get; set; }
     }
+    public class GetCustomerReturnData : ReturnData
+    {
+        public List<Customer>? listcustomer { get; set; }
+    }
     public class GetCategoryReturnData: ReturnData
     {
         public List<Category> list { get; set; }

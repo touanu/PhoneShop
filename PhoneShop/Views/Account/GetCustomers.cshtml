@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "danh sách khách hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+@model List<PhoneShop.DataAccess.DTO.Customer>
+@{
+    var code = ViewBag.ErrorCode;
+    var message = ViewBag.ErrorMessage;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+           <th> CustomerID </th>
+            <th>Birthday</th>
+            <th>FirstName</th>
+            <th>LastName</th> 
+            <th>UserName </th>
+            <th>PassWord</th> 
+            <th>PhoneNumber</th> 
+            <th>Email</th>
+            <th>WardID</th> 
+            <th>ProvinceID</th> 
+            <th>DistrictID</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <tr class="">
+                <td colspan="4">
+                    <input type="hidden" value="@code" id="txtErrorCodeResponseFromServer" />
+                    <input type="hidden" value="@message" id="txtErrorResponseFromServer" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                        <td>@item.CustomerID</td>
+                        <td>@item.Birthday</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.UserName</td>
+                        <td>@item.PassWord</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.Email</td>
+                        <td>@item.WardID</td>
+                        <td>@item.ProvinceID</td>
+                        <td>@item.DistrictID</td>
+                    
+                }
+            }
+        }
+    </tbody>
+</table>
