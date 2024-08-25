@@ -13,6 +13,8 @@ namespace PhoneShop.DataAccess.DTO
         public int OrderDetailID { get; set; }
         public int OrderID { get; set; }
         public int ProductID { get; set; }
+        public int? ProductAttributeID { get; set; }
+        public int? ProductAttributeValueID { get; set; }
         public int? PromotionID { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }

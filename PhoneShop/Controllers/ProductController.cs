@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PhoneShop.Commonlibs;
 using PhoneShop.DataAccess.DTO;
+using PhoneShopAPI.Filter;
 
 namespace PhoneShop.Controllers
 {
@@ -22,6 +23,7 @@ namespace PhoneShop.Controllers
         }
 
         [HttpGet]
+        [PhoneShopAuthorize("Add_Product", "INSERT")]
         public async Task<IActionResult> AddProduct()
         {
             var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";

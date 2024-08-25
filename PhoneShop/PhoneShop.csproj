@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CommonLibs\CommonLibs.csproj" />
     <ProjectReference Include="..\PhoneShop.DataAccess\PhoneShop.DataAccess.csproj" />
+    <ProjectReference Include="..\PhoneShopAPI\PhoneShopAPI.csproj" />
   </ItemGroup>
 
 </Project>
