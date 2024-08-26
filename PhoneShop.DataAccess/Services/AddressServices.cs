@@ -23,7 +23,7 @@ namespace PhoneShop.DataAccess.Services
                 if (ward == null)
                 {
                     returnData.ReturnCode = (int)ReturnCode.NotFound;
-                    returnData.ReturnMsg = "Không tìm thấy phường này.";
+                    returnData.ReturnMsg = "Không tìm thấy phường/xã này.";
                     return returnData;
                 }
 
@@ -31,17 +31,21 @@ namespace PhoneShop.DataAccess.Services
                 if (district == null)
                 {
                     returnData.ReturnCode = (int)ReturnCode.NotFound;
-                    returnData.ReturnMsg = "Không tìm thấy tỉnh này.";
+                    returnData.ReturnMsg = "Không tìm thấy huyện này.";
                     return returnData;
                 }
 
                 var province = await _phoneShopDBContext.Province.FindAsync(district.ProvinceID);
-                if (district == null)
+                if (province == null)
                 {
                     returnData.ReturnCode = (int)ReturnCode.NotFound;
-                    returnData.ReturnMsg = "Không tìm thấy tỉnh này.";
+                    returnData.ReturnMsg = "Không tìm thấy tỉnh/thành phố này.";
                     return returnData;
                 }
+
+                returnData.Ward = ward.FullName;
+                returnData.Province = province.FullName;
+                returnData.District = district.FullName;
 
                 returnData.ReturnCode = (int)ReturnCode.Success;
                 returnData.ReturnMsg = "Lấy thông tin địa chỉ thành công.";

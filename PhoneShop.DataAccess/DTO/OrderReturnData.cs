@@ -4,6 +4,7 @@
     {
         public Customer? Customer { get; set; }
         public AddressReturnData? CustomerAddress { get; set; }
+        public List<GetProductReturnData>? Products { get; set; }
     }
     public class OrderGetByIdReturnData : ReturnData
     {

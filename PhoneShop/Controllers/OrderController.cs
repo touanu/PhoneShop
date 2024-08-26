@@ -21,8 +21,8 @@ namespace PhoneShop.Controllers
             return View();
         }
 
-        [HttpGet("/Order/{id}")]
-        public async Task<IActionResult> OrderDetail(string id)
+        [HttpGet("/Order/Detail")]
+        public IActionResult OrderDetail()
         {
             var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
             if (string.IsNullOrEmpty(token))
@@ -30,35 +30,18 @@ namespace PhoneShop.Controllers
                 return Redirect("/Account/Login");
             }
 
-            if (string.IsNullOrEmpty(id) || !id.IsNumber())
+            return View();
+        }
+
+        [HttpGet("/Order/Print")]
+        public IActionResult PrintOrder()
+        {
+            var token = Request.Cookies["MY_JWT_TOKEN"] != null ? Request.Cookies["MY_JWT_TOKEN"].ToString() : "";
+            if (string.IsNullOrEmpty(token))
             {
-                return View(null);
+                return Redirect("/Account/Login");
             }
-
-            try
-            {
-                var baseurl = _configuration["API_URL:URL"] ?? "";
-                var url = "api/Order/GetDetail";
-                var requestData = new OrderDetailGetRequestData
-                {
-                    OrderID = int.Parse(id)
-                };
-
-                var result = await HttpHelper.HttpSendPost(baseurl, url,
-                    JsonConvert.SerializeObject(requestData));
-                var returnData = JsonConvert.DeserializeObject<OrderGetReturnData>(result);
-
-                if (returnData == null || returnData.ReturnCode < 0)
-                {
-                    return View(null);
-                }
-
-                return View(returnData);
-            }
-            catch (Exception)
-            {
-                return View(null);
-            }
+            return View();
         }
 
         [HttpPost]
@@ -72,6 +55,35 @@ namespace PhoneShop.Controllers
                 var result = await HttpHelper.HttpSendPost(baseurl, url,
                     JsonConvert.SerializeObject(requestData));
                 var returnData = JsonConvert.DeserializeObject<OrderGetViewReturnData>(result);
+
+                return PartialView(returnData);
+            }
+            catch (Exception)
+            {
+                return PartialView(null);
+            }
+        }
+
+        [HttpPost("/Order/GetOrderDetail/{id}")]
+        public async Task<IActionResult> GetOrderDetail(int id)
+        {
+            try
+            {
+                var baseurl = _configuration["API_URL:URL"] ?? "";
+                var url = "api/Order/GetDetail";
+                var requestData = new OrderDetailGetRequestData
+                {
+                    OrderID = id
+                };
+
+                var result = await HttpHelper.HttpSendPost(baseurl, url,
+                    JsonConvert.SerializeObject(requestData));
+                var returnData = JsonConvert.DeserializeObject<OrderGetReturnData>(result);
+
+                if (returnData == null || returnData.ReturnCode < 0)
+                {
+                    return PartialView(null);
+                }
 
                 return PartialView(returnData);
             }

@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PhoneShop | Order Print</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/css/adminlte.min.css">
+    <!-- jQuery -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+    </div>
+    <!-- ./wrapper -->
+    <!-- Page specific script -->
+    <script>
+        $(document).ready(function () {
+            const urlParam = new URLSearchParams(window.location.search);
+            const orderID = urlParam.get("id");
+
+            $.ajax({
+                type: "POST",
+                dataType: "html",
+                url: `/Order/GetOrderDetail/${orderID}`,
+                async: true,
+                success: function (response) {
+                    $(".wrapper").append(response);
+                    window.addEventListener("load", window.print());
+                }
+            });
+        })
+    </script>
+
+</body>
+</html>

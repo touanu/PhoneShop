@@ -108,7 +108,8 @@ namespace PhoneShopAPI.Controllers
                     (int)requestData.OrderID);
                 if (getOrderReturn == null
                     || getOrderReturn.ReturnCode < 0
-                    || getOrderReturn.Order == null)
+                    || getOrderReturn.Order == null
+                    || getOrderReturn.Details == null)
                 {
                     return Ok(getOrderReturn);
                 }
@@ -127,6 +128,19 @@ namespace PhoneShopAPI.Controllers
                     returnData.ReturnCode = (int)ReturnCode.NotFound;
                     returnData.ReturnMsg = "Không tìm thấy khách hàng của đơn hàng này.";
                     return Ok(returnData);
+                }
+
+                returnData.Products = [];
+                foreach (var item in getOrderReturn.Details)
+                {
+                    var product = await _unitOfWork._productServices.GetProductById(item.ProductID);
+                    if (product == null)
+                    {
+                        returnData.ReturnCode = (int)ReturnCode.NotFound;
+                        returnData.ReturnMsg = $"Không tìm thấy sản phẩm {item.ProductID} trong đơn hàng này.";
+                        return Ok(returnData);
+                    }
+                    returnData.Products.Add(product);
                 }
 
                 returnData.Order = getOrderReturn.Order;
