@@ -16,7 +16,6 @@
         <div class="col-12">
             <h4>
                 <i class="fas fa-globe"></i> PhoneShop.
-                <small class="float-right">Ngày: @Model.Order.CreatedDate.ToShortDateString()</small>
             </h4>
         </div>
         <!-- /.col -->
@@ -41,7 +40,7 @@
         <div class="col-sm-4 invoice-col">
             <b>Đơn hàng #@Model.Order.OrderID</b><br>
             <b>Tổng số lượng:</b> @Model.Order.TotalAmount<br>
-            <b>Ngày thanh toán:</b> @Model.Order.CreatedDate.ToShortDateString()<br>
+            <b>Ngày:</b> @Model.Order.CreatedDate.ToShortDateString()<br>
             <b>Trạng thái:</b> @Model.Order.StatusAsString<br />
             @* <b>Account:</b> 968-34567  *@
         </div>

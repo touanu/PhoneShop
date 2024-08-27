@@ -36,6 +36,7 @@
                 success: function (response) {
                     $(".wrapper").append(response);
                     window.addEventListener("load", window.print());
+                    setTimeout(function () { window.close(); }, 100);
                 }
             });
         })
